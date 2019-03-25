@@ -25,11 +25,11 @@ func Success(result interface{}) *structs.APIResult {
 }
 
 // Fail 回傳失敗API
-func Fail(err errorcode.APIError) *structs.APIResult {
+func Fail(err errorcode.Error) *structs.APIResult {
 	res := &structs.APIResult{}
 
-	res.ErrorCode = err.ErrorCode
-	res.ErrorMsg = err.ErrorMsg
+	res.ErrorCode = err.GetErrorCode()
+	res.ErrorMsg = err.GetErrorText()
 	res.Result = []string{}
 
 	return res
@@ -48,7 +48,7 @@ func RanderStr(length int) string {
 }
 
 // ParseTime 轉換時間格式(string ---> time.Time)
-func ParseTime(myTime string) (t time.Time, apiErr errorcode.APIError) {
+func ParseTime(myTime string) (t time.Time, apiErr errorcode.Error) {
 	var err error
 
 	if myTime == "0000-00-00 00:00:00" {
@@ -65,7 +65,7 @@ func ParseTime(myTime string) (t time.Time, apiErr errorcode.APIError) {
 }
 
 // StructToMap struct型態 轉 map型態 (For DB 使用)
-func StructToMap(myStruct interface{}) (myMap map[string]interface{}, apiErr errorcode.APIError) {
+func StructToMap(myStruct interface{}) (myMap map[string]interface{}, apiErr errorcode.Error) {
 
 	// 轉形成map，才可以處理空字串,0,false值
 	myMap = make(map[string]interface{})

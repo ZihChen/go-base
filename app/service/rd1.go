@@ -22,7 +22,7 @@ func RD1Ins() *RD1Ser {
 }
 
 // GetOrderDetail 取細單(SlotGame + 街機)
-func (*RD1Ser) GetOrderDetail(roundID string) (content []byte, apiErr errorcode.APIError) {
+func (*RD1Ser) GetOrderDetail(roundID string) (content []byte, apiErr errorcode.Error) {
 	//API位置
 	url := global.Config.API.RD1URL + "/promote/v1/db/wager/" + roundID
 

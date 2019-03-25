@@ -12,7 +12,7 @@ import (
 )
 
 // sendGet CURL GET
-func sendGet(apiURL string, header map[string]string, param map[string]interface{}) (body []byte, apiErr errorcode.APIError) {
+func sendGet(apiURL string, header map[string]string, param map[string]interface{}) (body []byte, apiErr errorcode.Error) {
 	client := &http.Client{}
 	// 建立一個請求
 	reqest, err := http.NewRequest(http.MethodGet, apiURL, nil)
@@ -65,7 +65,7 @@ func sendGet(apiURL string, header map[string]string, param map[string]interface
 }
 
 // sendPost CURL POST
-func sendPost(apiURL string, header map[string]string, param map[string]interface{}) (body []byte, apiErr errorcode.APIError) {
+func sendPost(apiURL string, header map[string]string, param map[string]interface{}) (body []byte, apiErr errorcode.Error) {
 	// 組參數
 	form := url.Values{}
 	for pk, pv := range param {
@@ -119,7 +119,7 @@ func sendPost(apiURL string, header map[string]string, param map[string]interfac
 }
 
 // sendPut CURL PUT
-func sendPut(apiURL string, header map[string]string, param map[string]interface{}) (body []byte, apiErr errorcode.APIError) {
+func sendPut(apiURL string, header map[string]string, param map[string]interface{}) (body []byte, apiErr errorcode.Error) {
 	// 組參數
 	form := url.Values{}
 	for pk, pv := range param {

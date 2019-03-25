@@ -18,7 +18,7 @@ type dbCon struct {
 }
 
 // DBConnection 建立Master連線
-func DBConnection(mode string) (db *gorm.DB, apiErr errorcode.APIError) {
+func DBConnection(mode string) (db *gorm.DB, apiErr errorcode.Error) {
 	connString := composeString(mode)
 	db, err := gorm.Open("mysql", connString)
 	if err != nil {
@@ -39,14 +39,14 @@ func DBConnection(mode string) (db *gorm.DB, apiErr errorcode.APIError) {
 func DBConnectTest() {
 	// 檢查 Master 連線
 	dbM, apiErr := DBConnection(global.GoFormatMa)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		panic("DB MASTER CONNECT ERROR")
 	}
 	defer dbM.Close()
 
 	// 檢查M Slave 連線
 	dbS, apiErr := DBConnection(global.GoFormatSl)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		panic("DB SLAVE CONNECT ERROR")
 	}
 	defer dbS.Close()

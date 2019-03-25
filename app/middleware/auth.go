@@ -14,7 +14,7 @@ import (
 // Auth 登入驗證
 func Auth(c *gin.Context) {
 	var account string
-	var apiErr errorcode.APIError
+	var apiErr errorcode.Error
 	// 取 cookie 的 session
 	cookie, err := c.Cookie("session")
 	if err != nil {
@@ -28,7 +28,7 @@ func Auth(c *gin.Context) {
 	redis := &repository.Redis{}
 	key := fmt.Sprintf("GoFormat:admin:%v", cookie)
 	account, apiErr = redis.Get(key)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		c.JSON(http.StatusOK, helper.Fail(apiErr))
 		c.Abort()
 		return
@@ -38,7 +38,7 @@ func Auth(c *gin.Context) {
 	if account == "" {
 		adminBus := business.AdminBus{}
 		account, apiErr = adminBus.CheckSessionExist(cookie)
-		if apiErr.ErrorCode != 0 {
+		if apiErr != nil {
 			c.JSON(http.StatusOK, helper.Fail(apiErr))
 			c.Abort()
 			return

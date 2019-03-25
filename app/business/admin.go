@@ -30,11 +30,11 @@ func AdminIns() *AdminBus {
 }
 
 // UserInfo 用戶資訊
-func (a *AdminBus) UserInfo(account string) (userInfo structs.Admin, apiErr errorcode.APIError) {
+func (a *AdminBus) UserInfo(account string) (userInfo structs.Admin, apiErr errorcode.Error) {
 	// 檢查使用者是否存在
 	adminRepo := repository.AdminIns()
 	admin, apiErr := adminRepo.GetAdmin(account)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 
@@ -53,12 +53,12 @@ func (a *AdminBus) UserInfo(account string) (userInfo structs.Admin, apiErr erro
 }
 
 // AdminList 取管理者清單
-func (a *AdminBus) AdminList() (lists []structs.AdminList, apiErr errorcode.APIError) {
+func (a *AdminBus) AdminList() (lists []structs.AdminList, apiErr errorcode.Error) {
 	adminRepo := repository.AdminIns()
 
 	// 取DB資料
 	list, apiErr := adminRepo.AdminList()
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 
@@ -84,11 +84,11 @@ func (a *AdminBus) AdminList() (lists []structs.AdminList, apiErr errorcode.APIE
 }
 
 // LoginRecord 紀錄登入紀錄
-func (a *AdminBus) LoginRecord(c *gin.Context, user *structs.Login) (apiErr errorcode.APIError) {
+func (a *AdminBus) LoginRecord(c *gin.Context, user *structs.Login) (apiErr errorcode.Error) {
 	// 檢查使用者是否存在
 	adminRepo := repository.AdminIns()
 	admin, apiErr := adminRepo.GetAdmin(user.Account)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 
@@ -115,7 +115,7 @@ func (a *AdminBus) LoginRecord(c *gin.Context, user *structs.Login) (apiErr erro
 
 	// 更新登入記入 + 新增一筆登入session紀錄
 	apiErr = adminRepo.UpdateLoginRecord(user)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 
@@ -131,12 +131,12 @@ func (a *AdminBus) LoginRecord(c *gin.Context, user *structs.Login) (apiErr erro
 }
 
 // CheckSessionExist middleware檢查
-func (a *AdminBus) CheckSessionExist(session string) (account string, apiErr errorcode.APIError) {
+func (a *AdminBus) CheckSessionExist(session string) (account string, apiErr errorcode.Error) {
 	adminRepo := repository.AdminIns()
 
 	// 取DB Session
 	admin, apiErr := adminRepo.GetSession(session)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 
@@ -150,11 +150,11 @@ func (a *AdminBus) CheckSessionExist(session string) (account string, apiErr err
 }
 
 // DeleteSession 登出後，清除DB Session 資料
-func (a *AdminBus) DeleteSession(session string) (apiErr errorcode.APIError) {
+func (a *AdminBus) DeleteSession(session string) (apiErr errorcode.Error) {
 	adminRepo := repository.AdminIns()
 
 	apiErr = adminRepo.DeleteSession(session)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 
@@ -162,11 +162,11 @@ func (a *AdminBus) DeleteSession(session string) (apiErr errorcode.APIError) {
 }
 
 // Create 建立管理者帳號
-func (a *AdminBus) Create(newAdmin *structs.ADRegister) (apiErr errorcode.APIError) {
+func (a *AdminBus) Create(newAdmin *structs.ADRegister) (apiErr errorcode.Error) {
 	// 檢查帳號是否存在
 	adminRepo := repository.AdminIns()
 	admin, apiErr := adminRepo.GetAdmin(newAdmin.Account)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 
@@ -178,13 +178,13 @@ func (a *AdminBus) Create(newAdmin *structs.ADRegister) (apiErr errorcode.APIErr
 
 	// 密碼加密
 	newAdmin.Password, apiErr = helper.HashPassword(newAdmin.Password)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 
 	// 存入DB
 	apiErr = adminRepo.CreateAdmin(newAdmin)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 
@@ -192,13 +192,13 @@ func (a *AdminBus) Create(newAdmin *structs.ADRegister) (apiErr errorcode.APIErr
 }
 
 // MenuList 取首頁選單
-func (a *AdminBus) MenuList(account string) (list []structs.MenuList, apiErr errorcode.APIError) {
+func (a *AdminBus) MenuList(account string) (list []structs.MenuList, apiErr errorcode.Error) {
 	// 取Session對應的用戶帳號
 	adminRepo := repository.AdminIns()
 
 	// 取管理者詳細資料
 	admin, apiErr := adminRepo.GetAdmin(account)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 
@@ -209,13 +209,13 @@ func (a *AdminBus) MenuList(account string) (list []structs.MenuList, apiErr err
 }
 
 // CheckPermission 檢查帳號權限
-func (a *AdminBus) CheckPermission(session string) (account structs.AdminRepo, apiErr errorcode.APIError) {
+func (a *AdminBus) CheckPermission(session string) (account structs.AdminRepo, apiErr errorcode.Error) {
 	// 進DB驗證資料
 	adminRepo := repository.AdminIns()
 
 	// 取DB Session
 	admin, apiErr := adminRepo.CheckPermission(session)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 
@@ -236,21 +236,21 @@ func (a *AdminBus) CheckPermission(session string) (account structs.AdminRepo, a
 }
 
 // UpdatePassword 更改密碼
-func (a *AdminBus) UpdatePassword(newPwd structs.UpdatePassword) (pwd structs.UpdatePwdRepo, apiErr errorcode.APIError) {
+func (a *AdminBus) UpdatePassword(newPwd structs.UpdatePassword) (pwd structs.UpdatePwdRepo, apiErr errorcode.Error) {
 	// 密碼加密
 	newPwd.Password, apiErr = helper.HashPassword(newPwd.Password)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 
 	// 更改DB資料
 	adminRepo := repository.AdminIns()
-	if apiErr = adminRepo.UpdatePassword(newPwd); apiErr.ErrorCode != 0 {
+	if apiErr = adminRepo.UpdatePassword(newPwd); apiErr != nil {
 		return
 	}
 
 	// 清除登入紀錄
-	if apiErr = clearLoginRecord(newPwd.Account); apiErr.ErrorCode != 0 {
+	if apiErr = clearLoginRecord(newPwd.Account); apiErr != nil {
 		return
 	}
 
@@ -258,7 +258,7 @@ func (a *AdminBus) UpdatePassword(newPwd structs.UpdatePassword) (pwd structs.Up
 }
 
 // ResetPassword 將密碼改為隨機亂數產生的預設密碼
-func (a *AdminBus) ResetPassword(newPwd structs.UpdatePassword) (pwd structs.UpdatePwdRepo, apiErr errorcode.APIError) {
+func (a *AdminBus) ResetPassword(newPwd structs.UpdatePassword) (pwd structs.UpdatePwdRepo, apiErr errorcode.Error) {
 	// 取亂數字串
 	newPwd.Password = helper.RanderStr(6)
 
@@ -268,24 +268,24 @@ func (a *AdminBus) ResetPassword(newPwd structs.UpdatePassword) (pwd structs.Upd
 	// 取用戶資料
 	adminRepo := repository.AdminIns()
 	admin, apiErr := adminRepo.GetAdminInfoByID(newPwd.ID)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 
 	// 密碼加密
 	newPwd.Password, apiErr = helper.HashPassword(newPwd.Password)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 
 	// 更新DB資料
 	newPwd.Account = admin.Account
-	if apiErr = adminRepo.UpdatePassword(newPwd); apiErr.ErrorCode != 0 {
+	if apiErr = adminRepo.UpdatePassword(newPwd); apiErr != nil {
 		return
 	}
 
 	// 清除登入紀錄
-	if apiErr = clearLoginRecord(newPwd.Account); apiErr.ErrorCode != 0 {
+	if apiErr = clearLoginRecord(newPwd.Account); apiErr != nil {
 		return
 	}
 
@@ -293,7 +293,7 @@ func (a *AdminBus) ResetPassword(newPwd structs.UpdatePassword) (pwd structs.Upd
 }
 
 // UpdateAdmin 更新管理者帳號權限
-func (a *AdminBus) UpdateAdmin(admin structs.EditAdmin) (apiErr errorcode.APIError) {
+func (a *AdminBus) UpdateAdmin(admin structs.EditAdmin) (apiErr errorcode.Error) {
 	var adminMap = make(map[string]interface{})
 
 	// 將struct 轉換成map
@@ -312,18 +312,18 @@ func (a *AdminBus) UpdateAdmin(admin structs.EditAdmin) (apiErr errorcode.APIErr
 
 	adminRepo := repository.AdminIns()
 	// 更新帳號資訊
-	if apiErr = adminRepo.UpdateAdmin(adminMap); apiErr.ErrorCode != 0 {
+	if apiErr = adminRepo.UpdateAdmin(adminMap); apiErr != nil {
 		return
 	}
 
 	// 清除該用戶session資料
 	adminInfo, apiErr := adminRepo.GetAdminInfoByID(admin.ID)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 
 	// 清除登入紀錄
-	if apiErr = clearLoginRecord(adminInfo.Account); apiErr.ErrorCode != 0 {
+	if apiErr = clearLoginRecord(adminInfo.Account); apiErr != nil {
 		return
 	}
 
@@ -331,21 +331,21 @@ func (a *AdminBus) UpdateAdmin(admin structs.EditAdmin) (apiErr errorcode.APIErr
 }
 
 // DeleteAdmin 刪除管理者帳號
-func (a *AdminBus) DeleteAdmin(uid int) (apiErr errorcode.APIError) {
+func (a *AdminBus) DeleteAdmin(uid int) (apiErr errorcode.Error) {
 	// 取帳號資訊
 	adminRepo := repository.AdminIns()
 	admin, apiErr := adminRepo.GetAdminInfoByID(uid)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 
 	// 清除登入紀錄
-	if apiErr = clearLoginRecord(admin.Account); apiErr.ErrorCode != 0 {
+	if apiErr = clearLoginRecord(admin.Account); apiErr != nil {
 		return
 	}
 
 	// 刪除DB資料
-	if apiErr = adminRepo.DeleteAdmin(uid); apiErr.ErrorCode != 0 {
+	if apiErr = adminRepo.DeleteAdmin(uid); apiErr != nil {
 		return
 	}
 
@@ -353,13 +353,13 @@ func (a *AdminBus) DeleteAdmin(uid int) (apiErr errorcode.APIError) {
 }
 
 // ClearExpiredSession 清除過期session
-func (a *AdminBus) ClearExpiredSession(time string) (apiErr errorcode.APIError) {
+func (a *AdminBus) ClearExpiredSession(time string) (apiErr errorcode.Error) {
 	repo := repository.AdminIns()
 
 	// 取DB Session 紀錄並清除
 	var sessions []model.AdminSession
 	sessions, apiErr = repo.ClearExpiredSession(time)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 
@@ -368,7 +368,7 @@ func (a *AdminBus) ClearExpiredSession(time string) (apiErr errorcode.APIError) 
 	for _, v := range sessions {
 		key := fmt.Sprintf("GoFormat:login:%v", v.Session)
 		apiErr = redis.Delete(key)
-		if apiErr.ErrorCode != 0 {
+		if apiErr != nil {
 			return
 		}
 	}
@@ -376,13 +376,13 @@ func (a *AdminBus) ClearExpiredSession(time string) (apiErr errorcode.APIError) 
 }
 
 // clearLoginRecord 清除登入紀錄
-func clearLoginRecord(account string) (apiErr errorcode.APIError) {
+func clearLoginRecord(account string) (apiErr errorcode.Error) {
 	adminRepo := repository.AdminIns()
 
 	// 取DB使用者全部的session並清除
 	var sessions []model.AdminSession
 	sessions, apiErr = adminRepo.DeleteAllSession(account)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 
@@ -391,7 +391,7 @@ func clearLoginRecord(account string) (apiErr errorcode.APIError) {
 	for _, v := range sessions {
 		key := fmt.Sprintf("GoFormat:login:%v", v.Session)
 
-		if apiErr = redis.Delete(key); apiErr.ErrorCode != 0 {
+		if apiErr = redis.Delete(key); apiErr != nil {
 			return
 		}
 

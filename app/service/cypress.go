@@ -23,7 +23,7 @@ func CyIns() *CypressSer {
 }
 
 //GetTopGames 熱門遊戲排行榜
-func (*CypressSer) GetTopGames() (content []byte, apiErr errorcode.APIError) {
+func (*CypressSer) GetTopGames() (content []byte, apiErr errorcode.Error) {
 	//API位置
 	url := global.Config.API.CypressURL + "/promoweb/v1/ranking/topGames"
 
@@ -48,7 +48,7 @@ func (*CypressSer) GetTopGames() (content []byte, apiErr errorcode.APIError) {
 }
 
 //GetTopReward 遊戲大獎次數排行榜
-func (*CypressSer) GetTopReward(x int) (content []byte, apiErr errorcode.APIError) {
+func (*CypressSer) GetTopReward(x int) (content []byte, apiErr errorcode.Error) {
 	//API位置
 	url := global.Config.API.CypressURL + "/promoweb/v1/ranking/topReward"
 
@@ -74,7 +74,7 @@ func (*CypressSer) GetTopReward(x int) (content []byte, apiErr errorcode.APIErro
 }
 
 //GetTopLucky 玩家倍數排行榜
-func (*CypressSer) GetTopLucky() (content []byte, apiErr errorcode.APIError) {
+func (*CypressSer) GetTopLucky() (content []byte, apiErr errorcode.Error) {
 	//API位置
 	url := global.Config.API.CypressURL + "/promoweb/v1/ranking/topLucky"
 
@@ -99,7 +99,7 @@ func (*CypressSer) GetTopLucky() (content []byte, apiErr errorcode.APIError) {
 }
 
 //GetTopWin 玩家派彩排行榜
-func (*CypressSer) GetTopWin() (content []byte, apiErr errorcode.APIError) {
+func (*CypressSer) GetTopWin() (content []byte, apiErr errorcode.Error) {
 	//API位置
 	url := global.Config.API.CypressURL + "/promoweb/v1/ranking/topWin"
 
@@ -124,7 +124,7 @@ func (*CypressSer) GetTopWin() (content []byte, apiErr errorcode.APIError) {
 }
 
 //GetGameList 取遊戲名稱列表
-func (*CypressSer) GetGameList() (content []byte, apiErr errorcode.APIError) {
+func (*CypressSer) GetGameList() (content []byte, apiErr errorcode.Error) {
 	//API位置
 	url := global.Config.API.CypressURL + "/promoweb/v1/util/gameList"
 
@@ -147,7 +147,7 @@ func (*CypressSer) GetGameList() (content []byte, apiErr errorcode.APIError) {
 }
 
 //GetMarquee 跑馬燈清單
-func (*CypressSer) GetMarquee(autoMarquee structs.MarqueeAPI) (content []byte, apiErr errorcode.APIError) {
+func (*CypressSer) GetMarquee(autoMarquee structs.MarqueeAPI) (content []byte, apiErr errorcode.Error) {
 	//API位置
 	url := global.Config.API.CypressURL + "/promoweb/marquee/data"
 
@@ -174,7 +174,7 @@ func (*CypressSer) GetMarquee(autoMarquee structs.MarqueeAPI) (content []byte, a
 }
 
 //GetMarqueeSet 取得跑馬燈贏分條件與倍率條件
-func (*CypressSer) GetMarqueeSet() (content []byte, apiErr errorcode.APIError) {
+func (*CypressSer) GetMarqueeSet() (content []byte, apiErr errorcode.Error) {
 	//API位置
 	url := global.Config.API.CypressURL + "/promoweb/marquee/set"
 
@@ -197,7 +197,7 @@ func (*CypressSer) GetMarqueeSet() (content []byte, apiErr errorcode.APIError) {
 }
 
 //SetMarqueeSet 設定跑馬燈贏分條件與倍率條件
-func (*CypressSer) SetMarqueeSet(param map[string]interface{}) (content []byte, apiErr errorcode.APIError) {
+func (*CypressSer) SetMarqueeSet(param map[string]interface{}) (content []byte, apiErr errorcode.Error) {
 	//API位置
 	url := global.Config.API.CypressURL + "/promoweb/marquee/set"
 
@@ -217,7 +217,7 @@ func (*CypressSer) SetMarqueeSet(param map[string]interface{}) (content []byte, 
 }
 
 // GetMarqueeGame 取跑馬燈遊戲
-func (*CypressSer) GetMarqueeGame() (content []byte, apiErr errorcode.APIError) {
+func (*CypressSer) GetMarqueeGame() (content []byte, apiErr errorcode.Error) {
 	//API位置
 	url := global.Config.API.CypressURL + "/promoweb/marquee/game"
 
@@ -240,7 +240,7 @@ func (*CypressSer) GetMarqueeGame() (content []byte, apiErr errorcode.APIError) 
 }
 
 //CreateMarqueeGame 新增跑馬燈遊戲
-func (*CypressSer) CreateMarqueeGame(param map[string]interface{}) (content []byte, apiErr errorcode.APIError) {
+func (*CypressSer) CreateMarqueeGame(param map[string]interface{}) (content []byte, apiErr errorcode.Error) {
 	//API位置
 	url := global.Config.API.CypressURL + "/promoweb/marquee/game"
 
@@ -260,7 +260,7 @@ func (*CypressSer) CreateMarqueeGame(param map[string]interface{}) (content []by
 }
 
 //DeleteMarqueeGame 刪除跑馬燈遊戲
-func (*CypressSer) DeleteMarqueeGame(param map[string]interface{}) (content []byte, apiErr errorcode.APIError) {
+func (*CypressSer) DeleteMarqueeGame(param map[string]interface{}) (content []byte, apiErr errorcode.Error) {
 	//API位置
 	url := global.Config.API.CypressURL + "/promoweb/marquee/game/delete"
 

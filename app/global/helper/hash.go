@@ -32,7 +32,7 @@ func Md5EncryptionWithTime(str string) string {
 }
 
 // HashPassword 密碼加密(註冊管理者使用)
-func HashPassword(password string) (value string, apiErr errorcode.APIError) {
+func HashPassword(password string) (value string, apiErr errorcode.Error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 
 	if err != nil {

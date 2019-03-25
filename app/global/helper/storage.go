@@ -7,7 +7,7 @@ import (
 )
 
 // ComposeParams 組合上傳檔案參數
-//func ComposeParams(c *gin.Context, filePath string) (uploadOption *structs.UploadFileOption, apiError errorcode.APIError) {
+//func ComposeParams(c *gin.Context, filePath string) (uploadOption *structs.UploadFileOption, apiError errorcode.Error) {
 //	uploadOption = &structs.UploadFileOption{}
 //
 //	file, err := c.FormFile("file")
@@ -27,7 +27,7 @@ import (
 //}
 //
 //// CreateFile 建立新檔案
-//func CreateFile(c *gin.Context, params *structs.UploadFileOption) (apiError errorcode.APIError) {
+//func CreateFile(c *gin.Context, params *structs.UploadFileOption) (apiError errorcode.Error) {
 //	// 組合路徑
 //	path := params.FilePath + "/" + params.FileName + "." + params.FileExt
 //

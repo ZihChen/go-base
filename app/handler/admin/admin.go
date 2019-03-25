@@ -37,7 +37,7 @@ func Index(c *gin.Context) {
 	// 取DB資料
 	adminBus := business.AdminIns()
 	list, apiErr := adminBus.AdminList()
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		c.JSON(http.StatusOK, helper.Fail(apiErr))
 		return
 	}
@@ -86,7 +86,7 @@ func Login(c *gin.Context) {
 	// 驗證DB資料 + 存session
 	adminBus := business.AdminIns()
 	apiErr := adminBus.LoginRecord(c, &user)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		c.JSON(http.StatusOK, helper.Fail(apiErr))
 		return
 	}
@@ -119,7 +119,7 @@ func Logout(c *gin.Context) {
 
 	// 砍DB資料
 	adminBus := business.AdminIns()
-	if apiErr := adminBus.DeleteSession(session); apiErr.ErrorCode != 0 {
+	if apiErr := adminBus.DeleteSession(session); apiErr != nil {
 		c.JSON(http.StatusOK, helper.Fail(apiErr))
 		return
 	}
@@ -191,7 +191,7 @@ func Register(c *gin.Context) {
 	// 註冊
 	adminBus := business.AdminIns()
 	apiErr := adminBus.Create(&ad)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		c.JSON(http.StatusOK, helper.Fail(apiErr))
 		return
 	}
@@ -225,7 +225,7 @@ func CategoryMenu(c *gin.Context) {
 	// 取首頁選單
 	adminBus := business.AdminIns()
 	menuList, apiErr := adminBus.MenuList(account)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		c.JSON(http.StatusOK, helper.Fail(apiErr))
 		return
 	}
@@ -287,7 +287,7 @@ func UpdatePassword(c *gin.Context) {
 	// 更改密碼
 	b := business.AdminIns()
 	_, apiErr := b.UpdatePassword(update)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		c.JSON(http.StatusOK, helper.Fail(apiErr))
 		return
 	}
@@ -342,7 +342,7 @@ func ResetPassword(c *gin.Context) {
 	// 更改密碼
 	b := business.AdminIns()
 	pwd, apiErr := b.ResetPassword(reset)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		c.JSON(http.StatusOK, helper.Fail(apiErr))
 		return
 	}
@@ -407,7 +407,7 @@ func EditAdmin(c *gin.Context) {
 
 	// 更新帳號資料
 	adminBus := business.AdminIns()
-	if apiErr := adminBus.UpdateAdmin(editAdmin); apiErr.ErrorCode != 0 {
+	if apiErr := adminBus.UpdateAdmin(editAdmin); apiErr != nil {
 		c.JSON(http.StatusOK, helper.Fail(apiErr))
 		return
 	}
@@ -449,7 +449,7 @@ func DeleteAdmin(c *gin.Context) {
 
 	// 刪除帳號
 	adminBus := business.AdminIns()
-	if apiErr := adminBus.DeleteAdmin(userID); apiErr.ErrorCode != 0 {
+	if apiErr := adminBus.DeleteAdmin(userID); apiErr != nil {
 		c.JSON(http.StatusOK, helper.Fail(apiErr))
 		return
 	}
@@ -479,7 +479,7 @@ func ClearExpiredSession(c *gin.Context) {
 	}()
 	adminBus := business.AdminIns()
 	timeStr := time.Now().Format("2006-01-02 15:04:05")
-	if apiErr := adminBus.ClearExpiredSession(timeStr); apiErr.ErrorCode != 0 {
+	if apiErr := adminBus.ClearExpiredSession(timeStr); apiErr != nil {
 		c.JSON(http.StatusOK, helper.Fail(apiErr))
 		return
 	}
@@ -512,7 +512,7 @@ func GetUserInfo(c *gin.Context) {
 	// 驗證DB資料 + 存session
 	adminBus := business.AdminIns()
 	adminInfo, apiErr := adminBus.UserInfo(account)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		c.JSON(http.StatusOK, helper.Fail(apiErr))
 		return
 	}

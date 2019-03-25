@@ -25,9 +25,9 @@ func RedisIns() *Redis {
 }
 
 // Exists 檢查key是否存在
-func (*Redis) Exists(key string) (ok bool, apiErr errorcode.APIError) {
+func (*Redis) Exists(key string) (ok bool, apiErr errorcode.Error) {
 	r, apiErr := model.RedisConnect()
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 	defer r.Close()
@@ -44,9 +44,9 @@ func (*Redis) Exists(key string) (ok bool, apiErr errorcode.APIError) {
 }
 
 // Set 存入redis值
-func (*Redis) Set(key string, value interface{}, time int) (apiErr errorcode.APIError) {
+func (*Redis) Set(key string, value interface{}, time int) (apiErr errorcode.Error) {
 	r, apiErr := model.RedisConnect()
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 	defer r.Close()
@@ -61,9 +61,9 @@ func (*Redis) Set(key string, value interface{}, time int) (apiErr errorcode.API
 }
 
 // Get 取出redis值
-func (*Redis) Get(key string) (value string, apiErr errorcode.APIError) {
+func (*Redis) Get(key string) (value string, apiErr errorcode.Error) {
 	r, apiErr := model.RedisConnect()
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 	defer r.Close()
@@ -74,25 +74,26 @@ func (*Redis) Get(key string) (value string, apiErr errorcode.APIError) {
 }
 
 // Delete 刪除redis值
-func (*Redis) Delete(key string) (err errorcode.APIError) {
+func (*Redis) Delete(key string) (apiErr errorcode.Error) {
 	r, apiErr := model.RedisConnect()
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 	defer r.Close()
 
 	if _, err := r.Do("DEL", key); err != nil {
 		go helper.WarnLog(fmt.Sprintf("REDIS_DELETE_ERROR: %v", err))
-		return errorcode.GetAPIError("REDIS_DELETE_ERROR")
+		apiErr = errorcode.GetAPIError("REDIS_DELETE_ERROR")
+		return
 	}
 
 	return
 }
 
 // Append 在相同key新增多個值
-func (*Redis) Append(key string, value interface{}) (n interface{}, apiErr errorcode.APIError) {
+func (*Redis) Append(key string, value interface{}) (n interface{}, apiErr errorcode.Error) {
 	r, apiErr := model.RedisConnect()
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return nil, apiErr
 	}
 	defer r.Close()
@@ -100,16 +101,17 @@ func (*Redis) Append(key string, value interface{}) (n interface{}, apiErr error
 	n, err := r.Do("APPEND", key, value)
 	if err != nil {
 		go helper.WarnLog(fmt.Sprintf("REDIS_APPEND_ERROR: %v", err))
-		return nil, errorcode.GetAPIError("REDIS_APPEND_ERROR")
+		apiErr = errorcode.GetAPIError("REDIS_APPEND_ERROR")
+		return
 	}
 
 	return
 }
 
 // HashSet Hash方式存入redis值
-func (*Redis) HashSet(hkey string, key interface{}, value interface{}, time int) (err errorcode.APIError) {
+func (*Redis) HashSet(hkey string, key interface{}, value interface{}, time int) (apiErr errorcode.Error) {
 	r, apiErr := model.RedisConnect()
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 	defer r.Close()
@@ -117,22 +119,24 @@ func (*Redis) HashSet(hkey string, key interface{}, value interface{}, time int)
 	// 存值
 	if _, err := r.Do("hset", hkey, key, value); err != nil {
 		go helper.WarnLog(fmt.Sprintf("REDIS_INSERT_ERROR: %v", err))
-		return errorcode.GetAPIError("REDIS_INSERT_ERROR")
+		apiErr = errorcode.GetAPIError("REDIS_INSERT_ERROR")
+		return
 	}
 
 	// 設置過期時間
 	if _, err := r.Do("EXPIRE", hkey, time); err != nil {
 		go helper.WarnLog(fmt.Sprintf("REDIS_SET_EXPIRE_ERROR: %v", err))
-		return errorcode.GetAPIError("REDIS_SET_EXPIRE_ERROR")
+		apiErr = errorcode.GetAPIError("REDIS_SET_EXPIRE_ERROR")
+		return
 	}
 
 	return
 }
 
 // HashGet Hash方式取出redis值
-func (*Redis) HashGet(hkey string, field interface{}) (value string, apiErr errorcode.APIError) {
+func (*Redis) HashGet(hkey string, field interface{}) (value string, apiErr errorcode.Error) {
 	r, apiErr := model.RedisConnect()
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 	defer r.Close()

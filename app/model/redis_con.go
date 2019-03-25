@@ -11,7 +11,7 @@ import (
 )
 
 // RedisConnect 與redis連線
-func RedisConnect() (redis Redis.Conn, apiErr errorcode.APIError) {
+func RedisConnect() (redis Redis.Conn, apiErr errorcode.Error) {
 	// 使用redis封裝的Dial進行tcp連接
 	host := global.Config.Redis.RedisHost
 	port := global.Config.Redis.RedisPort
@@ -41,7 +41,7 @@ func RedisConnect() (redis Redis.Conn, apiErr errorcode.APIError) {
 func RedisConnectTest() {
 	// 檢查 Master 連線
 	redis, apiErr := RedisConnect()
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		panic("REDIS CONNECT ERROR")
 	}
 	defer redis.Close()

@@ -23,7 +23,7 @@ func SuperAuth(c *gin.Context) {
 	// 檢查帳號權限
 	adminBus := business.AdminBus{}
 	_, apiErr := adminBus.CheckPermission(cookie)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		c.JSON(http.StatusOK, helper.Fail(apiErr))
 		c.Abort()
 		return

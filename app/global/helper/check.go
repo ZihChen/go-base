@@ -12,7 +12,7 @@ import (
 )
 
 // CheckDirIsExist 檢查檔案路徑是否存在
-func CheckDirIsExist(filePath string, perm os.FileMode) (apiError errorcode.APIError) {
+func CheckDirIsExist(filePath string, perm os.FileMode) (apiErr errorcode.Error) {
 	// 重新設置umask
 	// syscall.Umask(0)
 
@@ -22,7 +22,7 @@ func CheckDirIsExist(filePath string, perm os.FileMode) (apiError errorcode.APIE
 		if err := os.MkdirAll(filePath, perm); err != nil {
 			// log.Printf("❌ WriteLog: 建立資料夾錯誤 [%v] ❌ \n", err)
 			go FatalLog(fmt.Sprintf("Create Dir Error: %v", err))
-			apiError = errorcode.GetAPIError("CREATE_DIR_ERROR")
+			apiErr = errorcode.GetAPIError("CREATE_DIR_ERROR")
 			return
 		}
 	}

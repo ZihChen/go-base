@@ -27,9 +27,9 @@ func AdminIns() *AdminRepo {
 }
 
 // AdminList 取管理者清單
-func (a *AdminRepo) AdminList() (admin []model.Admin, apiErr errorcode.APIError) {
+func (a *AdminRepo) AdminList() (admin []model.Admin, apiErr errorcode.Error) {
 	db, apiErr := model.DBConnection(global.GoFormatSl)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 	defer db.Close()
@@ -43,9 +43,9 @@ func (a *AdminRepo) AdminList() (admin []model.Admin, apiErr errorcode.APIError)
 }
 
 // GetAdmin 檢查使用者是否存在
-func (a *AdminRepo) GetAdmin(account string) (admin model.Admin, apiErr errorcode.APIError) {
+func (a *AdminRepo) GetAdmin(account string) (admin model.Admin, apiErr errorcode.Error) {
 	db, apiErr := model.DBConnection(global.GoFormatSl)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 	defer db.Close()
@@ -62,9 +62,9 @@ func (a *AdminRepo) GetAdmin(account string) (admin model.Admin, apiErr errorcod
 }
 
 // UpdateLoginRecord 更新用戶登入時間 + 新增一筆Session資訊
-func (a *AdminRepo) UpdateLoginRecord(user *structs.Login) (apiErr errorcode.APIError) {
+func (a *AdminRepo) UpdateLoginRecord(user *structs.Login) (apiErr errorcode.Error) {
 	db, apiErr := model.DBConnection(global.GoFormatMa)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 	defer db.Close()
@@ -102,9 +102,9 @@ func (a *AdminRepo) UpdateLoginRecord(user *structs.Login) (apiErr errorcode.API
 }
 
 // GetSession 取DB Session資料
-func (a *AdminRepo) GetSession(session string) (adminSession model.AdminSession, apiErr errorcode.APIError) {
+func (a *AdminRepo) GetSession(session string) (adminSession model.AdminSession, apiErr errorcode.Error) {
 	db, apiErr := model.DBConnection(global.GoFormatSl)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 	defer db.Close()
@@ -120,9 +120,9 @@ func (a *AdminRepo) GetSession(session string) (adminSession model.AdminSession,
 }
 
 // DeleteSession 刪除DB資料
-func (a *AdminRepo) DeleteSession(session string) (apiErr errorcode.APIError) {
+func (a *AdminRepo) DeleteSession(session string) (apiErr errorcode.Error) {
 	db, apiErr := model.DBConnection(global.GoFormatMa)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 	defer db.Close()
@@ -142,9 +142,9 @@ func (a *AdminRepo) DeleteSession(session string) (apiErr errorcode.APIError) {
 }
 
 // CreateAdmin 新增後台管理員
-func (a *AdminRepo) CreateAdmin(user *structs.ADRegister) (apiErr errorcode.APIError) {
+func (a *AdminRepo) CreateAdmin(user *structs.ADRegister) (apiErr errorcode.Error) {
 	db, apiErr := model.DBConnection(global.GoFormatMa)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 	defer db.Close()
@@ -219,9 +219,9 @@ func (a *AdminRepo) MenuList(admin *model.Admin) (lists []structs.MenuList) {
 }
 
 // CheckPermission 檢查帳號權限
-func (a *AdminRepo) CheckPermission(session string) (admin model.Admin, apiErr errorcode.APIError) {
+func (a *AdminRepo) CheckPermission(session string) (admin model.Admin, apiErr errorcode.Error) {
 	db, apiErr := model.DBConnection(global.GoFormatSl)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 	defer db.Close()
@@ -237,9 +237,9 @@ func (a *AdminRepo) CheckPermission(session string) (admin model.Admin, apiErr e
 }
 
 // UpdatePassword 修改密碼
-func (a *AdminRepo) UpdatePassword(newPwd structs.UpdatePassword) (apiErr errorcode.APIError) {
+func (a *AdminRepo) UpdatePassword(newPwd structs.UpdatePassword) (apiErr errorcode.Error) {
 	db, apiErr := model.DBConnection(global.GoFormatMa)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 	defer db.Close()
@@ -265,9 +265,9 @@ func (a *AdminRepo) UpdatePassword(newPwd structs.UpdatePassword) (apiErr errorc
 }
 
 // GetAdminInfoByID 透過管理者ID取詳細資料
-func (a *AdminRepo) GetAdminInfoByID(adminID int) (admin model.Admin, apiErr errorcode.APIError) {
+func (a *AdminRepo) GetAdminInfoByID(adminID int) (admin model.Admin, apiErr errorcode.Error) {
 	db, apiErr := model.DBConnection(global.GoFormatSl)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 	defer db.Close()
@@ -282,9 +282,9 @@ func (a *AdminRepo) GetAdminInfoByID(adminID int) (admin model.Admin, apiErr err
 }
 
 // DeleteAllSession 清除用戶登入的所有session
-func (a *AdminRepo) DeleteAllSession(account string) (admin []model.AdminSession, apiErr errorcode.APIError) {
+func (a *AdminRepo) DeleteAllSession(account string) (admin []model.AdminSession, apiErr errorcode.Error) {
 	db, apiErr := model.DBConnection(global.GoFormatMa)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 	defer db.Close()
@@ -304,9 +304,9 @@ func (a *AdminRepo) DeleteAllSession(account string) (admin []model.AdminSession
 }
 
 // UpdateAdmin 更新管理者帳號權限
-func (a *AdminRepo) UpdateAdmin(adminData map[string]interface{}) (apiErr errorcode.APIError) {
+func (a *AdminRepo) UpdateAdmin(adminData map[string]interface{}) (apiErr errorcode.Error) {
 	db, apiErr := model.DBConnection(global.GoFormatMa)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 	defer db.Close()
@@ -331,9 +331,9 @@ func (a *AdminRepo) UpdateAdmin(adminData map[string]interface{}) (apiErr errorc
 }
 
 // DeleteAdmin 刪除帳號資料
-func (a *AdminRepo) DeleteAdmin(uid int) (apiErr errorcode.APIError) {
+func (a *AdminRepo) DeleteAdmin(uid int) (apiErr errorcode.Error) {
 	db, apiErr := model.DBConnection(global.GoFormatMa)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 	defer db.Close()
@@ -354,9 +354,9 @@ func (a *AdminRepo) DeleteAdmin(uid int) (apiErr errorcode.APIError) {
 }
 
 // ClearExpiredSession 清除過期session
-func (a *AdminRepo) ClearExpiredSession(time string) (session []model.AdminSession, apiErr errorcode.APIError) {
+func (a *AdminRepo) ClearExpiredSession(time string) (session []model.AdminSession, apiErr errorcode.Error) {
 	db, apiErr := model.DBConnection(global.GoFormatMa)
-	if apiErr.ErrorCode != 0 {
+	if apiErr != nil {
 		return
 	}
 	defer db.Close()

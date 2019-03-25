@@ -47,7 +47,6 @@ func main() {
 	router.RouteProvider(r)
 
 	// Listen and Server in 0.0.0.0:8081
-	// endless.ListenAndServe(":8081", r)
 	server := endless.NewServer(":9999", r)
 	server.BeforeBegin = func(add string) {
 		log.Printf("Service Port %v, Actual pid is %d", add, syscall.Getpid())
