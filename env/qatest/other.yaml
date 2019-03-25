@@ -1,0 +1,13 @@
+img_path:
+  img_path_rotate: /home/images/goformat/rotate
+
+img_server:
+  img_server_rotate: ./images/rotate/
+
+log:
+  log_dir: /home/log/
+  access_log: goformat_access.log
+  error_log: goformat_error.log
+
+db:
+  debug: true

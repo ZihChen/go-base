@@ -1,0 +1,75 @@
+#!/bin/bash
+# 撰寫人員: Neil_Hsieh
+# 撰寫日期：2019/01/14
+# 說明： 啟動GoFormat的服務
+#
+# 備註：
+#   
+
+# 執行GoFormat的目錄,
+WORK_PATH=$(dirname $(readlink -f $0))
+# 執行各容器，須掛載的資料夾位置
+VOLUME_PATH=$(dirname $(readlink -f $0))/../
+# Log存放的目錄(預設local路徑)
+LOG="/var/log/app/GoFormat"
+# 讀取圖片路徑(預設dev路徑)
+IMG="$VOLUME_PATH/images" 
+
+# 顯示環境
+printf "\033[1;31m%s  %+10s\n" "(1).Dev" "(2).QATest"
+printf "\033[1;31m%s  %s\n" "(3).Sit" "(4).Local"
+printf "\033[1;31m%s  %+7s\n" "(5).T2" "(6).T4"
+
+# 選擇環境
+printf "\033[0;36m"
+read -p "請選擇服務環境：" ENV_ID
+
+# 執行環境
+# 執行選項
+
+printf "\033[37m"
+
+case $ENV_ID in
+    1)
+        ENV="develop"
+        LOG="/home/log/GoFormat"
+        ;;
+    2) 
+        ENV="qatest"
+        LOG="/home/log/GoFormat"
+        ;;
+    3) 
+        ENV="sit"
+        LOG="/home/log/GoFormat"
+          
+        ;;
+    4) 
+        ENV="local"
+        IMG="./upload/images"
+
+        # 本機開發須安裝swagger + 初始化文件
+        go get -u github.com/swaggo/swag/cmd/swag
+        cd $WORK_PATH
+        swag init
+ 
+        ;;
+    5)
+        ENV="prodT2"
+        ;;
+    6)
+        ENV="prodT4" 
+        ;;
+    *) 
+        echo "格式不符合(環境變數)"
+        exit
+        ;;
+esac
+
+#############################
+#############################
+docker network ls | grep "web_service" >/dev/null 2>&1
+    if  [ $? -ne 0 ]; then
+        docker network create web_service
+    fi
+   
+ENV=$ENV LOG=$LOG IMG=$IMG docker-compose -f $WORK_PATH/docker-compose.yml up -d

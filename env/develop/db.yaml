@@ -1,0 +1,18 @@
+master:
+  # master db 設定
+  host: 172.17.0.1
+  username: root
+  password: root
+  database: goformat
+
+slave:
+  # slave db 設定
+  host: 172.17.0.1
+  username: root
+  password: root
+  database: goformat
+
+redis:
+  redis_host: 172.17.0.1
+  redis_port: 6380
+  redis_password: rd3Redis

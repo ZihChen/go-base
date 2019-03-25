@@ -1,0 +1,4 @@
+api:
+  cypress_url: http://192.168.201.47:8100/dev
+  cypress_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiI1YTU1YzAzM2FiZjUxZjAwMDE5NWI1ZjgiLCJhY2NvdW50Ijoib3BjczAwMSIsIm5pY2tuYW1lIjoib3BjczAwMSIsInR5cGUiOiJPUCIsInJvbGUiOiJjcyIsImp0aSI6IjQwNDIwNzczMiIsImlhdCI6MTUxNTU2OTIwMywiaXNzIjoiQ3lwcmVzcyIsInN1YiI6Ik9QVG9rZW4ifQ.Wm8Ud8CjWJBFKMwTm5q0l59lXSyJ06Ngy7EeonpjtXY
+  rd1_url: http://192.168.201.39:9415

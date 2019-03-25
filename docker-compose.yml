@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  golang:
+    build:
+      context: .
+      args:
+        ENV: ${ENV}
+    container_name: GoFormat
+    restart: always
+    ports:
+      - 9999:9999
+    environment:
+      - ENV=${ENV} # 各站環境變數
+      - TZ=UTC+4 # 美東時間
+    volumes:
+      - .:/go/src/GoFormat
+      - ${LOG}:/home/log
+      - ${IMG}:/home/images
+    networks:
+      - web_service
+networks:
+  web_service:
+    external: true
