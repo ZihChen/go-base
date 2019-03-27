@@ -40,7 +40,7 @@ func (*CypressSer) GetTopGames() (content []byte, apiErr errorcode.Error) {
 
 	//執行
 	content, err := sendGet(url, header, param)
-	if err.ErrorCode != 0 {
+	if err != nil {
 		return nil, err
 	}
 
@@ -66,7 +66,7 @@ func (*CypressSer) GetTopReward(x int) (content []byte, apiErr errorcode.Error) 
 
 	//執行
 	content, err := sendGet(url, header, param)
-	if err.ErrorCode != 0 {
+	if err != nil {
 		return nil, err
 	}
 
@@ -91,7 +91,7 @@ func (*CypressSer) GetTopLucky() (content []byte, apiErr errorcode.Error) {
 
 	//執行
 	content, err := sendGet(url, header, param)
-	if err.ErrorCode != 0 {
+	if err != nil {
 		return nil, err
 	}
 
@@ -116,7 +116,7 @@ func (*CypressSer) GetTopWin() (content []byte, apiErr errorcode.Error) {
 
 	//執行
 	content, err := sendGet(url, header, param)
-	if err.ErrorCode != 0 {
+	if err != nil {
 		return nil, err
 	}
 
@@ -139,7 +139,7 @@ func (*CypressSer) GetGameList() (content []byte, apiErr errorcode.Error) {
 
 	//執行
 	content, err := sendGet(url, header, param)
-	if err.ErrorCode != 0 {
+	if err != nil {
 		return nil, err
 	}
 
@@ -166,7 +166,7 @@ func (*CypressSer) GetMarquee(autoMarquee structs.MarqueeAPI) (content []byte, a
 
 	//執行
 	content, err := sendGet(url, header, param)
-	if err.ErrorCode != 0 {
+	if err != nil {
 		return nil, err
 	}
 
@@ -189,7 +189,7 @@ func (*CypressSer) GetMarqueeSet() (content []byte, apiErr errorcode.Error) {
 
 	//執行
 	content, err := sendGet(url, header, param)
-	if err.ErrorCode != 0 {
+	if err != nil {
 		return nil, err
 	}
 
@@ -209,7 +209,7 @@ func (*CypressSer) SetMarqueeSet(param map[string]interface{}) (content []byte, 
 
 	//執行
 	content, err := sendPut(url, header, param)
-	if err.ErrorCode != 0 {
+	if err != nil {
 		return nil, err
 	}
 
@@ -232,7 +232,7 @@ func (*CypressSer) GetMarqueeGame() (content []byte, apiErr errorcode.Error) {
 
 	//執行
 	content, err := sendGet(url, header, param)
-	if err.ErrorCode != 0 {
+	if err != nil {
 		return nil, err
 	}
 
@@ -252,7 +252,7 @@ func (*CypressSer) CreateMarqueeGame(param map[string]interface{}) (content []by
 
 	//執行
 	content, err := sendPost(url, header, param)
-	if err.ErrorCode != 0 {
+	if err != nil {
 		return nil, err
 	}
 
@@ -272,7 +272,7 @@ func (*CypressSer) DeleteMarqueeGame(param map[string]interface{}) (content []by
 
 	//執行
 	content, err := sendPost(url, header, param)
-	if err.ErrorCode != 0 {
+	if err != nil {
 		return nil, err
 	}
 

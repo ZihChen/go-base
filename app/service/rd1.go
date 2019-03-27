@@ -36,7 +36,7 @@ func (*RD1Ser) GetOrderDetail(roundID string) (content []byte, apiErr errorcode.
 
 	//執行
 	content, err := sendGet(url, header, param)
-	if err.ErrorCode != 0 {
+	if err != nil {
 		return nil, err
 	}
 
