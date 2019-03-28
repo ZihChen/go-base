@@ -6,14 +6,14 @@ services:
       context: .
       args:
         ENV: ${ENV}
-    container_name: GoFormat
+    container_name: ${PROJECT_NAME}
     restart: always
     ports:
       - 9999:9999
     environment:
       - ENV=${ENV} # 各站環境變數
     volumes:
-      - .:/go/src/GoFormat
+      - .:/go/src/${PROJECT_NAME}
       - ${LOG}:/home/log
       - ${IMG}:/home/images
       - /etc/localtime:/etc/localtime:ro # 美東時間

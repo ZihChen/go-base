@@ -1,7 +1,7 @@
 #!/bin/bash
 # 撰寫人員: Neil_Hsieh
 # 撰寫日期：2019/01/14
-# 說明： 啟動GoFormat的服務
+# 說明： 啟動Golang的服務
 #
 # 備註：
 #   
@@ -10,8 +10,10 @@
 WORK_PATH=$(dirname $(readlink -f $0))
 # 執行各容器，須掛載的資料夾位置
 VOLUME_PATH=$(dirname $(readlink -f $0))/../
+# 專案名稱(取當前資料夾路徑最後一個資料夾名稱)
+PROJECT_NAME=${WORK_PATH##*/}
 # Log存放的目錄(預設local路徑)
-LOG="/var/log/app/GoFormat"
+LOG="/var/log/app/$PROJECT_NAME"
 # 讀取圖片路徑(預設dev路徑)
 IMG="$VOLUME_PATH/images" 
 
@@ -32,15 +34,15 @@ printf "\033[37m"
 case $ENV_ID in
     1)
         ENV="develop"
-        LOG="/home/log/GoFormat"
+        LOG="/home/log/$PROJECT_NAME"
         ;;
     2) 
         ENV="qatest"
-        LOG="/home/log/GoFormat"
+        LOG="/home/log/$PROJECT_NAME"
         ;;
     3) 
         ENV="sit"
-        LOG="/home/log/GoFormat"
+        LOG="/home/log/$PROJECT_NAME"
           
         ;;
     4) 
@@ -72,4 +74,4 @@ docker network ls | grep "web_service" >/dev/null 2>&1
         docker network create web_service
     fi
    
-ENV=$ENV LOG=$LOG IMG=$IMG docker-compose -f $WORK_PATH/docker-compose.yml up -d
+ENV=$ENV LOG=$LOG IMG=$IMG PROJECT_NAME=$PROJECT_NAME docker-compose -f $WORK_PATH/docker-compose.yml up -d
