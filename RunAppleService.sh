@@ -49,6 +49,10 @@ case $ENV_ID in
         ENV="local"
         IMG="./upload/images"
 
+        # 第一次clone專案須同步對外套件
+        go get -u github.com/kardianos/govendor
+        govendor sync
+
         # 本機開發須安裝swagger + 初始化文件
         go get -u github.com/swaggo/swag/cmd/swag
         cd $WORK_PATH

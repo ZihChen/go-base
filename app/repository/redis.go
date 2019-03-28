@@ -42,18 +42,30 @@ func (*Redis) Exists(key string) (ok bool, apiErr errorcode.Error) {
 }
 
 // Set 存入redis值
-func (*Redis) Set(key string, value interface{}, time int) (apiErr errorcode.Error) {
+func (*Redis) Set(key string, value interface{}, expiretime int) (apiErr errorcode.Error) {
 	RedisPool := model.RedisPoolConnect()
 	conn := RedisPool.Get()
 	defer conn.Close()
 
-	if _, err := conn.Do("SET", key, value, "EX", time); err != nil {
+	if _, err := conn.Do("SET", key, value, "EX", expiretime); err != nil {
 		go helper.WarnLog(fmt.Sprintf("REDIS_INSERT_ERROR: %v", err))
 		apiErr = errorcode.GetAPIError("REDIS_INSERT_ERROR")
 		return
 	}
-
 	return
+}
+
+// RedisPing 檢查Redis是否啟動
+func RedisPing() {
+	RedisPool := model.RedisPoolConnect()
+	conn := RedisPool.Get()
+	defer conn.Close()
+
+	_, err := conn.Do("PING")
+	if err != nil {
+		go helper.WarnLog(fmt.Sprintf("REDIS_PING_ERROR: %v", err.Error()))
+		panic("REDIS CONNECT ERROR")
+	}
 }
 
 // Get 取出redis值

@@ -4,6 +4,7 @@ import (
 	"GoFormat/app/global"
 	"GoFormat/app/global/helper"
 	"GoFormat/app/model"
+	"GoFormat/app/repository"
 	"GoFormat/app/task"
 	_ "GoFormat/docs"
 	"GoFormat/router"
@@ -38,7 +39,7 @@ func main() {
 	model.DBConnectTest()
 
 	// 檢查 Redis 機器服務
-	model.RedisConnectTest()
+	repository.RedisPing()
 
 	// 背景
 	go task.Schedule()

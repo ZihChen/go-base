@@ -2,7 +2,6 @@ package model
 
 import (
 	"GoFormat/app/global"
-	"GoFormat/app/global/errorcode"
 	"GoFormat/app/global/helper"
 	"fmt"
 	"time"
@@ -64,41 +63,4 @@ func init() {
 // RedisPoolConnect 回傳連線池的 Redis 連線
 func RedisPoolConnect() *redis.Pool {
 	return RedisPool
-}
-
-// RedisConnect 與redis連線
-func RedisConnect() (c redis.Conn, apiErr errorcode.Error) {
-	// 使用redis封裝的Dial進行tcp連接
-	host := global.Config.Redis.RedisHost
-	port := global.Config.Redis.RedisPort
-	pwd := global.Config.Redis.RedisPwd
-
-	// 組合連接資訊
-	var connectionString = fmt.Sprintf("%s:%s", host, port)
-	c, err := redis.Dial(
-		"tcp",
-		connectionString,
-		redis.DialPassword(pwd),
-		redis.DialConnectTimeout(5*time.Second), // 建立連線 time out 時間 5 秒
-		redis.DialReadTimeout(5*time.Second),    // 讀取資料 time out 時間 5 秒
-		redis.DialWriteTimeout(5*time.Second),   // 寫入資料 time out 時間 5 秒
-	)
-
-	if err != nil {
-		go helper.WarnLog(fmt.Sprintf("REDIS_CONNECT_ERROR: %v", err))
-		apiErr = errorcode.GetAPIError("REDIS_CONNECT_ERROR")
-		return
-	}
-
-	return
-}
-
-// RedisConnectTest 檢查 Redis 機器是否可以連線
-func RedisConnectTest() {
-	// 檢查 Master 連線
-	redis, apiErr := RedisConnect()
-	if apiErr != nil {
-		panic("REDIS CONNECT ERROR")
-	}
-	defer redis.Close()
 }
