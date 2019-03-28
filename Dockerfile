@@ -16,6 +16,11 @@ WORKDIR /go/src/GoFormat
 # go get 會用到
 RUN apk add git
 
+# 美東時間
+# RUN apk --no-cache add tzdata  && \
+#     ln -sf /usr/share/zoneinfo/America/New_York /etc/localtime && \
+#     echo "America/Los_Angeles" > /etc/timezone 
+
 # 安裝govendor + realize
 RUN go get github.com/tockins/realize \
     && go get github.com/kardianos/govendor

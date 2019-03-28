@@ -12,11 +12,11 @@ services:
       - 9999:9999
     environment:
       - ENV=${ENV} # 各站環境變數
-      - TZ=UTC+4 # 美東時間
     volumes:
       - .:/go/src/GoFormat
       - ${LOG}:/home/log
       - ${IMG}:/home/images
+      - /etc/localtime:/etc/localtime:ro # 美東時間
     networks:
       - web_service
 networks:
