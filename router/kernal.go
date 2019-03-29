@@ -13,7 +13,6 @@ func RouteProvider(r *gin.Engine) {
 	r.Use(middleware.WriteLog)
 
 	// 載入router設定
-	LoadWebRouter(r)
 	LoadBackendRouter(r)
 
 	// 載入測試用API

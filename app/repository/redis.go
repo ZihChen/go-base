@@ -63,8 +63,7 @@ func RedisPing() {
 
 	_, err := conn.Do("PING")
 	if err != nil {
-		go helper.WarnLog(fmt.Sprintf("REDIS_PING_ERROR: %v", err.Error()))
-		panic("REDIS CONNECT ERROR")
+		panic("REDIS CONNECT ERROR:" + err.Error())
 	}
 }
 

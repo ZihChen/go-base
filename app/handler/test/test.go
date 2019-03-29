@@ -70,3 +70,63 @@ func GetRedisValue(c *gin.Context) {
 
 	c.JSON(http.StatusOK, helper.Success(value))
 }
+
+// PingDBOnce Ping DB 測試
+// @Summary Ping DB 測試
+// @description DB Pool 連線測試
+// @Tags Admin
+// @Produce  json
+// @Success 200 {object} structs.APIResult "成功"
+// @Failure 400 {object} structs.APIResult "異常錯誤"
+// @Router /test/ping_db_once [GET]
+func PingDBOnce(c *gin.Context) {
+	// 接Error
+	defer func() {
+		if err := recover(); err != nil {
+			// 寫Fatal Log
+			helper.FatalLog(err)
+
+			// 回傳不可預期的錯誤
+			apiErr := errorcode.GetAPIError(fmt.Sprintf("%v", err))
+			c.JSON(http.StatusBadRequest, helper.Fail(apiErr))
+		}
+	}()
+
+	dbBus := business.DBIns()
+	if err := dbBus.PingDBOnce(); err != nil {
+		c.JSON(http.StatusOK, helper.Fail(err))
+		return
+	}
+
+	c.JSON(http.StatusOK, helper.Success("123"))
+}
+
+// PingDBSecond Ping DB 測試
+// @Summary Ping DB 測試
+// @description DB Pool 連線測試
+// @Tags Admin
+// @Produce  json
+// @Success 200 {object} structs.APIResult "成功"
+// @Failure 400 {object} structs.APIResult "異常錯誤"
+// @Router /test/ping_db_second [GET]
+func PingDBSecond(c *gin.Context) {
+	// 接Error
+	defer func() {
+		if err := recover(); err != nil {
+			// 寫Fatal Log
+			helper.FatalLog(err)
+
+			// 回傳不可預期的錯誤
+			apiErr := errorcode.GetAPIError(fmt.Sprintf("%v", err))
+			c.JSON(http.StatusBadRequest, helper.Fail(apiErr))
+		}
+	}()
+
+	dbBus := business.DBIns()
+	if err := dbBus.PingDBSecond(); err != nil {
+		c.JSON(http.StatusOK, helper.Fail(err))
+		return
+	}
+
+	c.JSON(http.StatusOK, helper.Success("456"))
+}

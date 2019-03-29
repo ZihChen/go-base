@@ -15,7 +15,7 @@ var RedisPool *redis.Pool
 func init() {
 	RedisPool = &redis.Pool{
 		MaxIdle:     100,               // int 最大可允許的閒置連線數
-		MaxActive:   200,               // int 最大建立的連線數，默認為0不限制
+		MaxActive:   10000,             // int 最大建立的連線數，默認為0不限制(reids 預設最大連線量)
 		IdleTimeout: 300 * time.Second, // 連線過期時間，默認為0表示不做過期限制
 		Wait:        true,              // 當連線超出限制數量後，是否等待到空閒連線釋放
 		Dial: func() (c redis.Conn, err error) {

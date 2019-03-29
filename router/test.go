@@ -1,7 +1,6 @@
 package router
 
 import (
-	"GoFormat/app/handler/admin"
 	"GoFormat/app/handler/test"
 
 	"github.com/gin-gonic/gin"
@@ -16,8 +15,8 @@ func LoadTestRouter(r *gin.Engine) {
 	{
 		v1.GET("/get_redis", test.GetRedisValue)
 		v1.POST("/set_redis", test.SetRedisValue)
-		// 刪除過期session
-		v1.DELETE("/clear_session", admin.ClearExpiredSession)
+		v1.GET("/ping_db_once", test.PingDBOnce)
+		v1.GET("/ping_db_second", test.PingDBSecond)
 	}
 
 	// Swagger
