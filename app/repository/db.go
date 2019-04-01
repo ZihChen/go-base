@@ -25,40 +25,43 @@ func DBIns() *DB {
 
 // PingDBOnce ping db 測試
 func (*DB) PingDBOnce() (apiErr errorcode.Error) {
-	db, apiErr := model.DBConnection(global.GoFormatSl)
+	db, apiErr := model.NewConn(global.GoFormatSl)
 	if apiErr != nil {
 		return
 	}
 	// defer db.Close()
 
-	if err := db.DB().Ping(); err != nil {
+	time.Sleep(10 * time.Second)
+	admin := model.Admin{}
+
+	if err := db.Where("account = ?", "user3").Find(&admin).Error; err != nil {
 		fmt.Println("Ping Error:", err.Error())
 		db.DB().Close()
 		return
 	}
 
-	fmt.Println("Ping Access")
-	time.Sleep(20 * time.Second)
+	fmt.Println(admin)
 	return
 }
 
 // PingDBSecond ping db 測試
 func (*DB) PingDBSecond() (apiErr errorcode.Error) {
-	db, apiErr := model.DBConnection(global.GoFormatSl)
+	db, apiErr := model.NewConn(global.GoFormatSl)
 	if apiErr != nil {
 		return
 	}
 	// defer db.Close()
 
-	if err := db.DB().Ping(); err != nil {
+	time.Sleep(10 * time.Second)
+	admin := model.Admin{}
+
+	if err := db.Where("id = ?", 1).Find(&admin).Error; err != nil {
 		fmt.Println("Ping Error:", err.Error())
 		db.DB().Close()
 		return
 	}
 
-	fmt.Println("Ping Access")
-
-	time.Sleep(10 * time.Second)
+	fmt.Println(admin)
 
 	return
 }
