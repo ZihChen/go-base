@@ -3,6 +3,7 @@ package main
 import (
 	"GoFormat/app/global"
 	"GoFormat/app/global/helper"
+	"GoFormat/app/model"
 	_ "GoFormat/docs"
 	"GoFormat/router"
 	"fmt"
@@ -33,7 +34,7 @@ func main() {
 	global.Start()
 
 	// 檢查 DB 機器服務
-	// model.DBConnectTest()
+	model.DBPing()
 
 	// 檢查 Redis 機器服務
 	// repository.RedisPing()

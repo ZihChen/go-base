@@ -18,70 +18,94 @@ type dbCon struct {
 	Database string `json:"database"`
 }
 
-// DBPool 存放 db 連線池的全域變數
-var DBPool *gorm.DB
+// MasterPool 存放 db Master 連線池的全域變數
+var MasterPool *gorm.DB
 
-// NewConn 取connection pool 新連線
-func NewConn(mode string) (*gorm.DB, errorcode.Error) {
-	fmt.Println("尚未連線====>", DBPool)
-	if DBPool != nil {
-		return DBPool.New(), nil
+// SlavePool 存放 db Slave 連線池的全域變數
+var SlavePool *gorm.DB
+
+// MasterConnect 建立 Master Pool 連線
+func MasterConnect() (*gorm.DB, errorcode.Error) {
+	if MasterPool != nil {
+		return MasterPool, nil
 	}
 
-	var apiErr errorcode.Error
-	DBPool, apiErr = DBConnection(mode)
-	if apiErr != nil {
-		return nil, apiErr
-	}
-
-	fmt.Println("連線後====>", DBPool)
-	return DBPool.New(), nil
-}
-
-// DBConnection 建立 Pool 連線
-func DBConnection(mode string) (*gorm.DB, errorcode.Error) {
-	var err error
-	connString := composeString(mode)
-	DBPool, err = gorm.Open("mysql", connString)
+	connString := composeString(global.GoFormatMa)
+	MasterPool, err := gorm.Open("mysql", connString)
 	if err != nil {
-		fmt.Println("當DB連線錯誤：", err.Error())
 		go helper.FatalLog(fmt.Sprintf("DB_CONNECT_ERROR: %v", err.Error()))
 		apiErr := errorcode.GetAPIError("DB_CONNECT_ERROR")
 		return nil, apiErr
 	}
 
 	// 限制最大開啟的連線數
-	DBPool.DB().SetMaxIdleConns(100)
+	MasterPool.DB().SetMaxIdleConns(100)
 	// 限制最大閒置連線數
-	DBPool.DB().SetMaxOpenConns(2000)
+	MasterPool.DB().SetMaxOpenConns(2000)
 	// 空閒連線 timeout 時間
-	DBPool.DB().SetConnMaxLifetime(15 * time.Second)
+	MasterPool.DB().SetConnMaxLifetime(15 * time.Second)
 
 	// 全局禁用表名复数
-	// DBPool.SingularTable(true)
+	// MasterPool.SingularTable(true)
 	// 開啟SQL Debug模式
-	DBPool.LogMode(global.Config.DB.Debug)
+	MasterPool.LogMode(global.Config.DB.Debug)
 
-	return DBPool, nil
+	return MasterPool, nil
 }
 
-// DBConnectTest 檢查DB機器是否可以連線
-// func DBConnectTest() {
-// 	// 檢查 Master 連線
-// 	_, apiErr := DBConnection(global.GoFormatMa)
-// 	if apiErr != nil {
+// SlaveConnect 建立 Slave Pool 連線
+func SlaveConnect() (*gorm.DB, errorcode.Error) {
+	if SlavePool != nil {
+		return SlavePool, nil
+	}
 
-// 		panic("DB MASTER CONNECT ERROR")
-// 	}
-// 	// defer dbM.Close()
+	connString := composeString(global.GoFormatSl)
+	SlavePool, err := gorm.Open("mysql", connString)
+	if err != nil {
+		go helper.FatalLog(fmt.Sprintf("DB_CONNECT_ERROR: %v", err.Error()))
+		apiErr := errorcode.GetAPIError("DB_CONNECT_ERROR")
+		return nil, apiErr
+	}
 
-// 	// 檢查M Slave 連線
-// 	// dbS, apiErr := DBConnection(global.GoFormatSl)
-// 	// if apiErr != nil {
-// 	// 	panic("DB SLAVE CONNECT ERROR")
-// 	// }
-// 	// defer dbS.Close()
-// }
+	// 限制最大開啟的連線數
+	SlavePool.DB().SetMaxIdleConns(100)
+	// 限制最大閒置連線數
+	SlavePool.DB().SetMaxOpenConns(2000)
+	// 空閒連線 timeout 時間
+	SlavePool.DB().SetConnMaxLifetime(15 * time.Second)
+
+	// 全局禁用表名复数
+	// SlavePool.SingularTable(true)
+	// 開啟SQL Debug模式
+	SlavePool.LogMode(global.Config.DB.Debug)
+
+	return SlavePool, nil
+}
+
+// DBPing 檢查DB是否啟動
+func DBPing() {
+	// 檢查 master db
+	masterPool, apiErr := MasterConnect()
+	if apiErr != nil {
+		panic("MASTER DB CONNECT ERROR")
+	}
+
+	err := masterPool.DB().Ping()
+	if err != nil {
+		panic("PING MASTER DB ERROR:" + err.Error())
+	}
+
+	// 檢查 slave db
+	slavePool, apiErr := SlaveConnect()
+	if apiErr != nil {
+		panic("SLAVE DB CONNECT ERROR")
+	}
+
+	err = slavePool.DB().Ping()
+	if err != nil {
+		panic("PING SLAVE DB ERROR:" + err.Error())
+	}
+}
 
 // composeString 組合DB連線前的字串資料
 func composeString(mode string) string {
