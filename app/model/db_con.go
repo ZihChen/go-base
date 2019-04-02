@@ -18,20 +18,20 @@ type dbCon struct {
 	Database string `json:"database"`
 }
 
-// MasterPool 存放 db Master 連線池的全域變數
-var MasterPool *gorm.DB
+// masterPool 存放 db Master 連線池的全域變數
+var masterPool *gorm.DB
 
-// SlavePool 存放 db Slave 連線池的全域變數
-var SlavePool *gorm.DB
+// slavePool 存放 db Slave 連線池的全域變數
+var slavePool *gorm.DB
 
 // MasterConnect 建立 Master Pool 連線
 func MasterConnect() (*gorm.DB, errorcode.Error) {
-	if MasterPool != nil {
-		return MasterPool, nil
+	if masterPool != nil {
+		return masterPool, nil
 	}
 
 	connString := composeString(global.GoFormatMa)
-	MasterPool, err := gorm.Open("mysql", connString)
+	masterPool, err := gorm.Open("mysql", connString)
 	if err != nil {
 		go helper.FatalLog(fmt.Sprintf("DB_CONNECT_ERROR: %v", err.Error()))
 		apiErr := errorcode.GetAPIError("DB_CONNECT_ERROR")
@@ -39,28 +39,28 @@ func MasterConnect() (*gorm.DB, errorcode.Error) {
 	}
 
 	// 限制最大開啟的連線數
-	MasterPool.DB().SetMaxIdleConns(100)
+	masterPool.DB().SetMaxIdleConns(100)
 	// 限制最大閒置連線數
-	MasterPool.DB().SetMaxOpenConns(2000)
+	masterPool.DB().SetMaxOpenConns(2000)
 	// 空閒連線 timeout 時間
-	MasterPool.DB().SetConnMaxLifetime(15 * time.Second)
+	masterPool.DB().SetConnMaxLifetime(15 * time.Second)
 
 	// 全局禁用表名复数
-	// MasterPool.SingularTable(true)
+	// masterPool.SingularTable(true)
 	// 開啟SQL Debug模式
-	MasterPool.LogMode(global.Config.DB.Debug)
+	masterPool.LogMode(global.Config.DB.Debug)
 
-	return MasterPool, nil
+	return masterPool, nil
 }
 
 // SlaveConnect 建立 Slave Pool 連線
 func SlaveConnect() (*gorm.DB, errorcode.Error) {
-	if SlavePool != nil {
-		return SlavePool, nil
+	if slavePool != nil {
+		return slavePool, nil
 	}
 
 	connString := composeString(global.GoFormatSl)
-	SlavePool, err := gorm.Open("mysql", connString)
+	slavePool, err := gorm.Open("mysql", connString)
 	if err != nil {
 		go helper.FatalLog(fmt.Sprintf("DB_CONNECT_ERROR: %v", err.Error()))
 		apiErr := errorcode.GetAPIError("DB_CONNECT_ERROR")
@@ -68,18 +68,18 @@ func SlaveConnect() (*gorm.DB, errorcode.Error) {
 	}
 
 	// 限制最大開啟的連線數
-	SlavePool.DB().SetMaxIdleConns(100)
+	slavePool.DB().SetMaxIdleConns(100)
 	// 限制最大閒置連線數
-	SlavePool.DB().SetMaxOpenConns(2000)
+	slavePool.DB().SetMaxOpenConns(2000)
 	// 空閒連線 timeout 時間
-	SlavePool.DB().SetConnMaxLifetime(15 * time.Second)
+	slavePool.DB().SetConnMaxLifetime(15 * time.Second)
 
 	// 全局禁用表名复数
-	// SlavePool.SingularTable(true)
+	// slavePool.SingularTable(true)
 	// 開啟SQL Debug模式
-	SlavePool.LogMode(global.Config.DB.Debug)
+	slavePool.LogMode(global.Config.DB.Debug)
 
-	return SlavePool, nil
+	return slavePool, nil
 }
 
 // DBPing 檢查DB是否啟動

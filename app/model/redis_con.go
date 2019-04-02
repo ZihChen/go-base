@@ -9,11 +9,11 @@ import (
 	"github.com/gomodule/redigo/redis"
 )
 
-// RedisPool 存放redis連線池的全域變數
-var RedisPool *redis.Pool
+// redisPool 存放redis連線池的全域變數
+var redisPool *redis.Pool
 
 func init() {
-	RedisPool = &redis.Pool{
+	redisPool = &redis.Pool{
 		MaxIdle:     100,               // int 最大可允許的閒置連線數
 		MaxActive:   10000,             // int 最大建立的連線數，默認為0不限制(reids 預設最大連線量)
 		IdleTimeout: 300 * time.Second, // 連線過期時間，默認為0表示不做過期限制
@@ -62,5 +62,5 @@ func init() {
 
 // RedisPoolConnect 回傳連線池的 Redis 連線
 func RedisPoolConnect() *redis.Pool {
-	return RedisPool
+	return redisPool
 }

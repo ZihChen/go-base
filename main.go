@@ -4,6 +4,7 @@ import (
 	"GoFormat/app/global"
 	"GoFormat/app/global/helper"
 	"GoFormat/app/model"
+	"GoFormat/app/repository"
 	_ "GoFormat/docs"
 	"GoFormat/router"
 	"fmt"
@@ -37,7 +38,7 @@ func main() {
 	model.DBPing()
 
 	// 檢查 Redis 機器服務
-	// repository.RedisPing()
+	repository.RedisPing()
 
 	// 背景
 	// go task.Schedule()
