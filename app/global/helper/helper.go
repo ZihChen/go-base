@@ -11,10 +11,17 @@ import (
 // Success 回傳成功API
 func Success(result interface{}) *structs.APIResult {
 	res := &structs.APIResult{
-		ErrorCode: 1,
-		ErrorMsg:  "SUCCESS",
-		Result:    []string{},
+		ErrorCode:   1,
+		ErrorMsg:    "SUCCESS",
+		LogIDentity: "",
+		Result:      []string{},
 	}
+
+	if wLog.LogIDentity == "" {
+		panic("LOG ID NOT EXIST")
+	}
+
+	res.LogIDentity = wLog.LogIDentity
 
 	if result != "" && result != nil {
 		res.Result = result
@@ -30,6 +37,7 @@ func Fail(err errorcode.Error) *structs.APIResult {
 
 	res.ErrorCode = err.GetErrorCode()
 	res.ErrorMsg = err.GetErrorText()
+	res.LogIDentity = wLog.LogIDentity
 	res.Result = []string{}
 
 	return res

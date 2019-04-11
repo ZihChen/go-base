@@ -27,7 +27,6 @@ func (*DB) PingDBOnce() (apiErr errorcode.Error) {
 	if apiErr != nil {
 		return
 	}
-	// defer db.Close()
 
 	admin := model.Admin{}
 
@@ -77,7 +76,6 @@ func (*DB) PingDBSecond() (apiErr errorcode.Error) {
 	if apiErr != nil {
 		return
 	}
-	// defer db.Close()
 
 	admin := model.Admin{}
 

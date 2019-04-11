@@ -13,31 +13,33 @@ import (
 
 // LogFormat 紀錄Log格式
 type LogFormat struct {
-	Level    string        `json:"level"`
-	LogTime  string        `json:"logTime"`
-	ClientIP string        `json:"clientIP"`
-	Path     string        `json:"path"`
-	FileName string        `json:"filename"`
-	Status   int           `json:"status"`
-	Method   string        `json:"method"`
-	Params   interface{}   `json:"params"`
-	Result   interface{}   `json:"reslut"`
-	ExecTime time.Duration `json:"execTime"`
+	Level       string        `json:"level"`
+	LogIDentity string        `json:"logIDentity"`
+	LogTime     string        `json:"logTime"`
+	ClientIP    string        `json:"clientIP"`
+	Path        string        `json:"path"`
+	FileName    string        `json:"filename"`
+	Status      int           `json:"status"`
+	Method      string        `json:"method"`
+	Params      interface{}   `json:"params"`
+	Result      interface{}   `json:"reslut"`
+	ExecTime    time.Duration `json:"execTime"`
 }
 
 // 宣告預設寫log路徑 + 格式
 var fileName = "goformat_access.log"
 var filePath = "/home/log/"
 var wLog = &LogFormat{
-	Level:    "Default",
-	LogTime:  time.Now().Format("2006-01-02 15:04:05 -07:00"),
-	ClientIP: "127.0.0.1",
-	Path:     "",
-	FileName: "",
-	Status:   0,
-	Method:   "",
-	Params:   []string{},
-	Result:   []string{},
+	Level:       "Default",
+	LogIDentity: "",
+	LogTime:     time.Now().Format("2006-01-02 15:04:05 -07:00"),
+	ClientIP:    "127.0.0.1",
+	Path:        "",
+	FileName:    "",
+	Status:      0,
+	Method:      "",
+	Params:      []string{},
+	Result:      []string{},
 }
 
 // AccessLog access.log
@@ -117,6 +119,9 @@ func ComposeLog(c *gin.Context) {
 
 	wLog.LogTime = time.Now().Format("2006-01-02 15:04:05 -07:00")
 
+	// 賦予該log一個唯一認證
+	wLog.LogIDentity = logIDentity()
+
 	// 檢查是否有來源IP
 	if c.ClientIP() != "" {
 		wLog.ClientIP = c.ClientIP()
@@ -180,4 +185,10 @@ func writeLog() error {
 	}
 
 	return nil
+}
+
+// logIDentity Log 識別證
+func logIDentity() (identity string) {
+	identity = Md5EncryptionWithTime("identity")
+	return
 }

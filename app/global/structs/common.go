@@ -66,7 +66,8 @@ type Redis struct {
 
 // APIResult 回傳API格式
 type APIResult struct {
-	ErrorCode int         `json:"error_code"`
-	ErrorMsg  string      `json:"error_msg"`
-	Result    interface{} `json:"result"`
+	ErrorCode   int         `json:"error_code"`
+	ErrorMsg    string      `json:"error_msg"`
+	LogIDentity string      `json:"log_id"`
+	Result      interface{} `json:"result"`
 }
