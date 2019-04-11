@@ -2,9 +2,7 @@ package test
 
 import (
 	"GoFormat/app/business"
-	"GoFormat/app/global/errorcode"
 	"GoFormat/app/global/helper"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -19,17 +17,8 @@ import (
 // @Failure 400 {object} structs.APIResult "異常錯誤"
 // @Router /test/set_redis [POST]
 func SetRedisValue(c *gin.Context) {
-	// 接Error
-	defer func() {
-		if err := recover(); err != nil {
-			// 寫Fatal Log
-			helper.FatalLog(err)
-
-			// 回傳不可預期的錯誤
-			apiErr := errorcode.GetAPIError(fmt.Sprintf("%v", err))
-			c.JSON(http.StatusBadRequest, helper.Fail(apiErr))
-		}
-	}()
+	// 接不可預期的錯誤
+	defer helper.CatchError(c)
 
 	redisBus := business.RedisIns()
 	if apiErr := redisBus.SetRedisKey(); apiErr != nil {
@@ -49,17 +38,8 @@ func SetRedisValue(c *gin.Context) {
 // @Failure 400 {object} structs.APIResult "異常錯誤"
 // @Router /test/get_redis [GET]
 func GetRedisValue(c *gin.Context) {
-	// 接Error
-	defer func() {
-		if err := recover(); err != nil {
-			// 寫Fatal Log
-			helper.FatalLog(err)
-
-			// 回傳不可預期的錯誤
-			apiErr := errorcode.GetAPIError(fmt.Sprintf("%v", err))
-			c.JSON(http.StatusBadRequest, helper.Fail(apiErr))
-		}
-	}()
+	// 接不可預期的錯誤
+	defer helper.CatchError(c)
 
 	redisBus := business.RedisIns()
 	value, err := redisBus.GetRedisValue()
@@ -80,17 +60,8 @@ func GetRedisValue(c *gin.Context) {
 // @Failure 400 {object} structs.APIResult "異常錯誤"
 // @Router /test/ping_db_once [GET]
 func PingDBOnce(c *gin.Context) {
-	// 接Error
-	defer func() {
-		if err := recover(); err != nil {
-			// 寫Fatal Log
-			helper.FatalLog(err)
-
-			// 回傳不可預期的錯誤
-			apiErr := errorcode.GetAPIError(fmt.Sprintf("%v", err))
-			c.JSON(http.StatusBadRequest, helper.Fail(apiErr))
-		}
-	}()
+	// 接不可預期的錯誤
+	defer helper.CatchError(c)
 
 	dbBus := business.DBIns()
 	if err := dbBus.PingDBOnce(); err != nil {
@@ -110,17 +81,8 @@ func PingDBOnce(c *gin.Context) {
 // @Failure 400 {object} structs.APIResult "異常錯誤"
 // @Router /test/ping_db_second [GET]
 func PingDBSecond(c *gin.Context) {
-	// 接Error
-	defer func() {
-		if err := recover(); err != nil {
-			// 寫Fatal Log
-			helper.FatalLog(err)
-
-			// 回傳不可預期的錯誤
-			apiErr := errorcode.GetAPIError(fmt.Sprintf("%v", err))
-			c.JSON(http.StatusBadRequest, helper.Fail(apiErr))
-		}
-	}()
+	// 接不可預期的錯誤
+	defer helper.CatchError(c)
 
 	dbBus := business.DBIns()
 	if err := dbBus.PingDBSecond(); err != nil {

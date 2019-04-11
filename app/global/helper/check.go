@@ -4,10 +4,12 @@ import (
 	"GoFormat/app/global/errorcode"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"regexp"
 	"syscall"
 
+	"github.com/gin-gonic/gin"
 	"gopkg.in/go-playground/validator.v9"
 )
 
@@ -81,4 +83,16 @@ func InArray(val string, array []string) (exists bool) {
 		}
 	}
 	return false
+}
+
+// CatchError 回傳不可預期的錯誤
+func CatchError(c *gin.Context) {
+	if err := recover(); err != nil {
+		// 寫Fatal Log
+		FatalLog(err)
+
+		// 回傳不可預期的錯誤
+		apiErr := errorcode.GetAPIError(fmt.Sprintf("%v", err))
+		c.JSON(http.StatusBadRequest, Fail(apiErr))
+	}
 }
