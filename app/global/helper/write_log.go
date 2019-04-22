@@ -23,6 +23,7 @@ type LogFormat struct {
 	Method      string        `json:"method"`
 	Params      interface{}   `json:"params"`
 	Result      interface{}   `json:"reslut"`
+	HTTPReferer string        `json:"http_referer"`
 	ExecTime    time.Duration `json:"execTime"`
 }
 
@@ -40,6 +41,7 @@ var wLog = &LogFormat{
 	Method:      "",
 	Params:      []string{},
 	Result:      []string{},
+	HTTPReferer: "",
 }
 
 // AccessLog access.log
@@ -58,7 +60,11 @@ func AccessLog() {
 }
 
 // FatalLog 組合error log內容
-func FatalLog(err interface{}) {
+func FatalLog(err interface{}, param ...interface{}) {
+	// 檢查是否需要紀錄帶入的參數
+	if len(param) > 0 {
+		wLog.Params = fmt.Sprintf("%v", param)
+	}
 
 	// 取檔案位置
 	fileName = global.Config.Log.ErrorLog
@@ -98,7 +104,12 @@ func PidLog(pid int) {
 }
 
 // WarnLog 組合warn log內容
-func WarnLog(err interface{}) {
+func WarnLog(err interface{}, param ...interface{}) {
+	// 檢查是否需要紀錄帶入的參數
+	if len(param) > 0 {
+		wLog.Params = fmt.Sprintf("%v", param)
+	}
+
 	// 取檔案位置
 	fileName = global.Config.Log.ErrorLog
 	filePath = global.Config.Log.LogDir
@@ -162,6 +173,8 @@ func ComposeLog(c *gin.Context) {
 		}
 	}
 
+	// 組來源網址
+	wLog.HTTPReferer = c.GetHeader("Referer")
 }
 
 // writeLog 寫Log
