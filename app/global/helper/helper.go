@@ -4,6 +4,7 @@ import (
 	"GoFormat/app/global/errorcode"
 	"GoFormat/app/global/structs"
 	"encoding/json"
+	"fmt"
 	"math/rand"
 	"time"
 )
@@ -18,7 +19,7 @@ func Success(result interface{}) *structs.APIResult {
 	}
 
 	if wLog.LogIDentity == "" {
-		panic("LOG ID NOT EXIST")
+		go WarnLog(fmt.Sprintf("LOG_ID_NOT_EXIST: %v", wLog.LogIDentity))
 	}
 
 	res.LogIDentity = wLog.LogIDentity

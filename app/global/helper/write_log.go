@@ -127,6 +127,8 @@ func WarnLog(err interface{}, param ...interface{}) {
 
 // ComposeLog 組合Log內容
 func ComposeLog(c *gin.Context) {
+	// 初始化Log內容
+	clearLogContent()
 
 	wLog.LogTime = time.Now().Format("2006-01-02 15:04:05 -07:00")
 
@@ -204,4 +206,23 @@ func writeLog() error {
 func logIDentity() (identity string) {
 	identity = Md5EncryptionWithTime("identity")
 	return
+}
+
+// clearLogContent 重新初始化 Log 內容
+func clearLogContent() {
+
+	wLog = &LogFormat{
+		Level:       "Default",
+		LogIDentity: "",
+		LogTime:     time.Now().Format("2006-01-02 15:04:05 -07:00"),
+		ClientIP:    "127.0.0.1",
+		Path:        "",
+		FileName:    "",
+		Status:      0,
+		Method:      "",
+		Params:      []string{},
+		Result:      []string{},
+		HTTPReferer: "",
+	}
+
 }

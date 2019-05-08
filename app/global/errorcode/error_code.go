@@ -16,6 +16,8 @@ var errorCode = map[string]APIError{
 	"IMAGES_TOO_LARGE":        {1010, "IMAGES TOO LARGE"},        // 檔案過大
 	"BIND_PARAMS_FAIL":        {1011, "BIND PARAMS FAIL"},        // 組合參數失敗
 	"CRYPTION_ERROR":          {1012, "CRYPTION ERROR"},          // 密碼加密錯誤
+	"GET_TIME_ZONE_ERROR":     {1013, "GET TIME ZONE ERROR"},     // 取當前時區錯誤
+	"LOG_ID_NOT_EXIST":        {1014, "LOG ID NOT EXIST"},        // Log 身份證
 
 	/** DB 錯誤 **/
 	"DB_CONNECT_ERROR": {2000, "DB CONNECT ERROR"}, // DB連線失敗
