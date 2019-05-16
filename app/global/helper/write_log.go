@@ -2,8 +2,10 @@ package helper
 
 import (
 	"GoFormat/app/global"
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"strings"
@@ -176,6 +178,7 @@ func ComposeLog(c *gin.Context) {
 				srd = strings.Replace(srd, "\n", "", -1)
 				srd = strings.Replace(srd, "\t", "", -1)
 				wLog.Params = srd
+				c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(rd))
 			}
 
 			// 若參數有帶入密碼，將密碼換成「*」號
