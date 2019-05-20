@@ -21,8 +21,8 @@ RUN apk add git
 #     ln -sf /usr/share/zoneinfo/America/New_York /etc/localtime && \
 #     echo "America/Los_Angeles" > /etc/timezone 
 
-# 安裝govendor + realize
-RUN go get github.com/tockins/realize \
+# 安裝govendor + fresh
+RUN go get github.com/pilu/fresh \
     && go get github.com/kardianos/govendor
 
-CMD ["sh", "-c", "govendor sync; ENV=${ENV:-develop} realize start"]
+CMD ["sh", "-c", "govendor sync; ENV=${ENV:-develop} fresh runner.conf"]

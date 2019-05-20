@@ -45,16 +45,5 @@ func main() {
 
 	// 載入router設定
 	router.RouteProvider(r)
-
-	// Listen and Server in 0.0.0.0:8081
-	server := endless.NewServer(":9999", r)
-	server.BeforeBegin = func(add string) {
-		log.Printf("Service Port %v, Actual pid is %d", add, syscall.Getpid())
-		go helper.PidLog(syscall.Getpid())
-	}
-
-	err := server.ListenAndServe()
-	if err != nil {
-		panic(err)
-	}
+	r.Run(":8080")
 }
