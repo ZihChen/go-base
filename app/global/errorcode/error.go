@@ -30,6 +30,11 @@ func GetAPIError(code string) APIError {
 	return APIError{api.ErrorCode, fmt.Sprintf(api.ErrorMsg+"(%d)", api.ErrorCode)}
 }
 
+// GetOtherUnitError 由其他單位產生的錯誤
+func GetOtherUnitError(errMsg string) APIError {
+	return APIError{10000, errMsg}
+}
+
 // GetErrorCode 錯誤代碼
 func (e APIError) GetErrorCode() int {
 	return e.ErrorCode
