@@ -2,10 +2,13 @@ package helper
 
 import (
 	"GoFormat/app/global"
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -166,6 +169,17 @@ func ComposeLog(c *gin.Context) {
 			c.Request.ParseMultipartForm(1000)
 
 			wLog.Params = c.Request.PostForm
+
+			// 以 application/json 傳遞參數需用 GetRawData 接才有
+			if len(c.Request.PostForm) < 1 {
+				rd, _ := c.GetRawData()
+				srd := string(rd)
+				srd = strings.Replace(srd, " ", "", -1)
+				srd = strings.Replace(srd, "\n", "", -1)
+				srd = strings.Replace(srd, "\t", "", -1)
+				wLog.Params = srd
+				c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(rd))
+			}
 
 			// 若參數有帶入密碼，將密碼換成「*」號
 			if c.Request.PostForm.Get("pwd") != "" || c.Request.PostForm.Get("password") != "" {

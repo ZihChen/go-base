@@ -19,6 +19,7 @@
 /upload
 /dump.rdb
 /docs/*
+/Redis/*
 
 ### Govendor ###
 github.com

@@ -11,7 +11,7 @@ import (
 // SetRedisValue 測試 Redis 存值
 // @Summary 測試 Redis 存值
 // @description Redis Pool 連線測試
-// @Tags Admin
+// @Tags Test
 // @Produce  json
 // @Success 200 {object} structs.APIResult "成功"
 // @Failure 400 {object} structs.APIResult "異常錯誤"
@@ -32,7 +32,7 @@ func SetRedisValue(c *gin.Context) {
 // GetRedisValue 測試 Redis 取值
 // @Summary 測試 Redis 取值
 // @description Redis Pool 連線測試
-// @Tags Admin
+// @Tags Test
 // @Produce  json
 // @Success 200 {object} structs.APIResult "成功"
 // @Failure 400 {object} structs.APIResult "異常錯誤"
@@ -54,7 +54,7 @@ func GetRedisValue(c *gin.Context) {
 // PingDBOnce Ping DB 測試
 // @Summary Ping DB 測試
 // @description DB Pool 連線測試
-// @Tags Admin
+// @Tags Test
 // @Produce  json
 // @Success 200 {object} structs.APIResult "成功"
 // @Failure 400 {object} structs.APIResult "異常錯誤"
@@ -75,7 +75,7 @@ func PingDBOnce(c *gin.Context) {
 // PingDBSecond Ping DB 測試
 // @Summary Ping DB 測試
 // @description DB Pool 連線測試
-// @Tags Admin
+// @Tags Test
 // @Produce  json
 // @Success 200 {object} structs.APIResult "成功"
 // @Failure 400 {object} structs.APIResult "異常錯誤"

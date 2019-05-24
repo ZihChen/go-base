@@ -64,9 +64,15 @@ func ParseTime(myTime string) (t time.Time, apiErr errorcode.Error) {
 		return
 	}
 
-	t, err = time.Parse("2006-01-02 15:04:05", myTime)
+	local, err := time.LoadLocation("Local") //服务器设置的时区
 	if err != nil {
-		apiErr = errorcode.GetAPIError("Parse_Time_ERROR")
+		apiErr = errorcode.GetAPIError("GET_TIME_ZONE_ERROR")
+		return
+	}
+
+	t, err = time.ParseInLocation("2006-01-02 15:04:05", myTime, local)
+	if err != nil {
+		apiErr = errorcode.GetAPIError("PARSE_TIME_ERROR")
 		return
 	}
 

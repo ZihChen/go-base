@@ -17,7 +17,7 @@ COPY . /go/src/$PROJECT_NAME
 # 指定專案工作路徑
 WORKDIR /go/src/$PROJECT_NAME
 
-# 安裝govendor + realize
+# 安裝govendor + fresh
 RUN go get github.com/pilu/fresh \
     && go get github.com/kardianos/govendor
 
