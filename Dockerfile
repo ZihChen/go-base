@@ -3,26 +3,22 @@ FROM golang:1.11.2-alpine
 
 # 取參數
 ARG ENV
-
-# 複製專案
-COPY . /go/src/GoFormat
-
-# 指定專案工作路徑
-WORKDIR /go/src/GoFormat
-
-# RUN apk add --no-cache ca-certificates \
-#         dpkg gcc git musl-dev
+ARG PROJECT_NAME
 
 # go get 會用到
-RUN apk add git
+RUN apk add git \
+    && apk add logrotate
 
-# 美東時間
-# RUN apk --no-cache add tzdata  && \
-#     ln -sf /usr/share/zoneinfo/America/New_York /etc/localtime && \
-#     echo "America/Los_Angeles" > /etc/timezone 
+COPY ./logrotate /etc/logrotate.d/$PROJECT_NAME
+
+# 複製專案
+COPY . /go/src/$PROJECT_NAME
+
+# 指定專案工作路徑
+WORKDIR /go/src/$PROJECT_NAME
 
 # 安裝govendor + realize
-RUN go get github.com/tockins/realize \
+RUN go get github.com/pilu/fresh \
     && go get github.com/kardianos/govendor
 
-CMD ["sh", "-c", "govendor sync; ENV=${ENV:-develop} realize start"]
+CMD ["sh", "-c", "govendor sync; ENV=${ENV:-develop} fresh runner.conf"]

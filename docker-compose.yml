@@ -6,6 +6,7 @@ services:
       context: .
       args:
         ENV: ${ENV}
+        PROJECT_NAME: ${PROJECT_NAME}
     container_name: ${PROJECT_NAME}
     restart: always
     ports:
