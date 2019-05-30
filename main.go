@@ -8,10 +8,7 @@ import (
 	_ "GoFormat/docs"
 	"GoFormat/router"
 	"fmt"
-	"log"
-	"syscall"
 
-	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
