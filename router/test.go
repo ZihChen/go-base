@@ -17,6 +17,7 @@ func LoadTestRouter(r *gin.Engine) {
 		v1.POST("/set_redis", test.SetRedisValue)
 		v1.GET("/ping_db_once", test.PingDBOnce)
 		v1.GET("/ping_db_second", test.PingDBSecond)
+		v1.GET("/error_task", test.ErrorTest)
 	}
 
 	// Swagger

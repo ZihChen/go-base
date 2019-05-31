@@ -92,3 +92,24 @@ func PingDBSecond(c *gin.Context) {
 
 	c.JSON(http.StatusOK, helper.Success("456"))
 }
+
+// ErrorTest 測試錯誤發生時是否可以回傳正確的 logID
+// @Summary 測試錯誤發生時是否可以回傳正確的 logID
+// @description DB Pool 測試錯誤發生時是否可以回傳正確的 logID
+// @Tags Test
+// @Produce  json
+// @Success 200 {object} structs.APIResult "成功"
+// @Failure 400 {object} structs.APIResult "異常錯誤"
+// @Router /test/error_task [GET]
+func ErrorTest(c *gin.Context) {
+	// 接不可預期的錯誤
+	defer helper.CatchError(c)
+
+	errBus := business.ErrIns()
+	if err := errBus.GetErrorLog(); err != nil {
+		c.JSON(http.StatusOK, helper.Fail(err))
+		return
+	}
+
+	c.JSON(http.StatusOK, helper.Success("999"))
+}

@@ -9,43 +9,64 @@ type Error interface {
 	Error() string
 	GetErrorCode() int
 	GetErrorText() string
+	GetLogID() string
+	SetLogID(logID string)
+	SetErrorCode(code string)
 }
 
-// APIError API錯誤格式
-type APIError struct {
-	ErrorCode int    `json:"error_code"`
-	ErrorMsg  string `json:"error_msg"`
+// newError API錯誤格式
+type newError struct {
+	ErrorCode       int    `json:"error_code"`
+	ErrorMsg        string `json:"error_msg"`
+	LogILogIDentity string `json:"logIDentity"`
 }
 
-// GetAPIError 由錯誤碼取得API回傳
-func GetAPIError(code string) APIError {
-	if code == "" {
-		return APIError{}
-	}
+// NewError 由錯誤碼取得API回傳
+func NewError() Error {
+	return &newError{}
+}
+
+// NewOtherUnitError 由其他單位產生的錯誤
+func NewOtherUnitError(errMsg string) Error {
+	return &newError{10000, errMsg, ""}
+}
+
+// SetLogID 塞入 Log 識別證
+func (e *newError) SetLogID(logID string) {
+	e.LogILogIDentity = logID
+}
+
+// SetErrorCode 設定 errorcode
+func (e *newError) SetErrorCode(code string) {
 
 	api, ok := errorCode[code]
 	if !ok {
-		return APIError{9999, fmt.Sprintf("Undefined Error (%s)", code)}
+		e.ErrorCode = 9999
+		e.ErrorMsg = fmt.Sprintf("Undefined Error (%s)", code)
+		e.LogILogIDentity = ""
+	} else {
+		e.ErrorCode = api.ErrorCode
+		e.ErrorMsg = fmt.Sprintf(api.ErrorMsg+"(%d)", api.ErrorCode)
+		e.LogILogIDentity = ""
 	}
-	return APIError{api.ErrorCode, fmt.Sprintf(api.ErrorMsg+"(%d)", api.ErrorCode)}
-}
-
-// GetOtherUnitError 由其他單位產生的錯誤
-func GetOtherUnitError(errMsg string) APIError {
-	return APIError{10000, errMsg}
 }
 
 // GetErrorCode 錯誤代碼
-func (e APIError) GetErrorCode() int {
+func (e *newError) GetErrorCode() int {
 	return e.ErrorCode
 }
 
 // GetErrorText 錯誤訊息
-func (e APIError) GetErrorText() string {
+func (e *newError) GetErrorText() string {
 	return e.ErrorMsg
 }
 
+// GetLogID Log身份
+func (e *newError) GetLogID() string {
+	return e.LogILogIDentity
+}
+
 // Error API錯誤訊息
-func (e APIError) Error() string {
+func (e *newError) Error() string {
 	return fmt.Sprintf("%d: %v", e.ErrorCode, e.ErrorMsg)
 }

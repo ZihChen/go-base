@@ -32,3 +32,9 @@ const (
 	Marquee = 1 // 跑馬燈
 	News    = 2 // 最新報導
 )
+
+/** 錯誤 Log 類型 **/
+const (
+	WarnLog  = "Warn"  // 警告型 Log
+	FatalLog = "Fatal" // 嚴重型 Log
+)

@@ -35,13 +35,13 @@ func Start() (err error) {
 	for _, path := range envPathList {
 		configFile, err := ioutil.ReadFile(path)
 		if err != nil {
-			log.Fatalf("Can not find Yaml file %v", err)
+			log.Fatalf("🔔🔔🔔  Can not find Yaml file %v 🔔🔔🔔", err)
 		}
-
 		// 塞值進入struct
 		if err = yaml.Unmarshal(configFile, &Config); err != nil {
 			panic(err)
 		}
+
 	}
 
 	return nil

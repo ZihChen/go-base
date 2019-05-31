@@ -1,6 +1,7 @@
 package helper
 
 import (
+	"GoFormat/app/global"
 	"GoFormat/app/global/errorcode"
 	"crypto/md5"
 	"fmt"
@@ -19,10 +20,10 @@ func Md5Encryption(str string) string {
 	return md5Str
 }
 
-// Md5EncryptionWithTime md5 加密（加上毫秒時間）
+// Md5EncryptionWithTime md5 加密（加上奈秒時間）
 func Md5EncryptionWithTime(str string) string {
-	msTime := time.Now().UnixNano() / int64(time.Millisecond)
-	data := str + strconv.FormatInt(msTime, 10)
+	naTime := time.Now().UnixNano()
+	data := str + strconv.FormatInt(naTime, 10)
 	key := []byte(data)
 
 	token := md5.Sum(key)
@@ -36,7 +37,7 @@ func HashPassword(password string) (value string, apiErr errorcode.Error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 
 	if err != nil {
-		apiErr = errorcode.GetAPIError("CRYPTION_ERROR")
+		apiErr = ErrorHandle(global.WarnLog, "CRYPTION_ERROR", err.Error())
 		return string(bytes), apiErr
 	}
 

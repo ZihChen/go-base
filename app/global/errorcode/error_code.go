@@ -1,6 +1,12 @@
 package errorcode
 
-var errorCode = map[string]APIError{
+// newErrorCode 錯誤代碼格式
+type newErrorCode struct {
+	ErrorCode int    `json:"error_code"`
+	ErrorMsg  string `json:"error_msg"`
+}
+
+var errorCode = map[string]newErrorCode{
 	/** 共同 **/
 	"SUCCESS":                 {1, "SUCCESS"},                    // 呼叫API成功
 	"PERMISSION_DENIED":       {403, "PERMISSION DENIED"},        // 權限不足

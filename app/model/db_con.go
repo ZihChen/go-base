@@ -5,6 +5,7 @@ import (
 	"GoFormat/app/global/errorcode"
 	"GoFormat/app/global/helper"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -33,8 +34,8 @@ func MasterConnect() (*gorm.DB, errorcode.Error) {
 	connString := composeString(global.GoFormatMa)
 	masterPool, err := gorm.Open("mysql", connString)
 	if err != nil {
-		go helper.FatalLog(fmt.Sprintf("DB_CONNECT_ERROR: %v", err.Error()))
-		apiErr := errorcode.GetAPIError("DB_CONNECT_ERROR")
+		apiErr := helper.ErrorHandle(global.FatalLog, "DB_CONNECT_ERROR", err.Error())
+
 		return nil, apiErr
 	}
 
@@ -62,8 +63,7 @@ func SlaveConnect() (*gorm.DB, errorcode.Error) {
 	connString := composeString(global.GoFormatSl)
 	slavePool, err := gorm.Open("mysql", connString)
 	if err != nil {
-		go helper.FatalLog(fmt.Sprintf("DB_CONNECT_ERROR: %v", err.Error()))
-		apiErr := errorcode.GetAPIError("DB_CONNECT_ERROR")
+		apiErr := helper.ErrorHandle(global.FatalLog, "DB_CONNECT_ERROR", err.Error())
 		return nil, apiErr
 	}
 
@@ -87,23 +87,23 @@ func DBPing() {
 	// 檢查 master db
 	masterPool, apiErr := MasterConnect()
 	if apiErr != nil {
-		panic("MASTER DB CONNECT ERROR")
+		log.Fatalf("🔔🔔🔔 MASTER DB CONNECT ERROR: %v 🔔🔔🔔", global.Config.DBMaster.Host)
 	}
 
 	err := masterPool.DB().Ping()
 	if err != nil {
-		panic("PING MASTER DB ERROR:" + err.Error())
+		log.Fatalf("🔔🔔🔔 PING MASTER DB ERROR: %v 🔔🔔🔔", err.Error())
 	}
 
 	// 檢查 slave db
 	slavePool, apiErr := SlaveConnect()
 	if apiErr != nil {
-		panic("SLAVE DB CONNECT ERROR")
+		log.Fatalf("🔔🔔🔔 SLAVE DB CONNECT ERROR: %v 🔔🔔🔔", global.Config.DBMaster.Host)
 	}
 
 	err = slavePool.DB().Ping()
 	if err != nil {
-		panic("PING SLAVE DB ERROR:" + err.Error())
+		log.Fatalf("🔔🔔🔔 PING SLAVE DB ERROR: %v 🔔🔔🔔", err.Error())
 	}
 }
 

@@ -1,6 +1,7 @@
 package service
 
 import (
+	"GoFormat/app/global"
 	"GoFormat/app/global/errorcode"
 	"GoFormat/app/global/helper"
 	"fmt"
@@ -17,8 +18,8 @@ func sendGet(apiURL string, header map[string]string, param map[string]interface
 	// 建立一個請求
 	reqest, err := http.NewRequest(http.MethodGet, apiURL, nil)
 	if err != nil {
-		go helper.WarnLog(fmt.Sprintf("CURL_CREATE_FAIL: %v", err))
-		apiErr = errorcode.GetAPIError("CURL_CREATE_FAIL")
+		apiErr = helper.ErrorHandle(global.WarnLog, "CURL_CREATE_FAIL", err.Error())
+
 		return nil, apiErr
 	}
 	// 組Header
@@ -43,21 +44,22 @@ func sendGet(apiURL string, header map[string]string, param map[string]interface
 	// 執行
 	resp, err := client.Do(reqest)
 	if err != nil {
-		go helper.WarnLog(fmt.Sprintf("API_CONNECT_ERROR: ErrorMsg: %v ", err))
-		apiErr = errorcode.GetAPIError("API_CONNECT_ERROR")
+		apiErr = helper.ErrorHandle(global.WarnLog, "API_CONNECT_ERROR", err.Error())
+
 		return nil, apiErr
 	}
 	if resp.StatusCode != 200 {
-		go helper.WarnLog(fmt.Sprintf("API_STATUS_ERROR: Status: %d, ErrorMsg: %v ", resp.StatusCode, err))
-		apiErr = errorcode.GetAPIError("API_STATUS_ERROR")
+		errMsg := fmt.Sprintf("API_STATUS_ERROR: Status: %d, ErrorMsg: %v ", resp.StatusCode, err)
+		apiErr = helper.ErrorHandle(global.WarnLog, "API_STATUS_ERROR", errMsg)
+
 		return nil, apiErr
 	}
 	defer resp.Body.Close()
 
 	body, err2 := ioutil.ReadAll(resp.Body)
 	if err2 != nil {
-		go helper.WarnLog(fmt.Sprintf("CURL_GET_ERROR: %v", err2))
-		apiErr = errorcode.GetAPIError("CURL_GET_ERROR")
+		apiErr = helper.ErrorHandle(global.WarnLog, "API_CONNECT_ERROR", err2.Error())
+
 		return nil, apiErr
 	}
 
@@ -84,8 +86,8 @@ func sendPost(apiURL string, header map[string]string, param map[string]interfac
 	client := &http.Client{}
 	reqest, err := http.NewRequest(http.MethodPost, apiURL, strings.NewReader(form.Encode()))
 	if err != nil {
-		go helper.WarnLog(fmt.Sprintf("CURL_CREATE_FAIL: %v", err))
-		apiErr = errorcode.GetAPIError("CURL_CREATE_FAIL")
+		apiErr = helper.ErrorHandle(global.WarnLog, "CURL_CREATE_FAIL", err.Error())
+
 		return nil, apiErr
 	}
 
@@ -97,21 +99,22 @@ func sendPost(apiURL string, header map[string]string, param map[string]interfac
 	// 執行
 	resp, err := client.Do(reqest)
 	if err != nil {
-		go helper.WarnLog(fmt.Sprintf("API_CONNECT_ERROR: ErrorMsg: %v ", err))
-		apiErr = errorcode.GetAPIError("API_CONNECT_ERROR")
+		apiErr = helper.ErrorHandle(global.WarnLog, "API_CONNECT_ERROR", err.Error())
+
 		return nil, apiErr
 	}
 	if resp.StatusCode != 200 {
-		go helper.WarnLog(fmt.Sprintf("API_STATUS_ERROR: Status: %d, ErrorMsg: %v ", resp.StatusCode, err))
-		apiErr = errorcode.GetAPIError("API_STATUS_ERROR")
+		errMsg := fmt.Sprintf("API_STATUS_ERROR: Status: %d, ErrorMsg: %v ", resp.StatusCode, err)
+		apiErr = helper.ErrorHandle(global.WarnLog, "API_STATUS_ERROR", errMsg)
+
 		return nil, apiErr
 	}
 	defer resp.Body.Close()
 
 	body, err2 := ioutil.ReadAll(resp.Body)
 	if err2 != nil {
-		go helper.WarnLog(fmt.Sprintf("CURL_POST_FAIL: %v", err2))
-		apiErr = errorcode.GetAPIError("CURL_POST_FAIL")
+		apiErr = helper.ErrorHandle(global.WarnLog, "CURL_POST_FAIL", err2.Error())
+
 		return nil, apiErr
 	}
 
@@ -138,8 +141,8 @@ func sendPut(apiURL string, header map[string]string, param map[string]interface
 	client := &http.Client{}
 	reqest, err := http.NewRequest(http.MethodPut, apiURL, strings.NewReader(form.Encode()))
 	if err != nil {
-		go helper.WarnLog(fmt.Sprintf("CURL_CREATE_FAIL: %v", err))
-		apiErr = errorcode.GetAPIError("CURL_CREATE_FAIL")
+		apiErr = helper.ErrorHandle(global.WarnLog, "CURL_CREATE_FAIL", err.Error())
+
 		return nil, apiErr
 	}
 
@@ -151,21 +154,22 @@ func sendPut(apiURL string, header map[string]string, param map[string]interface
 	// 執行
 	resp, err := client.Do(reqest)
 	if err != nil {
-		go helper.WarnLog(fmt.Sprintf("API_CONNECT_ERROR: ErrorMsg: %v ", err))
-		apiErr = errorcode.GetAPIError("API_CONNECT_ERROR")
+		apiErr = helper.ErrorHandle(global.WarnLog, "API_CONNECT_ERROR", err.Error())
+
 		return nil, apiErr
 	}
 	if resp.StatusCode != 200 {
-		go helper.WarnLog(fmt.Sprintf("API_STATUS_ERROR: Status: %d, ErrorMsg: %v ", resp.StatusCode, err))
-		apiErr = errorcode.GetAPIError("API_STATUS_ERROR")
+		errMsg := fmt.Sprintf("API_STATUS_ERROR: Status: %d, ErrorMsg: %v ", resp.StatusCode, err)
+		apiErr = helper.ErrorHandle(global.WarnLog, "API_STATUS_ERROR", errMsg)
+
 		return nil, apiErr
 	}
 	defer resp.Body.Close()
 
 	body, err2 := ioutil.ReadAll(resp.Body)
 	if err2 != nil {
-		go helper.WarnLog(fmt.Sprintf("CURL_POST_FAIL: %v", err2))
-		apiErr = errorcode.GetAPIError("CURL_POST_FAIL")
+		apiErr = helper.ErrorHandle(global.WarnLog, "CURL_POST_FAIL", err2.Error())
+
 		return nil, apiErr
 	}
 

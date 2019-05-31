@@ -1,10 +1,11 @@
 package repository
 
 import (
+	"GoFormat/app/global"
 	"GoFormat/app/global/errorcode"
 	"GoFormat/app/global/helper"
 	"GoFormat/app/model"
-	"fmt"
+	"log"
 	"sync"
 
 	"github.com/gomodule/redigo/redis"
@@ -24,6 +25,18 @@ func RedisIns() *Redis {
 	return redisSingleton
 }
 
+// RedisPing 檢查Redis是否啟動
+func RedisPing() {
+	RedisPool := model.RedisPoolConnect()
+	conn := RedisPool.Get()
+	defer conn.Close()
+
+	_, err := conn.Do("PING")
+	if err != nil {
+		log.Fatalf("🔔🔔🔔 REDIS CONNECT ERROR: %v 🔔🔔🔔", err.Error())
+	}
+}
+
 // Exists 檢查key是否存在
 func (*Redis) Exists(key string) (ok bool, apiErr errorcode.Error) {
 	RedisPool := model.RedisPoolConnect()
@@ -33,8 +46,8 @@ func (*Redis) Exists(key string) (ok bool, apiErr errorcode.Error) {
 	chkExisits, _ := conn.Do("EXISTS", key)
 	ok, err := redis.Bool(chkExisits, nil)
 	if err != nil {
-		go helper.WarnLog(fmt.Sprintf("REDIS_CHECK_EXIST_ERROR: %v", err))
-		apiErr = errorcode.GetAPIError("REDIS_CHECK_EXIST_ERROR")
+		apiErr = helper.ErrorHandle(global.WarnLog, "REDIS_CHECK_EXIST_ERROR", err.Error())
+
 		return
 	}
 
@@ -48,23 +61,11 @@ func (*Redis) Set(key string, value interface{}, expiretime int) (apiErr errorco
 	defer conn.Close()
 
 	if _, err := conn.Do("SET", key, value, "EX", expiretime); err != nil {
-		go helper.WarnLog(fmt.Sprintf("REDIS_INSERT_ERROR: %v", err))
-		apiErr = errorcode.GetAPIError("REDIS_INSERT_ERROR")
+		apiErr = helper.ErrorHandle(global.WarnLog, "REDIS_INSERT_ERROR", err.Error())
+
 		return
 	}
 	return
-}
-
-// RedisPing 檢查Redis是否啟動
-func RedisPing() {
-	RedisPool := model.RedisPoolConnect()
-	conn := RedisPool.Get()
-	defer conn.Close()
-
-	_, err := conn.Do("PING")
-	if err != nil {
-		panic("REDIS CONNECT ERROR:" + err.Error())
-	}
 }
 
 // Get 取出redis值
@@ -85,8 +86,8 @@ func (*Redis) Delete(key string) (apiErr errorcode.Error) {
 	defer conn.Close()
 
 	if _, err := conn.Do("DEL", key); err != nil {
-		go helper.WarnLog(fmt.Sprintf("REDIS_DELETE_ERROR: %v", err))
-		apiErr = errorcode.GetAPIError("REDIS_DELETE_ERROR")
+		apiErr = helper.ErrorHandle(global.WarnLog, "REDIS_DELETE_ERROR", err.Error())
+
 		return
 	}
 
@@ -101,8 +102,8 @@ func (*Redis) Append(key string, value interface{}) (n interface{}, apiErr error
 
 	n, err := conn.Do("APPEND", key, value)
 	if err != nil {
-		go helper.WarnLog(fmt.Sprintf("REDIS_APPEND_ERROR: %v", err))
-		apiErr = errorcode.GetAPIError("REDIS_APPEND_ERROR")
+		apiErr = helper.ErrorHandle(global.WarnLog, "REDIS_APPEND_ERROR", err.Error())
+
 		return
 	}
 
@@ -117,15 +118,15 @@ func (*Redis) HashSet(hkey string, key interface{}, value interface{}, time int)
 
 	// 存值
 	if _, err := conn.Do("hset", hkey, key, value); err != nil {
-		go helper.WarnLog(fmt.Sprintf("REDIS_INSERT_ERROR: %v", err))
-		apiErr = errorcode.GetAPIError("REDIS_INSERT_ERROR")
+		apiErr = helper.ErrorHandle(global.WarnLog, "REDIS_INSERT_ERROR", err.Error())
+
 		return
 	}
 
 	// 設置過期時間
 	if _, err := conn.Do("EXPIRE", hkey, time); err != nil {
-		go helper.WarnLog(fmt.Sprintf("REDIS_SET_EXPIRE_ERROR: %v", err))
-		apiErr = errorcode.GetAPIError("REDIS_SET_EXPIRE_ERROR")
+		apiErr = helper.ErrorHandle(global.WarnLog, "REDIS_SET_EXPIRE_ERROR", err.Error())
+
 		return
 	}
 

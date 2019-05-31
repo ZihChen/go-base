@@ -36,7 +36,7 @@ func init() {
 			)
 
 			if err != nil {
-				go helper.WarnLog(fmt.Sprintf("REDIS_CONNECT_ERROR: %v", err))
+				helper.ErrorHandle(global.WarnLog, "REDIS_CONNECT_ERROR", err.Error())
 				return
 			}
 			return
@@ -49,7 +49,7 @@ func init() {
 
 			_, err = redis.Do("PING")
 			if err != nil {
-				go helper.WarnLog(fmt.Sprintf("REDIS_PING_ERROR: %v", err))
+				helper.ErrorHandle(global.WarnLog, "REDIS_PING_ERROR", err.Error())
 				return
 			}
 

@@ -1,6 +1,7 @@
 package helper
 
 import (
+	"GoFormat/app/global"
 	"GoFormat/app/global/errorcode"
 	"fmt"
 	"log"
@@ -22,9 +23,7 @@ func CheckDirIsExist(filePath string, perm os.FileMode) (apiErr errorcode.Error)
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
 		// 建制資料夾
 		if err := os.MkdirAll(filePath, perm); err != nil {
-			// log.Printf("❌ WriteLog: 建立資料夾錯誤 [%v] ❌ \n", err)
-			go FatalLog(fmt.Sprintf("Create Dir Error: %v", err))
-			apiErr = errorcode.GetAPIError("CREATE_DIR_ERROR")
+			apiErr = ErrorHandle(global.FatalLog, "CREATE_DIR_ERROR")
 			return
 		}
 	}
@@ -88,11 +87,8 @@ func InArray(val string, array []string) (exists bool) {
 // CatchError 回傳不可預期的錯誤
 func CatchError(c *gin.Context) {
 	if err := recover(); err != nil {
-		// 寫Fatal Log
-		FatalLog(err)
-
 		// 回傳不可預期的錯誤
-		apiErr := errorcode.GetAPIError(fmt.Sprintf("%v", err))
+		apiErr := ErrorHandle(global.FatalLog, fmt.Sprintf("%v", err))
 		c.JSON(http.StatusBadRequest, Fail(apiErr))
 	}
 }
