@@ -26,11 +26,6 @@ func NewError() Error {
 	return &newError{}
 }
 
-// NewOtherUnitError 由其他單位產生的錯誤
-func NewOtherUnitError(errMsg string) Error {
-	return &newError{10000, errMsg, ""}
-}
-
 // SetLogID 塞入 Log 識別證
 func (e *newError) SetLogID(logID string) {
 	e.LogILogIDentity = logID

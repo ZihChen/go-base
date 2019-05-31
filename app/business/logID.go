@@ -25,7 +25,7 @@ func ErrIns() *ErrBus {
 
 // GetErrorLog 取錯誤代碼
 func (e *ErrBus) GetErrorLog() (apiErr errorcode.Error) {
-	apiErr = helper.ErrorHandle(global.WarnLog, "PERMISSION_DENIE")
+	apiErr = helper.ErrorHandle(global.WarnLog, "PERMISSION_DENIE", "")
 
 	// fmt.Println("====>", apiErr.GetErrorCode())
 	// fmt.Println("====>", apiErr.GetErrorText())
