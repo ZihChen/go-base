@@ -60,13 +60,13 @@ func ParseTime(myTime string) (t time.Time, apiErr errorcode.Error) {
 
 	local, err := time.LoadLocation("Local") //服务器设置的时区
 	if err != nil {
-		apiErr = ErrorHandle(global.WarnLog, "GET_TIME_ZONE_ERROR")
+		apiErr = ErrorHandle(global.WarnLog, "GET_TIME_ZONE_ERROR", err.Error())
 		return
 	}
 
 	t, err = time.ParseInLocation("2006-01-02 15:04:05", myTime, local)
 	if err != nil {
-		apiErr = ErrorHandle(global.WarnLog, "PARSE_TIME_ERROR")
+		apiErr = ErrorHandle(global.WarnLog, "PARSE_TIME_ERROR", err.Error())
 		return
 	}
 
@@ -82,12 +82,12 @@ func StructToMap(myStruct interface{}) (myMap map[string]interface{}, apiErr err
 	// 資料轉型
 	byteData, err := json.Marshal(myStruct)
 	if err != nil {
-		apiErr = ErrorHandle(global.WarnLog, "JSON_MARSHAL_ERROR")
+		apiErr = ErrorHandle(global.WarnLog, "JSON_MARSHAL_ERROR", err.Error())
 		return
 	}
 
 	if err := json.Unmarshal(byteData, &myMap); err != nil {
-		apiErr = ErrorHandle(global.WarnLog, "JSON_UNMARSHAL_ERROR")
+		apiErr = ErrorHandle(global.WarnLog, "JSON_UNMARSHAL_ERROR", err.Error())
 		return
 	}
 

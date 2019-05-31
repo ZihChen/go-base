@@ -23,7 +23,7 @@ func CheckDirIsExist(filePath string, perm os.FileMode) (apiErr errorcode.Error)
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
 		// 建制資料夾
 		if err := os.MkdirAll(filePath, perm); err != nil {
-			apiErr = ErrorHandle(global.FatalLog, "CREATE_DIR_ERROR")
+			apiErr = ErrorHandle(global.FatalLog, "CREATE_DIR_ERROR", "")
 			return
 		}
 	}
@@ -88,7 +88,7 @@ func InArray(val string, array []string) (exists bool) {
 func CatchError(c *gin.Context) {
 	if err := recover(); err != nil {
 		// 回傳不可預期的錯誤
-		apiErr := ErrorHandle(global.FatalLog, fmt.Sprintf("%v", err))
+		apiErr := ErrorHandle(global.FatalLog, fmt.Sprintf("%v", err), "")
 		c.JSON(http.StatusBadRequest, Fail(apiErr))
 	}
 }

@@ -19,7 +19,7 @@ func main() {
 	defer func() {
 		if err := recover(); err != nil {
 			// 補上將err傳至telegram
-			helper.ErrorHandle(global.WarnLog, fmt.Sprintf("[❌ Fatal❌ ]: %v", err))
+			helper.ErrorHandle(global.WarnLog, fmt.Sprintf("[❌ Fatal❌ ]: %v", err), "")
 			fmt.Println("[❌ Fatal❌ ]:", err)
 		}
 	}()

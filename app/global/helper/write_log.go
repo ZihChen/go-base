@@ -43,7 +43,7 @@ var fileName = "apple_access.log"
 var filePath = "/home/log/"
 
 // ErrorHandle 取錯誤代碼 + 寫錯誤 Log
-func ErrorHandle(errorType, errorCode string, errMsg ...string) (apiErr errorcode.Error) {
+func ErrorHandle(errorType, errorCode string, errMsg interface{}, param ...interface{}) (apiErr errorcode.Error) {
 	var logID string
 
 	// New 一個 Error Interface
@@ -54,9 +54,9 @@ func ErrorHandle(errorType, errorCode string, errMsg ...string) (apiErr errorcod
 
 	switch errorType {
 	case global.WarnLog:
-		logID = warnLog(errorCode, errMsg)
+		logID = warnLog(fmt.Sprintf(errorCode+": %v", errMsg), param)
 	default:
-		logID = fatalLog(errorCode, errMsg)
+		logID = fatalLog(fmt.Sprintf(errorCode+": %v", errMsg), param)
 	}
 
 	// 存入 Log 識別證
