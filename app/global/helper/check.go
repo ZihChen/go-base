@@ -23,7 +23,7 @@ func CheckDirIsExist(filePath string, perm os.FileMode) (apiErr errorcode.Error)
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
 		// 建制資料夾
 		if err := os.MkdirAll(filePath, perm); err != nil {
-			apiErr = ErrorHandle(global.FatalLog, "CREATE_DIR_ERROR", "")
+			apiErr = ErrorHandle(global.FatalLog, "CREATE_DIR_ERROR", err.Error())
 			return
 		}
 	}
@@ -40,14 +40,14 @@ func CheckFileIsExist(filePath, fileName string, perm os.FileMode) error {
 	if _, err := os.Stat(filePath + fileName); os.IsNotExist(err) {
 		// 建制資料夾
 		if err := os.MkdirAll(filePath, perm); err != nil {
-			log.Printf("❌ WriteLog: 建立資料夾錯誤 [%v] ❌ \n", err)
+			log.Printf("❌ WriteLog: 建立資料夾錯誤 [%v] ❌ \n", err.Error())
 			return nil
 		}
 
 		//  建制檔案
 		_, err := os.Create(filePath + fileName)
 		if err != nil {
-			log.Printf("❌ WriteLog: 建立檔案錯誤 [%v] ❌ \n", err)
+			log.Printf("❌ WriteLog: 建立檔案錯誤 [%v] ❌ \n", err.Error())
 			return nil
 		}
 	}

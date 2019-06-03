@@ -17,7 +17,7 @@ var Lang = []string{"en", "tw", "cn"}
 
 func getEnv() string {
 	if len(os.Getenv("ENV")) <= 0 {
-		log.Fatalf("Can not get ENV value")
+		log.Fatalf("🔔🔔🔔  Can not get ENV value 🔔🔔🔔")
 	}
 	return os.Getenv("ENV")
 }

@@ -98,7 +98,7 @@ func DBPing() {
 	// 檢查 slave db
 	slavePool, apiErr := SlaveConnect()
 	if apiErr != nil {
-		log.Fatalf("🔔🔔🔔 SLAVE DB CONNECT ERROR: %v 🔔🔔🔔", global.Config.DBMaster.Host)
+		log.Fatalf("🔔🔔🔔 SLAVE DB CONNECT ERROR: %v 🔔🔔🔔", global.Config.DbSlave.Host)
 	}
 
 	err = slavePool.DB().Ping()
