@@ -26,3 +26,8 @@ github.com
 golang.org
 gopkg.in
 google.golang.org
+
+### Init Docker Service ###
+ordered_startup.log
+supervisord.pid
+.env
