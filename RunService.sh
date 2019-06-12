@@ -77,5 +77,14 @@ docker network ls | grep "web_service" >/dev/null 2>&1
     if  [ $? -ne 0 ]; then
         docker network create web_service
     fi
-   
-ENV=$ENV LOG=$LOG IMG=$IMG PROJECT_NAME=$PROJECT_NAME docker-compose -f $WORK_PATH/docker-compose.yml up -d
+
+echo "ENV=$ENV">.env
+echo "LOG=$LOG">>.env
+echo "IMG=$IMG">>.env
+echo "PROJECT_NAME=$PROJECT_NAME">>.env
+
+printf "\033[1;33m"  
+printf ".env 設置完成，可執行指令 docker-compose up -d"  
+printf "\033[0m"  
+
+# echo "ENV=$ENV LOG=$LOG IMG=$IMG PROJECT_NAME=$PROJECT_NAME docker-compose -f $WORK_PATH/docker-compose.yml up -d"
