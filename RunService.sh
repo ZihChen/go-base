@@ -83,8 +83,6 @@ echo "LOG=$LOG">>.env
 echo "IMG=$IMG">>.env
 echo "PROJECT_NAME=$PROJECT_NAME">>.env
 
-printf "\033[1;33m"  
-printf ".env 設置完成，可執行指令 docker-compose up -d"  
-printf "\033[0m"  
+docker-compose up -d
 
 # echo "ENV=$ENV LOG=$LOG IMG=$IMG PROJECT_NAME=$PROJECT_NAME docker-compose -f $WORK_PATH/docker-compose.yml up -d"
