@@ -5,6 +5,7 @@ FROM golang:1.11.2-alpine
 RUN apk add git logrotate supervisor py-pip
 RUN pip install --upgrade pip
 RUN pip install ordered-startup-supervisord
+RUN pip install supervisor-stdout
 
 # 安裝govendor + realize
 RUN go get github.com/pilu/fresh \
