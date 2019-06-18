@@ -117,7 +117,7 @@
 			"revisionTime": "2018-10-26T00:15:55Z"
 		},
 		{
-			"checksumSHA1": "5BQ/LPeqPYQPwkfg5zRI+isY6IY=",
+			"checksumSHA1": "BVLcEDQelqXp6x9u4mbrxE7rxKs=",
 			"path": "github.com/jinzhu/gorm",
 			"revision": "472c70caa40267cb89fd8facb07fe6454b578626",
 			"revisionTime": "2018-11-03T14:14:39Z"
@@ -189,7 +189,7 @@
 			"revisionTime": "2019-06-12T11:45:02Z"
 		},
 		{
-			"checksumSHA1": "zQ6CCjo98fRkVuR3l4838HM5+4c=",
+			"checksumSHA1": "fX3fJrdbbJnY1+2ni7+RoFrlX8o=",
 			"path": "github.com/ugorji/go/codec",
 			"revision": "86ce10f27282a2dea0afc943adf213400d57895d",
 			"revisionTime": "2019-05-27T20:40:59Z"
@@ -219,7 +219,7 @@
 			"revisionTime": "2019-06-13T09:12:16Z"
 		},
 		{
-			"checksumSHA1": "cA0PBfPNFIs6NrIR+cnGAIMKN1M=",
+			"checksumSHA1": "iSRyy83Oz52vzNaIF1l8L88ItNU=",
 			"path": "golang.org/x/net/webdav",
 			"revision": "d28f0bde5980168871434b95cfc858db9f2a7a99",
 			"revisionTime": "2019-06-13T09:12:16Z"
@@ -231,7 +231,7 @@
 			"revisionTime": "2019-06-13T09:12:16Z"
 		},
 		{
-			"checksumSHA1": "vqJKlEOwdhF77irWgmM+FRLfpno=",
+			"checksumSHA1": "ACZk9yzaxKrTUUEy4IS9Lb0+dqc=",
 			"path": "golang.org/x/sys/unix",
 			"revision": "adf421d2caf4ffcf74142ff5fb9ee323b21a819e",
 			"revisionTime": "2019-05-25T16:31:25Z"
@@ -249,19 +249,19 @@
 			"revisionTime": "2018-12-15T17:52:45Z"
 		},
 		{
-			"checksumSHA1": "xNDxEBIuYd45U6bb1ZBfVQQTMIo=",
+			"checksumSHA1": "vv9EDuekZgHxFbh+0jJhB7jLZXY=",
 			"path": "golang.org/x/text/unicode/bidi",
 			"revision": "342b2e1fbaa52c93f31447ad2c6abc048c63e475",
 			"revisionTime": "2018-12-15T17:52:45Z"
 		},
 		{
-			"checksumSHA1": "OE61CWKF0KBo5hZEMrfhCkQEKg0=",
+			"checksumSHA1": "8fzd6fnxrstdNSVg+Srhf1nKgek=",
 			"path": "golang.org/x/text/unicode/norm",
 			"revision": "342b2e1fbaa52c93f31447ad2c6abc048c63e475",
 			"revisionTime": "2018-12-15T17:52:45Z"
 		},
 		{
-			"checksumSHA1": "FRYoB1XtaB/dF3eb1hgpgTp/EKw=",
+			"checksumSHA1": "Lu3uoAMO13oghOInM0akXGFSvLo=",
 			"path": "golang.org/x/text/width",
 			"revision": "342b2e1fbaa52c93f31447ad2c6abc048c63e475",
 			"revisionTime": "2018-12-15T17:52:45Z"

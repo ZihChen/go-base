@@ -50,11 +50,11 @@ case $ENV_ID in
         IMG="./upload/images"
 
         # 第一次clone專案須同步對外套件
-        go get -u github.com/kardianos/govendor
+        go get github.com/kardianos/govendor
         govendor sync
 
         # 本機開發須安裝swagger + 初始化文件
-        go get -u github.com/swaggo/swag/cmd/swag
+        go get github.com/swaggo/swag/cmd/swag
         cd $WORK_PATH
         swag init
  
@@ -83,6 +83,10 @@ echo "LOG=$LOG">>.env
 echo "IMG=$IMG">>.env
 echo "PROJECT_NAME=$PROJECT_NAME">>.env
 
-docker-compose up -d
-
-# echo "ENV=$ENV LOG=$LOG IMG=$IMG PROJECT_NAME=$PROJECT_NAME docker-compose -f $WORK_PATH/docker-compose.yml up -d"
+# 啟動容器服務
+if [ "$ENV" = "local" ] 
+then
+    docker-compose up -d
+else
+    docker-compose up -d golang
+fi

@@ -11,15 +11,15 @@ services:
       - 9999:8080
     environment:
       - ENV=${ENV} # 各站環境變數
-      - PROJECT_NAME=${PROJECT_NAME}
+      - PROJECT_NAME=${PROJECT_NAME} # 專案名稱
     working_dir: /go/src/${PROJECT_NAME}
     volumes:
       - .:/go/src/${PROJECT_NAME}
       - ${LOG}:/home/log
       - ${IMG}:/home/images
       - /etc/localtime:/etc/localtime:ro # 美東時間
-      - ./supervisor.ini:/etc/supervisor.d/supervisor.ini
-      - ./logrotate:/etc/logrotate.d/${PROJECT_NAME}
+      - ./linux_conf/logrotate:/etc/logrotate.d/${PROJECT_NAME} # 掛載logrotate 規則
+      - ./linux_conf/supervisor.ini:/etc/supervisor.d/${PROJECT_NAME}.ini # 掛載 supervisor 起服務規則
     networks:
       - web_service
     command: "/usr/bin/supervisord -c /etc/supervisord.conf"
