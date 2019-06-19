@@ -36,6 +36,7 @@ var errorCode = map[string]newErrorCode{
 	"REDIS_SET_EXPIRE_ERROR":  {3004, "REDIS SET EXPIRE ERROR"},  // Redis設定過期時間失敗
 	"REDIS_CHECK_EXIST_ERROR": {3005, "REDIS CHECK EXIST ERROR"}, // 檢查Redis值是否存在時發生錯誤
 	"REDIS_PING_ERROR":        {3006, "REDIS PING ERROR"},        // Redis Ping 錯誤
+	"REDIS_GET_VALUE_ERROR":   {3007, "REDIS GET VALUE ERROR"},   // Redis 取值錯誤
 
 	/** 呼叫 API 錯誤 **/
 	"CURL_CREATE_FAIL":  {4000, "CURL CREATE FAIL"},  // CURL建立失敗
