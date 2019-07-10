@@ -15,3 +15,4 @@
 
 #### 備註：
 - 需要選擇環境，本機環境會自行執行swag init
+- 本機環境會執行 nodejs ,npm ,graphql-cli 安裝

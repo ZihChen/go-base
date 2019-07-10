@@ -54,10 +54,10 @@ case $ENV_ID in
         govendor sync
 
         # 本機開發須安裝swagger + 初始化文件
-        go get github.com/swaggo/swag/cmd/swag
+        go get -u github.com/swaggo/swag/cmd/swag
         cd $WORK_PATH
         swag init
- 
+
         ;;
     5)
         ENV="prodT2"

@@ -31,3 +31,7 @@ google.golang.org
 ordered_startup.log
 supervisord.pid
 .env
+
+###Graphql config setting ###
+schema.graphql
+.graphqlconfig
