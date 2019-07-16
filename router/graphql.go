@@ -15,3 +15,4 @@ func LoadGraphqlRouter(r *gin.Engine) {
 func LoadGraphiqlToolRouter(r *gin.Engine) {
 	r.GET("/graphql", graphql.GraphqlHandler())
 }
+
