@@ -14,7 +14,9 @@ import (
 
 // sendGet CURL GET
 func sendGet(apiURL string, header map[string]string, param map[string]interface{}) (body []byte, apiErr errorcode.Error) {
-	client := &http.Client{}
+	client := &http.Client{
+		Timeout: global.TimeOut,
+	}
 	// 建立一個請求
 	reqest, err := http.NewRequest(http.MethodGet, apiURL, nil)
 	if err != nil {
@@ -83,7 +85,9 @@ func sendPost(apiURL string, header map[string]string, param map[string]interfac
 	}
 
 	// 建立一個請求
-	client := &http.Client{}
+	client := &http.Client{
+		Timeout: global.TimeOut,
+	}
 	reqest, err := http.NewRequest(http.MethodPost, apiURL, strings.NewReader(form.Encode()))
 	if err != nil {
 		apiErr = helper.ErrorHandle(global.WarnLog, "CURL_CREATE_FAIL", err.Error())
@@ -138,7 +142,9 @@ func sendPut(apiURL string, header map[string]string, param map[string]interface
 	}
 
 	// 建立一個請求
-	client := &http.Client{}
+	client := &http.Client{
+		Timeout: global.TimeOut,
+	}
 	reqest, err := http.NewRequest(http.MethodPut, apiURL, strings.NewReader(form.Encode()))
 	if err != nil {
 		apiErr = helper.ErrorHandle(global.WarnLog, "CURL_CREATE_FAIL", err.Error())

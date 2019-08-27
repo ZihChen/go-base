@@ -38,3 +38,8 @@ const (
 	WarnLog  = "Warn"  // 警告型 Log
 	FatalLog = "Fatal" // 嚴重型 Log
 )
+
+/** HTTP CURL 設定 **/
+const (
+	TimeOut = 10 // 連api 10 秒timeout
+)
