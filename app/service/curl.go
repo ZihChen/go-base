@@ -10,12 +10,14 @@ import (
 	"net/url"
 	"reflect"
 	"strings"
+	"time"
 )
 
 // sendGet CURL GET
 func sendGet(apiURL string, header map[string]string, param map[string]interface{}) (body []byte, apiErr errorcode.Error) {
+	time := time.Duration(global.TimeOut * time.Second)
 	client := &http.Client{
-		Timeout: global.TimeOut,
+		Timeout: time,
 	}
 	// 建立一個請求
 	reqest, err := http.NewRequest(http.MethodGet, apiURL, nil)
@@ -85,8 +87,9 @@ func sendPost(apiURL string, header map[string]string, param map[string]interfac
 	}
 
 	// 建立一個請求
+	time := time.Duration(global.TimeOut * time.Second)
 	client := &http.Client{
-		Timeout: global.TimeOut,
+		Timeout: time,
 	}
 	reqest, err := http.NewRequest(http.MethodPost, apiURL, strings.NewReader(form.Encode()))
 	if err != nil {
@@ -142,8 +145,9 @@ func sendPut(apiURL string, header map[string]string, param map[string]interface
 	}
 
 	// 建立一個請求
+	time := time.Duration(global.TimeOut * time.Second)
 	client := &http.Client{
-		Timeout: global.TimeOut,
+		Timeout: time,
 	}
 	reqest, err := http.NewRequest(http.MethodPut, apiURL, strings.NewReader(form.Encode()))
 	if err != nil {
