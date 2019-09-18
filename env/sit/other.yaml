@@ -5,7 +5,7 @@ img_server:
   img_server_rotate: ./images/rotate/
 
 log:
-  log_dir: /home/log/
+  log_dir: /app/log/
   access_log: goformat_access.log
   error_log: goformat_error.log
 

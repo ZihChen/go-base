@@ -1,13 +1,13 @@
 master:
   # master db 設定
-  host: 172.17.0.1
+  host: GoFormatDB
   username: root
   password: root
   database: goformat
 
 slave:
   # slave db 設定
-  host: 172.17.0.1
+  host: GoFormatDB
   username: root
   password: root
   database: goformat

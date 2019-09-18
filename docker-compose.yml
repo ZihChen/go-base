@@ -1,8 +1,19 @@
 version: '3'
 
 services:
+  goformat-db:
+    image: mariadb
+    container_name: GoFormatDB
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root # DB 密碼
+      MYSQL_DATABASE: goformat  # 資料庫名稱
+    volumes:
+      - /home/GoFormat/database:/var/lib/mysql
+    networks:
+      - web_service
   golang:
-    image: harbor.rd3sit.com/golang/goformat:latest
+    image: nexus.cqgame.games/rd3/golang-goformat:latest
     # build:
     #   context: .
     container_name: ${PROJECT_NAME}
@@ -15,7 +26,7 @@ services:
     working_dir: /go/src/${PROJECT_NAME}
     volumes:
       - .:/go/src/${PROJECT_NAME}
-      - ${LOG}:/home/log
+      - ${LOG}:/app/log/
       - ${IMG}:/home/images
       - /etc/localtime:/etc/localtime:ro # 美東時間
       - ./linux_conf/logrotate:/etc/logrotate.d/${PROJECT_NAME} # 掛載logrotate 規則
@@ -23,6 +34,8 @@ services:
     networks:
       - web_service
     command: "/usr/bin/supervisord -c /etc/supervisord.conf"
+
+
 networks:
   web_service:
     external: true

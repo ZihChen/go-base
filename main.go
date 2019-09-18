@@ -8,6 +8,7 @@ import (
 	_ "GoFormat/docs"
 	"GoFormat/router"
 	"fmt"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -26,10 +27,23 @@ func main() {
 
 	// 開發時，console視窗不顯示有顏色的log
 	gin.DisableConsoleColor()
-	r := gin.Default()
+
+	// 本機開發需要顯示 Gin Log
+	var r *gin.Engine
+	if os.Getenv("ENV") == "local" {
+		r = gin.Default()
+	} else {
+		r = gin.New()
+		r.Use(gin.Recovery())
+	}
 
 	// 載入環境設定(所有動作須在該func後執行)
 	global.Start()
+
+	// 自動建置 DB + Table
+	if os.Getenv("ENV") == "local" {
+		model.CheckTableIsExist()
+	}
 
 	// 檢查 DB 機器服務
 	model.DBPing()

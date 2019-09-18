@@ -107,6 +107,28 @@ func DBPing() {
 	}
 }
 
+// CheckTableIsExist 啟動main.go服務時，直接檢查所有 DB 的 Table 是否已經存在
+func CheckTableIsExist() {
+	db, apiErr := MasterConnect()
+	if apiErr != nil {
+		log.Fatalf("🔔🔔🔔 MASTER DB CONNECT ERROR: %v 🔔🔔🔔", global.Config.DBMaster.Host)
+	}
+
+	defer db.Close()
+
+	// 會自動建置 DB Table
+	db.AutoMigrate(&Admin{})
+	err := db.AutoMigrate(
+		&Admin{},
+	).Error
+
+	if err != nil {
+		helper.ErrorHandle(global.FatalLog, "DB_TABLE_NOT_EXIST", fmt.Sprintf("❌ 設置DB錯誤： %v ❌", err.Error()))
+		log.Fatalf("🔔🔔🔔 PING MASTER DB ERROR: %v 🔔🔔🔔", err.Error())
+	}
+
+}
+
 // composeString 組合DB連線前的字串資料
 func composeString(mode string) string {
 	db := dbCon{}
