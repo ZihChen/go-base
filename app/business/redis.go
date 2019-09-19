@@ -38,6 +38,7 @@ func (a *RedisBus) SetRedisKey() (err errorcode.Error) {
 
 // GetRedisValue 取 redis 值
 func (a *RedisBus) GetRedisValue() (value string, err errorcode.Error) {
+
 	redis := repository.RedisIns()
 	key := fmt.Sprintf("GoFormat:TestRedis")
 	value, err = redis.Get(key)

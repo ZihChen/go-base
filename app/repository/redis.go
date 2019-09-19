@@ -70,6 +70,7 @@ func (*Redis) Set(key string, value interface{}, expiretime int) (apiErr errorco
 
 // Get 取出redis值
 func (*Redis) Get(key string) (value string, apiErr errorcode.Error) {
+
 	RedisPool := model.RedisPoolConnect()
 	conn := RedisPool.Get()
 	defer conn.Close()

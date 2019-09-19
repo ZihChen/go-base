@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"runtime"
 	"strings"
 	"time"
 
@@ -33,7 +34,7 @@ type ErrorLogFormat struct {
 	LogIDentity string      `json:"logIDentity"` // Log 識別證
 	LogTime     string      `json:"logTime"`     // Log 當前時間
 	Path        string      `json:"path"`        // 當前路徑
-	FileName    string      `json:"filename"`    // 當前檔案名稱
+	FuncName    string      `json:"funcname"`    // 發生錯誤的func名稱
 	Params      interface{} `json:"params"`      // 錯誤發生時參數
 	Result      interface{} `json:"reslut"`      // 錯誤訊息
 }
@@ -126,13 +127,13 @@ func AccessLog(c *gin.Context) {
 	writeLog(byteData)
 }
 
-// fatalLog 組合error log內容
+// fatalLog 組合error log內容，不可預期的錯誤才可使用
 func fatalLog(err interface{}, param interface{}) string {
-	content := ErrorLogFormat{
+	content := &ErrorLogFormat{
 		Level:       "[❌ Fatal❌ ]",
 		LogIDentity: Md5EncryptionWithTime("identity"),
 		LogTime:     time.Now().Format("2006-01-02 15:04:05 -07:00"),
-		FileName:    "",
+		FuncName:    "",
 		Path:        "",
 		Params:      "",
 		Result:      fmt.Sprintf("%v", err),
@@ -147,6 +148,9 @@ func fatalLog(err interface{}, param interface{}) string {
 
 	// 檢查路徑是否存在
 	CheckFileIsExist(filePath, fileName, 0755)
+
+	// 紀錄檔案名稱 + 行數 + func名稱
+	getFilePath(6, content)
 
 	// 型態轉換
 	byteData, _ := json.Marshal(content)
@@ -157,13 +161,13 @@ func fatalLog(err interface{}, param interface{}) string {
 	return content.LogIDentity
 }
 
-// warnLog 組合warn log內容
+// warnLog 組合warn log內容，可預期的錯誤才可使用
 func warnLog(err interface{}, param interface{}) string {
-	content := ErrorLogFormat{
+	content := &ErrorLogFormat{
 		Level:       "[⚠️ Warn ⚠️ ]",
 		LogIDentity: Md5EncryptionWithTime(RanderStr(6)),
 		LogTime:     time.Now().Format("2006-01-02 15:04:05 -07:00"),
-		FileName:    "",
+		FuncName:    "",
 		Path:        "",
 		Params:      "",
 		Result:      fmt.Sprintf("%v", err),
@@ -179,6 +183,9 @@ func warnLog(err interface{}, param interface{}) string {
 	// 檢查路徑是否存在
 	CheckFileIsExist(filePath, fileName, 0755)
 
+	// 紀錄檔案名稱 + 行數 + func名稱
+	getFilePath(3, content)
+
 	// 型態轉換
 	byteData, _ := json.Marshal(content)
 
@@ -186,6 +193,19 @@ func warnLog(err interface{}, param interface{}) string {
 	writeLog(byteData)
 
 	return content.LogIDentity
+}
+
+// getFilePath 取檔案名稱 + 行數 + func名稱
+func getFilePath(n int, content *ErrorLogFormat) {
+
+	// 取檔案行數 + 路徑
+	funcName, file, line, _ := runtime.Caller(n)
+	f := runtime.FuncForPC(funcName)
+
+	// 	組合資料
+	content.FuncName = fmt.Sprintf("%v", f.Name())
+	content.Path = fmt.Sprintf("%v:%d", file, line)
+
 }
 
 // writeLog 寫Log

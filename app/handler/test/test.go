@@ -15,7 +15,7 @@ import (
 // @Produce  json
 // @Success 200 {object} structs.APIResult "成功"
 // @Failure 400 {object} structs.APIResult "異常錯誤"
-// @Router /test/set_redis [POST]
+// @Router /api/test/set_redis [POST]
 func SetRedisValue(c *gin.Context) {
 	// 接不可預期的錯誤
 	defer helper.CatchError(c)
@@ -36,7 +36,7 @@ func SetRedisValue(c *gin.Context) {
 // @Produce  json
 // @Success 200 {object} structs.APIResult "成功"
 // @Failure 400 {object} structs.APIResult "異常錯誤"
-// @Router /test/get_redis [GET]
+// @Router /api/test/get_redis [GET]
 func GetRedisValue(c *gin.Context) {
 	// 接不可預期的錯誤
 	defer helper.CatchError(c)
@@ -49,6 +49,7 @@ func GetRedisValue(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, helper.Success(value))
+
 }
 
 // PingDBOnce Ping DB 測試
@@ -58,7 +59,7 @@ func GetRedisValue(c *gin.Context) {
 // @Produce  json
 // @Success 200 {object} structs.APIResult "成功"
 // @Failure 400 {object} structs.APIResult "異常錯誤"
-// @Router /test/ping_db_once [GET]
+// @Router /api/test/ping_db_once [GET]
 func PingDBOnce(c *gin.Context) {
 	// 接不可預期的錯誤
 	defer helper.CatchError(c)
@@ -79,7 +80,7 @@ func PingDBOnce(c *gin.Context) {
 // @Produce  json
 // @Success 200 {object} structs.APIResult "成功"
 // @Failure 400 {object} structs.APIResult "異常錯誤"
-// @Router /test/ping_db_second [GET]
+// @Router /api/test/ping_db_second [GET]
 func PingDBSecond(c *gin.Context) {
 	// 接不可預期的錯誤
 	defer helper.CatchError(c)
@@ -100,7 +101,7 @@ func PingDBSecond(c *gin.Context) {
 // @Produce  json
 // @Success 200 {object} structs.APIResult "成功"
 // @Failure 400 {object} structs.APIResult "異常錯誤"
-// @Router /test/error_task [GET]
+// @Router /api/test/error_task [GET]
 func ErrorTest(c *gin.Context) {
 	// 接不可預期的錯誤
 	defer helper.CatchError(c)
