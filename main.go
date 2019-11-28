@@ -57,4 +57,39 @@ func main() {
 	// 載入router設定
 	router.RouteProvider(r)
 	r.Run(":8080")
+
+	// 若有遇到需直接刪除 Pod 情形，為讓服務能 graceful-shutdown，可啟用以下代碼並將『r.Run(":8080")』註解即可
+	//　https://github.com/gin-gonic/examples/blob/master/graceful-shutdown/graceful-shutdown/server.go
+	/*
+		srv := &http.Server{
+			Addr:    ":8080",
+			Handler: r,
+		}
+
+		go func() {
+			// service connections
+			if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+				log.Fatalf("listen: %s\n", err)
+			}
+		}()
+
+		// Wait for interrupt signal to gracefully shutdown the server with
+		// a timeout of 5 seconds.
+		quit := make(chan os.Signal)
+		// kill (no param) default send syscall.SIGTERM
+		// kill -2 is syscall.SIGINT
+		// kill -9 is syscall.SIGKILL but can't be catch, so don't need add it
+		signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+		<-quit
+		log.Println("Shutdown Server ...")
+
+		// 設定 shutdown 的 timeout 時間 5s
+		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		defer cancel()
+		// Shutdown 方法会等待活躍中連線的執行,但是等到 ctx 的 timeout 時間即刻 shutdown
+		if err := srv.Shutdown(ctx); err != nil {
+			log.Fatal("Server Shutdown:", err)
+		}
+		log.Println("Server exiting")
+	*/
 }
