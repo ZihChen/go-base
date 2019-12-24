@@ -39,9 +39,9 @@ type ErrorLogFormat struct {
 	Result      interface{} `json:"reslut"`      // 錯誤訊息
 }
 
-// 宣告預設寫log路徑 + 格式
-var fileName = "apple_access.log"
-var filePath = "/home/log/"
+// 宣告預設寫log路徑 + 格式至各環境 other.yaml 查詢
+var fileName = ""
+var filePath = ""
 
 // ErrorHandle 取錯誤代碼 + 寫錯誤 Log
 func ErrorHandle(errorType, errorCode string, errMsg interface{}, param ...interface{}) (apiErr errorcode.Error) {
