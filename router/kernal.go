@@ -13,7 +13,4 @@ func RouteProvider(r *gin.Engine) {
 
 	// api route
 	LoadBackendRouter(r)
-
-	// 載入graphql router設定
-	LoadGraphqlRouter(r)
 }
