@@ -1,8 +1,8 @@
 package helper
 
 import (
-	"GoFormat/app/global"
-	"GoFormat/app/global/errorcode"
+	"goformat/app/global"
+	"goformat/app/global/errorcode"
 	"fmt"
 	"log"
 	"net/http"

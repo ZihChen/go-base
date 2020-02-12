@@ -1,8 +1,8 @@
 package task
 
 import (
-	"GoFormat/app/global"
-	"GoFormat/app/global/helper"
+	"goformat/app/global"
+	"goformat/app/global/helper"
 	"fmt"
 
 	"github.com/robfig/cron"

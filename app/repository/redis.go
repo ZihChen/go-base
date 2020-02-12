@@ -1,10 +1,10 @@
 package repository
 
 import (
-	"GoFormat/app/global"
-	"GoFormat/app/global/errorcode"
-	"GoFormat/app/global/helper"
-	"GoFormat/app/model"
+	"goformat/app/global"
+	"goformat/app/global/errorcode"
+	"goformat/app/global/helper"
+	"goformat/app/model"
 	"log"
 	"sync"
 

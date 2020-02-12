@@ -1,7 +1,7 @@
 package router
 
 import (
-	"GoFormat/app/middleware"
+	"goformat/app/middleware"
 
 	"github.com/gin-gonic/gin"
 )

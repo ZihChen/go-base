@@ -1,8 +1,8 @@
 package business
 
 import (
-	"GoFormat/app/global/errorcode"
-	"GoFormat/app/repository"
+	"goformat/app/global/errorcode"
+	"goformat/app/repository"
 	"sync"
 )
 

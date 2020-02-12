@@ -1,8 +1,8 @@
 package mutation
 
 import (
-	"GoFormat/app/global/structs"
-	"GoFormat/app/graphql/schema"
+	"goformat/app/global/structs"
+	"goformat/app/graphql/schema"
 	"github.com/graphql-go/graphql"
 )
 

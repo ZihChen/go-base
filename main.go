@@ -1,13 +1,13 @@
 package main
 
 import (
-	"GoFormat/app/global"
-	"GoFormat/app/global/helper"
-	"GoFormat/app/model"
-	"GoFormat/app/repository"
-	_ "GoFormat/docs"
-	"GoFormat/router"
 	"fmt"
+	"goformat/app/global"
+	"goformat/app/global/helper"
+	"goformat/app/model"
+	"goformat/app/repository"
+	"goformat/app/task"
+	"goformat/router"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -16,12 +16,58 @@ import (
 
 var c *gin.Context
 
+// 初始化動作
+func init() {
+	// 載入環境設定(所有動作須在該func後執行)
+	global.Start()
+
+	// 檢查 DB 機器服務
+	model.DBPing()
+
+	// 自動建置 DB + Table
+	if os.Getenv("ENV") == "local" {
+		model.CheckTableIsExist()
+	}
+
+	// 檢查 Redis 機器服務
+	repository.RedisPing()
+
+	// 設定程式碼 timezone
+	os.Setenv("TZ", "America/Puerto_Rico")
+}
+
 func main() {
 	defer func() {
 		if err := recover(); err != nil {
 			// 補上將err傳至telegram
 			helper.ErrorHandle(global.WarnLog, fmt.Sprintf("[❌ Fatal❌ ]: %v", err), "")
 			fmt.Println("[❌ Fatal❌ ]:", err)
+		}
+	}()
+
+	// 取得欲開啟服務環境變數
+	service := os.Getenv("SERVICE")
+
+	switch service {
+	// 執行 http 服務
+	case "http":
+		runHTTP()
+	// 本機環境執行兩種服務
+	case "all":
+		runHTTP()
+	default:
+		helper.ErrorHandle(global.FatalLog, fmt.Sprintf("[❌ Fatal❌ ] SERVICE IS NOT EXIST: %v", service), "")
+		fmt.Println("[❌ Fatal❌ ] SERVICE IS NOT EXIST: ", service)
+	}
+}
+
+// runHTTP HTTP 啟動服務
+func runHTTP() {
+	defer func() {
+		if err := recover(); err != nil {
+			// 補上將err傳至telegram
+			helper.ErrorHandle(global.FatalLog, fmt.Sprintf("[❌ Fatal❌ ] HTTP: %v", err), "")
+			fmt.Println("[❌ Fatal❌ ] HTTP:", err)
 		}
 	}()
 
@@ -33,26 +79,13 @@ func main() {
 	if os.Getenv("ENV") == "local" {
 		r = gin.Default()
 	} else {
+		gin.SetMode(gin.ReleaseMode)
 		r = gin.New()
 		r.Use(gin.Recovery())
 	}
 
-	// 載入環境設定(所有動作須在該func後執行)
-	global.Start()
-
-	// 自動建置 DB + Table
-	if os.Getenv("ENV") == "local" {
-		model.CheckTableIsExist()
-	}
-
-	// 檢查 DB 機器服務
-	model.DBPing()
-
-	// 檢查 Redis 機器服務
-	repository.RedisPing()
-
 	// 背景
-	// go task.Schedule()
+	go task.Schedule()
 
 	// 載入router設定
 	router.RouteProvider(r)

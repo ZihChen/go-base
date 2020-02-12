@@ -1,7 +1,7 @@
 package global
 
 import (
-	"GoFormat/app/global/structs"
+	"goformat/app/global/structs"
 	"io/ioutil"
 	"log"
 	"os"

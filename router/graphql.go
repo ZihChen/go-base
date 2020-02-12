@@ -1,7 +1,7 @@
 package router
 
 import (
-	"GoFormat/app/graphql"
+	"goformat/app/graphql"
 	"os"
 
 	"github.com/gin-gonic/gin"

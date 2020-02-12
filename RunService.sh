@@ -15,61 +15,31 @@ PROJECT_NAME=${WORK_PATH##*/}
 # Log存放的目錄(預設local路徑)
 LOG="/var/log/app/$PROJECT_NAME"
 # 讀取圖片路徑(預設dev路徑)
-IMG="$VOLUME_PATH/images" 
+IMG="$VOLUME_PATH/images"
+# 環境變數
+ENV="local"
 
-# 顯示環境
-printf "\033[1;31m%s  %+10s\n" "(1).Dev" "(2).QATest"
-printf "\033[1;31m%s  %s\n" "(3).Sit" "(4).Local"
-printf "\033[1;31m%s  %+7s\n" "(5).T2" "(6).T4"
 
-# 選擇環境
-printf "\033[0;36m"
-read -p "請選擇服務環境：" ENV_ID
+# govendor path
+GOVENDOR_PATH="$GOPATH/src/github.com/kardianos/govendor/"
+# swagger path
+SWAGGER_PATH="$GOPATH/src/github.com/swaggo/"
 
-# 執行環境
-# 執行選項
 
-printf "\033[37m"
+# 第一次clone專案須同步對外套件
+if [ ! -d "$GOVENDOR_PATH" ]; then
+    go get github.com/kardianos/govendor
+fi
 
-case $ENV_ID in
-    1)
-        ENV="develop"
-        LOG="/home/log/$PROJECT_NAME"
-        ;;
-    2) 
-        ENV="qatest"
-        LOG="/home/log/$PROJECT_NAME"
-        ;;
-    3) 
-        ENV="sit"
-        LOG="/home/log/$PROJECT_NAME"
-          
-        ;;
-    4) 
-        ENV="local"
-        IMG="./upload/images"
+# 本機開發須安裝swagger + 初始化文件
+if [ ! -d "$GOVENDOR_PATH" ]; then
+    go get -u github.com/swaggo/swag/cmd/swag
+fi
 
-        # 第一次clone專案須同步對外套件
-        go get github.com/kardianos/govendor
-        govendor sync
+cd $WORK_PATH
+govendor sync
+swag init
 
-        # 本機開發須安裝swagger + 初始化文件
-        go get -u github.com/swaggo/swag/cmd/swag
-        cd $WORK_PATH
-        swag init
-
-        ;;
-    5)
-        ENV="prodT2"
-        ;;
-    6)
-        ENV="prodT4" 
-        ;;
-    *) 
-        echo "格式不符合(環境變數)"
-        exit
-        ;;
-esac
 
 #############################
 #############################
@@ -84,9 +54,4 @@ echo "IMG=$IMG">>.env
 echo "PROJECT_NAME=$PROJECT_NAME">>.env
 
 # 啟動容器服務
-if [ "$ENV" = "local" ] 
-then
-    docker-compose up -d
-else
-    docker-compose up -d golang
-fi
+docker-compose up -d

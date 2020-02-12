@@ -1,7 +1,7 @@
 package router
 
 import (
-	"GoFormat/app/handler/test"
+	"goformat/app/handler/test"
 	"os"
 
 	"github.com/gin-gonic/gin"

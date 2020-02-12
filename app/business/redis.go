@@ -1,9 +1,9 @@
 package business
 
 import (
-	"GoFormat/app/global"
-	"GoFormat/app/global/errorcode"
-	"GoFormat/app/repository"
+	"goformat/app/global"
+	"goformat/app/global/errorcode"
+	"goformat/app/repository"
 	"fmt"
 	"sync"
 	"time"
@@ -27,7 +27,7 @@ func RedisIns() *RedisBus {
 // SetRedisKey 存值進入redis
 func (a *RedisBus) SetRedisKey() (err errorcode.Error) {
 	redis := repository.RedisIns()
-	key := fmt.Sprintf("GoFormat:TestRedis")
+	key := fmt.Sprintf("goformat:TestRedis")
 	err = redis.Set(key, time.Now(), global.RedisDBExpire)
 	if err != nil {
 		return
@@ -40,7 +40,7 @@ func (a *RedisBus) SetRedisKey() (err errorcode.Error) {
 func (a *RedisBus) GetRedisValue() (value string, err errorcode.Error) {
 
 	redis := repository.RedisIns()
-	key := fmt.Sprintf("GoFormat:TestRedis")
+	key := fmt.Sprintf("goformat:TestRedis")
 	value, err = redis.Get(key)
 	if err != nil {
 		return

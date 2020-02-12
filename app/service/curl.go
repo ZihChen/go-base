@@ -1,9 +1,9 @@
 package service
 
 import (
-	"GoFormat/app/global"
-	"GoFormat/app/global/errorcode"
-	"GoFormat/app/global/helper"
+	"goformat/app/global"
+	"goformat/app/global/errorcode"
+	"goformat/app/global/helper"
 	"fmt"
 	"io/ioutil"
 	"net/http"

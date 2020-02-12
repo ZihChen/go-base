@@ -1,8 +1,8 @@
 package graphql
 
 import (
-	"GoFormat/app/graphql/schema/mutation"
-	"GoFormat/app/graphql/schema/query"
+	"goformat/app/graphql/schema/mutation"
+	"goformat/app/graphql/schema/query"
 	"github.com/gin-gonic/gin"
 	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/handler"
