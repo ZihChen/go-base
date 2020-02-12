@@ -6,6 +6,7 @@ import (
 	"goformat/app/global/helper"
 	"goformat/app/model"
 	"goformat/app/repository"
+	"goformat/app/service"
 	"goformat/app/task"
 	"goformat/router"
 	"os"
@@ -86,6 +87,10 @@ func runHTTP() {
 
 	// 背景
 	go task.Schedule()
+
+	// api gateway服務註冊
+	out, _ := service.GateWayServiceRegister(global.Config.GrpcSetting.Name)
+	fmt.Println(out)
 
 	// 載入router設定
 	router.RouteProvider(r)

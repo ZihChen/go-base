@@ -30,9 +30,11 @@ type DbSlave struct {
 
 // API 載入各單位api環境設定
 type API struct {
-	CypressURL   string `yaml:"cypress_url"`
-	CypressToken string `yaml:"cypress_token"`
-	RD1URL       string `yaml:"rd1_url"`
+	CypressURL       string `yaml:"cypress_url"`
+	CypressToken     string `yaml:"cypress_token"`
+	RD1URL           string `yaml:"rd1_url"`
+	PitayaGrpcServer string `yaml:"pitaya_grpc_server"`
+	LemonGrpcServer  string `yaml:"lemon_grpc_server"`
 }
 
 // ImagePath 載入各單位other環境設定

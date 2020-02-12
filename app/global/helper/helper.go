@@ -1,12 +1,14 @@
 package helper
 
 import (
+	"encoding/json"
 	"goformat/app/global"
 	"goformat/app/global/errorcode"
 	"goformat/app/global/structs"
-	"encoding/json"
 	"math/rand"
 	"time"
+
+	"google.golang.org/grpc"
 )
 
 // Success 回傳成功API
@@ -92,4 +94,15 @@ func StructToMap(myStruct interface{}) (myMap map[string]interface{}, apiErr err
 	}
 
 	return
+}
+
+// GrpcServerConnect grpc 連線建立
+func GrpcServerConnect(address string) (conn *grpc.ClientConn, apiErr errorcode.Error) {
+	conn, err := grpc.Dial(address, grpc.WithInsecure())
+	if err != nil {
+		apiErr := ErrorHandle(global.WarnLog, "CONNECT_GRPC_SERVER_FAILED", err.Error())
+		return nil, apiErr
+	}
+	return
+
 }
