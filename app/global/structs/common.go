@@ -10,6 +10,7 @@ type EnvConfig struct {
 	Log         Log         `yaml:"log"`
 	DB          DB          `yaml:"db"`
 	Redis       Redis       `yaml:"redis"`
+	GrpcSetting GrpcSetting `yaml:"grpc_setting"`
 }
 
 // DbMaster 載入db的master環境設定
@@ -72,4 +73,10 @@ type APIResult struct {
 	ErrorMsg    string      `json:"error_msg"`
 	LogIDentity string      `json:"log_id"`
 	Result      interface{} `json:"result"`
+}
+
+// GrpcSetting grpc 自動註冊服務設定
+type GrpcSetting struct {
+	Name string `yaml:"name"`
+	Path string `yaml:"path"`
 }
