@@ -2,7 +2,7 @@ package repository
 
 import (
 	"goformat/app/global"
-	"goformat/app/global/errorcode"
+	"goformat/library/errorcode"
 	"goformat/app/global/helper"
 	"goformat/app/model"
 	"log"

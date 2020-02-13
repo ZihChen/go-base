@@ -2,7 +2,7 @@ package business
 
 import (
 	"goformat/app/global"
-	"goformat/app/global/errorcode"
+	"goformat/library/errorcode"
 	"goformat/app/repository"
 	"fmt"
 	"sync"

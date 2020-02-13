@@ -2,7 +2,7 @@ package helper
 
 import (
 	"goformat/app/global"
-	"goformat/app/global/errorcode"
+	"goformat/library/errorcode"
 	"crypto/md5"
 	"fmt"
 	"strconv"

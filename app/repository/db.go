@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"goformat/app/global/errorcode"
+	"goformat/library/errorcode"
 	"goformat/app/model"
 	"fmt"
 	"sync"

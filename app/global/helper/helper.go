@@ -3,7 +3,7 @@ package helper
 import (
 	"encoding/json"
 	"goformat/app/global"
-	"goformat/app/global/errorcode"
+	"goformat/library/errorcode"
 	"goformat/app/global/structs"
 	"math/rand"
 	"time"

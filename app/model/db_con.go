@@ -2,7 +2,7 @@ package model
 
 import (
 	"goformat/app/global"
-	"goformat/app/global/errorcode"
+	"goformat/library/errorcode"
 	"goformat/app/global/helper"
 	"fmt"
 	"log"
