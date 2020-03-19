@@ -2,7 +2,9 @@ package router
 
 import (
 	"goformat/app/handler/test"
+	"net/http"
 	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -13,6 +15,12 @@ import (
 func LoadBackendRouter(r *gin.Engine) {
 	api := r.Group("/api")
 	{
+
+		api.GET("/sleep", func(c *gin.Context) {
+			time.Sleep(time.Second * 10)
+			c.JSON(http.StatusOK, "Sleep")
+		})
+
 		// 載入測試用API
 		if os.Getenv("ENV") == "develop" || os.Getenv("ENV") == "local" {
 			v1 := api.Group("/test")

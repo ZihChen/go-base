@@ -19,8 +19,8 @@ services:
       context: .
     container_name: ${PROJECT_NAME}
     restart: always
-    ports:
-      - 9999:8080
+    # ports:
+    #   - 9999:8080
     environment:
       - ENV=${ENV} # 各站環境變數
       - SERVICE=all
@@ -35,7 +35,8 @@ services:
       - "traefik.http.services.golang-goformat.loadbalancer.server.port=8080"
     networks:
       - web_service
-    command: "fresh runner.conf"
+    command: "top"
+    # command: "fresh runner.conf"
 
   redis-goformat:
     image: nexus.cqgame.games/rd3/library-redis:alpine
