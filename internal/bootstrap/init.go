@@ -1,6 +1,7 @@
 package bootstrap
 
 import (
+	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -16,6 +17,7 @@ func SetupGracefulSignal() {
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL)
 	go func() {
 		<-sig
+		fmt.Println("🔥收到關閉 channel 通知🔥")
 		close(serverClose)
 	}()
 }

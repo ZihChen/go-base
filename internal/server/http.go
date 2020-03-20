@@ -47,6 +47,7 @@ func RunHTTP() {
 	waitFinish := new(sync.WaitGroup)
 
 	waitFinish.Add(1)
+
 	go func(waitFinish *sync.WaitGroup) {
 		defer waitFinish.Done()
 
@@ -60,5 +61,12 @@ func RunHTTP() {
 	// 關閉優雅程序
 	<-bootstrap.GracefulDown()
 
+	select {
+	case <-bootstrap.WaitOnceSignal():
+		fmt.Println(`🚦  收到關閉訊號，強制結束 🚦`)
+		os.Exit(2)
+	}
+
 	waitFinish.Wait()
+
 }

@@ -17,7 +17,7 @@ func LoadBackendRouter(r *gin.Engine) {
 	{
 
 		api.GET("/sleep", func(c *gin.Context) {
-			time.Sleep(time.Second * 10)
+			time.Sleep(time.Second * 20)
 			c.JSON(http.StatusOK, "Sleep")
 		})
 
