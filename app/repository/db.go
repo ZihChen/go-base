@@ -1,9 +1,10 @@
 package repository
 
 import (
-	"goformat/library/errorcode"
-	"goformat/app/model"
 	"fmt"
+	"goformat/app/model"
+	"goformat/internal/database"
+	"goformat/library/errorcode"
 	"sync"
 )
 
@@ -23,7 +24,7 @@ func DBIns() *DB {
 
 // PingDBOnce ping db 測試
 func (*DB) PingDBOnce() (apiErr errorcode.Error) {
-	db, apiErr := model.SlaveConnect()
+	db, apiErr := database.SlaveConnect()
 	if apiErr != nil {
 		return
 	}
@@ -72,7 +73,7 @@ func (*DB) PingDBOnce() (apiErr errorcode.Error) {
 
 // PingDBSecond ping db 測試
 func (*DB) PingDBSecond() (apiErr errorcode.Error) {
-	db, apiErr := model.MasterConnect()
+	db, apiErr := database.MasterConnect()
 	if apiErr != nil {
 		return
 	}

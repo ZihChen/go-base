@@ -2,9 +2,9 @@ package repository
 
 import (
 	"goformat/app/global"
-	"goformat/library/errorcode"
 	"goformat/app/global/helper"
-	"goformat/app/model"
+	"goformat/internal/cache"
+	"goformat/library/errorcode"
 	"log"
 	"sync"
 
@@ -27,7 +27,7 @@ func RedisIns() *Redis {
 
 // RedisPing 檢查Redis是否啟動
 func RedisPing() {
-	RedisPool := model.RedisPoolConnect()
+	RedisPool := cache.RedisPoolConnect()
 	conn := RedisPool.Get()
 	defer conn.Close()
 
@@ -39,7 +39,7 @@ func RedisPing() {
 
 // Exists 檢查key是否存在
 func (*Redis) Exists(key string) (ok bool, apiErr errorcode.Error) {
-	RedisPool := model.RedisPoolConnect()
+	RedisPool := cache.RedisPoolConnect()
 	conn := RedisPool.Get()
 	defer conn.Close()
 
@@ -56,7 +56,7 @@ func (*Redis) Exists(key string) (ok bool, apiErr errorcode.Error) {
 
 // Set 存入redis值
 func (*Redis) Set(key string, value interface{}, expiretime int) (apiErr errorcode.Error) {
-	RedisPool := model.RedisPoolConnect()
+	RedisPool := cache.RedisPoolConnect()
 	conn := RedisPool.Get()
 	defer conn.Close()
 
@@ -71,7 +71,7 @@ func (*Redis) Set(key string, value interface{}, expiretime int) (apiErr errorco
 // Get 取出redis值
 func (*Redis) Get(key string) (value string, apiErr errorcode.Error) {
 
-	RedisPool := model.RedisPoolConnect()
+	RedisPool := cache.RedisPoolConnect()
 	conn := RedisPool.Get()
 	defer conn.Close()
 
@@ -85,7 +85,7 @@ func (*Redis) Get(key string) (value string, apiErr errorcode.Error) {
 
 // Delete 刪除redis值
 func (*Redis) Delete(key string) (apiErr errorcode.Error) {
-	RedisPool := model.RedisPoolConnect()
+	RedisPool := cache.RedisPoolConnect()
 	conn := RedisPool.Get()
 	defer conn.Close()
 
@@ -100,7 +100,7 @@ func (*Redis) Delete(key string) (apiErr errorcode.Error) {
 
 // Append 在相同key新增多個值
 func (*Redis) Append(key string, value interface{}) (n interface{}, apiErr errorcode.Error) {
-	RedisPool := model.RedisPoolConnect()
+	RedisPool := cache.RedisPoolConnect()
 	conn := RedisPool.Get()
 	defer conn.Close()
 
@@ -116,7 +116,7 @@ func (*Redis) Append(key string, value interface{}) (n interface{}, apiErr error
 
 // HashSet Hash方式存入redis值
 func (*Redis) HashSet(hkey string, key interface{}, value interface{}, time int) (apiErr errorcode.Error) {
-	RedisPool := model.RedisPoolConnect()
+	RedisPool := cache.RedisPoolConnect()
 	conn := RedisPool.Get()
 	defer conn.Close()
 
@@ -139,7 +139,7 @@ func (*Redis) HashSet(hkey string, key interface{}, value interface{}, time int)
 
 // HashGet Hash方式取出redis值
 func (*Redis) HashGet(hkey string, field interface{}) (value string, apiErr errorcode.Error) {
-	RedisPool := model.RedisPoolConnect()
+	RedisPool := cache.RedisPoolConnect()
 	conn := RedisPool.Get()
 	defer conn.Close()
 

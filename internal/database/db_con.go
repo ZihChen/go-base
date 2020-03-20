@@ -1,10 +1,11 @@
-package model
+package database
 
 import (
-	"goformat/app/global"
-	"goformat/library/errorcode"
-	"goformat/app/global/helper"
 	"fmt"
+	"goformat/app/global"
+	"goformat/app/global/helper"
+	"goformat/app/model"
+	"goformat/library/errorcode"
 	"log"
 	"time"
 
@@ -27,12 +28,14 @@ var slavePool *gorm.DB
 
 // MasterConnect 建立 Master Pool 連線
 func MasterConnect() (*gorm.DB, errorcode.Error) {
+	var err error
+
 	if masterPool != nil {
 		return masterPool, nil
 	}
 
 	connString := composeString(global.GoFormatMa)
-	masterPool, err := gorm.Open("mysql", connString)
+	masterPool, err = gorm.Open("mysql", connString)
 	if err != nil {
 		apiErr := helper.ErrorHandle(global.FatalLog, "DB_CONNECT_ERROR", err.Error())
 
@@ -56,12 +59,14 @@ func MasterConnect() (*gorm.DB, errorcode.Error) {
 
 // SlaveConnect 建立 Slave Pool 連線
 func SlaveConnect() (*gorm.DB, errorcode.Error) {
+	var err error
+
 	if slavePool != nil {
 		return slavePool, nil
 	}
 
 	connString := composeString(global.GoFormatSl)
-	slavePool, err := gorm.Open("mysql", connString)
+	slavePool, err = gorm.Open("mysql", connString)
 	if err != nil {
 		apiErr := helper.ErrorHandle(global.FatalLog, "DB_CONNECT_ERROR", err.Error())
 		return nil, apiErr
@@ -114,12 +119,10 @@ func CheckTableIsExist() {
 		log.Fatalf("🔔🔔🔔 MASTER DB CONNECT ERROR: %v 🔔🔔🔔", global.Config.DBMaster.Host)
 	}
 
-	defer db.Close()
-
 	// 會自動建置 DB Table
-	db.AutoMigrate(&Admin{})
+	db.AutoMigrate(&model.Admin{})
 	err := db.AutoMigrate(
-		&Admin{},
+		&model.Admin{},
 	).Error
 
 	if err != nil {

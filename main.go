@@ -2,6 +2,8 @@ package main
 
 import (
 	"goformat/app/global"
+	"goformat/app/repository"
+	"goformat/internal/database"
 	"goformat/internal/entry"
 	"os"
 
@@ -14,15 +16,15 @@ func init() {
 	global.Start()
 
 	// 檢查 DB 機器服務
-	// model.DBPing()
+	database.DBPing()
 
-	// // 自動建置 DB + Table
-	// if os.Getenv("ENV") == "local" {
-	// 	model.CheckTableIsExist()
-	// }
+	// 自動建置 DB + Table
+	if os.Getenv("ENV") == "local" {
+		database.CheckTableIsExist()
+	}
 
-	// // 檢查 Redis 機器服務
-	// repository.RedisPing()
+	// 檢查 Redis 機器服務
+	repository.RedisPing()
 
 	// 設定程式碼 timezone
 	os.Setenv("TZ", "America/Puerto_Rico")

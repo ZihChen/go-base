@@ -1,9 +1,9 @@
-package model
+package cache
 
 import (
+	"fmt"
 	"goformat/app/global"
 	"goformat/app/global/helper"
-	"fmt"
 	"time"
 
 	"github.com/gomodule/redigo/redis"
