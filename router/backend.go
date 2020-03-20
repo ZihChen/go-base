@@ -4,7 +4,6 @@ import (
 	"goformat/app/handler/test"
 	"net/http"
 	"os"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -16,9 +15,9 @@ func LoadBackendRouter(r *gin.Engine) {
 	api := r.Group("/api")
 	{
 
-		api.GET("/sleep", func(c *gin.Context) {
-			time.Sleep(time.Second * 20)
-			c.JSON(http.StatusOK, "Sleep")
+		// K8S Health Check
+		api.GET("/healthz", func(c *gin.Context) {
+			c.AbortWithStatus(http.StatusOK)
 		})
 
 		// 載入測試用API
