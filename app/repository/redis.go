@@ -146,8 +146,43 @@ func (*Redis) HashGet(hkey string, field interface{}) (value string, apiErr erro
 	// 取值
 	value, err := redis.String(conn.Do("HGET", hkey, field))
 	if err != nil {
-		helper.ErrorHandle(global.WarnLog, "REDIS_GET_VALUE_ERROR", err.Error(), hkey, field)
+		apiErr = helper.ErrorHandle(global.WarnLog, "REDIS_HASH_GET_VALUE_ERROR", err.Error(), hkey, field)
 	}
 
 	return
+}
+
+// HashGetALL Hash方式取出所有redis值
+func (*Redis) HashGetALL(hkey string, data interface{}) (apiErr errorcode.Error) {
+	RedisPool := cache.RedisPoolConnect()
+	conn := RedisPool.Get()
+	defer conn.Close()
+
+	v, err := redis.Values(conn.Do("HGETALL", hkey))
+	if err != nil {
+		apiErr = helper.ErrorHandle(global.WarnLog, "REDIS_HASH_GET_ALL_VALUE_ERROR", err.Error(), hkey)
+		return
+	}
+
+	if err := redis.ScanStruct(v, data); err != nil {
+		apiErr = helper.ErrorHandle(global.WarnLog, "REDIS_HASH_GET_SCAN_STRUCT_ERROR", err.Error(), hkey)
+		return
+	}
+
+	return
+}
+
+// HashDelete 刪除redis 對應hash表
+func (*Redis) HashDelete(hKey string, key interface{}) (apiErr errorcode.Error) {
+	RedisPool := cache.RedisPoolConnect()
+	conn := RedisPool.Get()
+	defer conn.Close()
+
+	if _, err := conn.Do("HDEL", hKey, key); err != nil {
+		apiErr = helper.ErrorHandle(global.WarnLog, "REDIS_DELETE_ERROR", err.Error())
+
+		return
+	}
+	return
+
 }
