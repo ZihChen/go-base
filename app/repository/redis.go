@@ -137,6 +137,28 @@ func (*Redis) HashSet(hkey string, key interface{}, value interface{}, time int)
 	return
 }
 
+// HashMSet Hash 方式存入多筆 redis 值
+func (*Redis) HashMSet(hkey string, value map[string]interface{}, time int) (apiErr errorcode.Error) {
+	RedisPool := cache.RedisPoolConnect()
+	conn := RedisPool.Get()
+	defer conn.Close()
+
+	// 存入值
+	if _, err := conn.Do("HMSET", redis.Args{}.Add(hkey).AddFlat(value)...); err != nil {
+		apiErr = helper.ErrorHandle(global.WarnLog, "REDIS_HASH_MSET_VALUE_ERROR", err.Error(), hkey, value)
+		return
+	}
+
+	// 設置過期時間
+	if _, err := conn.Do("EXPIRE", hkey, time); err != nil {
+		apiErr = helper.ErrorHandle(global.WarnLog, "REDIS_SET_EXPIRE_ERROR", err.Error())
+
+		return
+	}
+
+	return
+}
+
 // HashGet Hash方式取出redis值
 func (*Redis) HashGet(hkey string, field interface{}) (value string, apiErr errorcode.Error) {
 	RedisPool := cache.RedisPoolConnect()
