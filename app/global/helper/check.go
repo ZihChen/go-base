@@ -1,9 +1,9 @@
 package helper
 
 import (
+	"fmt"
 	"goformat/app/global"
 	"goformat/library/errorcode"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -91,4 +91,21 @@ func CatchError(c *gin.Context) {
 		apiErr := ErrorHandle(global.FatalLog, fmt.Sprintf("%v", err), "")
 		c.JSON(http.StatusBadRequest, Fail(apiErr))
 	}
+}
+
+// IndexOf 搜尋值在陣列的索引位置
+func IndexOf(element string, data []string) int {
+	for k, v := range data {
+		if element == v {
+			return k
+		}
+	}
+	return -1 // not found.
+}
+
+// RemoveIndex 刪除陣列元素
+func RemoveIndex(array []string, element string) []string {
+	index := IndexOf(element, array)
+
+	return append(array[:index], array[index+1:]...)
 }
