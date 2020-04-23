@@ -12,7 +12,14 @@ import (
 // redisPool 存放redis連線池的全域變數
 var redisPool *redis.Pool
 
-func init() {
+// RedisPoolConnect 回傳連線池的 Redis 連線
+func RedisPoolConnect() *redis.Pool {
+
+	// 檢查連線是否存在
+	if redisPool != nil {
+		return redisPool
+	}
+
 	redisPool = &redis.Pool{
 		MaxIdle:     100,               // int 最大可允許的閒置連線數
 		MaxActive:   10000,             // int 最大建立的連線數，默認為0不限制(reids 預設最大連線量)
@@ -58,9 +65,5 @@ func init() {
 
 	}
 
-}
-
-// RedisPoolConnect 回傳連線池的 Redis 連線
-func RedisPoolConnect() *redis.Pool {
 	return redisPool
 }
