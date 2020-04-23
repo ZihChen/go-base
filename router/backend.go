@@ -1,6 +1,7 @@
 package router
 
 import (
+	"goformat/app/handler/pprof"
 	"goformat/app/handler/test"
 	"net/http"
 	"os"
@@ -12,6 +13,9 @@ import (
 
 // LoadBackendRouter 路由控制
 func LoadBackendRouter(r *gin.Engine) {
+
+	pprof.Register(r, "/api/debug/pprof/") // 性能
+
 	api := r.Group("/api")
 	{
 

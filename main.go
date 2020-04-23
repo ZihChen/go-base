@@ -7,6 +7,8 @@ import (
 	"goformat/internal/entry"
 	"os"
 
+	_ "./docs"
+
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
