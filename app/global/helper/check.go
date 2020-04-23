@@ -39,16 +39,16 @@ func CheckFileIsExist(filePath, fileName string, perm os.FileMode) error {
 	// 檢查檔案路徑是否存在
 	if _, err := os.Stat(filePath + fileName); os.IsNotExist(err) {
 		// 建制資料夾
-		if err := os.MkdirAll(filePath, perm); err != nil {
+		if err = os.MkdirAll(filePath, perm); err != nil {
 			log.Printf("❌ WriteLog: 建立資料夾錯誤 [%v] ❌ \n", err.Error())
-			return nil
+			return err
 		}
 
 		//  建制檔案
-		_, err := os.Create(filePath + fileName)
+		_, err = os.Create(filePath + fileName)
 		if err != nil {
 			log.Printf("❌ WriteLog: 建立檔案錯誤 [%v] ❌ \n", err.Error())
-			return nil
+			return err
 		}
 	}
 

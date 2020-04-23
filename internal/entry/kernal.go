@@ -27,7 +27,7 @@ func Run() {
 	case "all":
 		server.RunHTTP()
 	default:
-		helper.ErrorHandle(global.FatalLog, fmt.Sprintf("[❌ Fatal❌ ] SERVICE IS NOT EXIST: %v", service), "")
+		_ = helper.ErrorHandle(global.FatalLog, fmt.Sprintf("[❌ Fatal❌ ] SERVICE IS NOT EXIST: %v", service), "")
 		fmt.Println("[❌ Fatal❌ ] SERVICE IS NOT EXIST: ", service)
 	}
 }

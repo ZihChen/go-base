@@ -77,7 +77,7 @@ func (*Redis) Get(key string) (value string, apiErr errorcode.Error) {
 
 	value, err := redis.String(conn.Do("GET", key))
 	if err != nil {
-		helper.ErrorHandle(global.WarnLog, "REDIS_GET_VALUE_ERROR", err.Error(), key)
+		_ = helper.ErrorHandle(global.WarnLog, "REDIS_GET_VALUE_ERROR", err.Error(), key)
 	}
 
 	return

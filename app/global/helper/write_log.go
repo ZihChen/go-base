@@ -95,7 +95,7 @@ func AccessLog(c *gin.Context) {
 	if c.Request.Method == "GET" {
 		content.Params = c.Request.URL.RawQuery
 	} else {
-		c.Request.ParseMultipartForm(1000)
+		_ = c.Request.ParseMultipartForm(1000)
 
 		content.Params = c.Request.PostForm
 
@@ -118,7 +118,7 @@ func AccessLog(c *gin.Context) {
 	}
 
 	// 檢查路徑是否存在
-	CheckFileIsExist(filePath, fileName, 0755)
+	_ = CheckFileIsExist(filePath, fileName, 0755)
 
 	// 型態轉換
 	byteData, _ := json.Marshal(content)
@@ -147,7 +147,7 @@ func fatalLog(err interface{}, param interface{}) string {
 	filePath = global.Config.Log.LogDir
 
 	// 檢查路徑是否存在
-	CheckFileIsExist(filePath, fileName, 0755)
+	_ = CheckFileIsExist(filePath, fileName, 0755)
 
 	// 紀錄檔案名稱 + 行數 + func名稱
 	getFilePath(6, content)
@@ -181,7 +181,7 @@ func warnLog(err interface{}, param interface{}) string {
 	filePath = global.Config.Log.LogDir
 
 	// 檢查路徑是否存在
-	CheckFileIsExist(filePath, fileName, 0755)
+	_ = CheckFileIsExist(filePath, fileName, 0755)
 
 	// 紀錄檔案名稱 + 行數 + func名稱
 	getFilePath(3, content)
@@ -209,13 +209,12 @@ func getFilePath(n int, content *ErrorLogFormat) {
 }
 
 // writeLog 寫Log
-func writeLog(logTxt []byte) error {
+func writeLog(logTxt []byte) {
 
 	// 開啟檔案
 	logFile, err := os.OpenFile(filePath+fileName, os.O_CREATE|os.O_RDWR|os.O_APPEND, 0664)
 	if err != nil {
 		log.Printf("❌ WriteLog: 建立檔案錯誤 [%v] ❌ \n", err)
-		return nil
 	}
 	defer logFile.Close()
 
@@ -223,8 +222,5 @@ func writeLog(logTxt []byte) error {
 	_, err = logFile.WriteString(string(logTxt) + "\n")
 	if err != nil {
 		log.Printf("❌ WriteLog: 寫檔案錯誤 [%v] ❌ \n", err)
-		return nil
 	}
-
-	return nil
 }
