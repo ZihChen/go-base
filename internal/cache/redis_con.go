@@ -43,7 +43,7 @@ func RedisPoolConnect() *redis.Pool {
 			)
 
 			if err != nil {
-				helper.ErrorHandle(global.WarnLog, "REDIS_CONNECT_ERROR", err.Error())
+				_ = helper.ErrorHandle(global.WarnLog, "REDIS_CONNECT_ERROR", err.Error())
 				return
 			}
 			return
@@ -56,7 +56,7 @@ func RedisPoolConnect() *redis.Pool {
 
 			_, err = redis.Do("PING")
 			if err != nil {
-				helper.ErrorHandle(global.WarnLog, "REDIS_PING_ERROR", err.Error())
+				_ = helper.ErrorHandle(global.WarnLog, "REDIS_PING_ERROR", err.Error())
 				return
 			}
 

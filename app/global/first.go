@@ -23,7 +23,7 @@ func getEnv() string {
 }
 
 // Start 執行main.go的第一步驟，載入各環境設定檔
-func Start() (err error) {
+func Start() {
 	env := getEnv()
 
 	envPathList := []string{
@@ -44,5 +44,4 @@ func Start() (err error) {
 
 	}
 
-	return nil
 }

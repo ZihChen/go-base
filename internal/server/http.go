@@ -19,7 +19,7 @@ func RunHTTP() {
 	defer func() {
 		if err := recover(); err != nil {
 			// 補上將err傳至telegram
-			helper.ErrorHandle(global.FatalLog, fmt.Sprintf("[❌ Fatal❌ ] HTTP: %v", err), "")
+			_ = helper.ErrorHandle(global.FatalLog, fmt.Sprintf("[❌ Fatal❌ ] HTTP: %v", err), "")
 			fmt.Println("[❌ Fatal❌ ] HTTP:", err)
 		}
 	}()
@@ -53,7 +53,7 @@ func RunHTTP() {
 
 		err := r.Run(":8080")
 		if err != nil {
-			helper.ErrorHandle(global.FatalLog, "SERVER_LISTEN_ERROR", err.Error())
+			_ = helper.ErrorHandle(global.FatalLog, "SERVER_LISTEN_ERROR", err.Error())
 			fmt.Println("[❌ Fatal❌ ] Server 建立監聽連線失敗:", err)
 		}
 	}(waitFinish)
@@ -61,11 +61,10 @@ func RunHTTP() {
 	// 關閉優雅程序
 	<-bootstrap.GracefulDown()
 
-	select {
-	case <-bootstrap.WaitOnceSignal():
-		fmt.Println(`🚦  收到關閉訊號，強制結束 🚦`)
-		os.Exit(2)
-	}
+	// 關閉系統
+	<-bootstrap.WaitOnceSignal()
+	fmt.Println(`🚦  收到關閉訊號，強制結束 🚦`)
+	os.Exit(2)
 
 	waitFinish.Wait()
 

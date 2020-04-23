@@ -126,7 +126,7 @@ func CheckTableIsExist() {
 	).Error
 
 	if err != nil {
-		helper.ErrorHandle(global.FatalLog, "DB_TABLE_NOT_EXIST", fmt.Sprintf("❌ 設置DB錯誤： %v ❌", err.Error()))
+		_ = helper.ErrorHandle(global.FatalLog, "DB_TABLE_NOT_EXIST", fmt.Sprintf("❌ 設置DB錯誤： %v ❌", err.Error()))
 		log.Fatalf("🔔🔔🔔 PING MASTER DB ERROR: %v 🔔🔔🔔", err.Error())
 	}
 

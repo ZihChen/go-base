@@ -1,10 +1,10 @@
 package helper
 
 import (
-	"goformat/app/global"
-	"goformat/library/errorcode"
 	"crypto/md5"
 	"fmt"
+	"goformat/app/global"
+	"goformat/library/errorcode"
 	"strconv"
 	"time"
 
@@ -45,10 +45,10 @@ func HashPassword(password string) (value string, apiErr errorcode.Error) {
 }
 
 // CheckPasswordHash 檢查檢查(登入使用))
-func CheckPasswordHash(password, dbPwd string) bool {
+func CheckPasswordHash(password, dbPwd string) (result bool) {
 	err := bcrypt.CompareHashAndPassword([]byte(dbPwd), []byte(password))
-	if err != nil {
-		return false
+	if err == nil {
+		return true
 	}
-	return true
+	return
 }

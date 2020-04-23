@@ -1,9 +1,9 @@
 package task
 
 import (
+	"fmt"
 	"goformat/app/global"
 	"goformat/app/global/helper"
-	"fmt"
 
 	"github.com/robfig/cron"
 )
@@ -14,7 +14,7 @@ func Schedule() {
 	defer func() {
 		if err := recover(); err != nil {
 			// 補上將err傳至telegram
-			helper.ErrorHandle(global.WarnLog, fmt.Sprintf("[❌ Fatal❌ ]: %v", err), "")
+			_ = helper.ErrorHandle(global.WarnLog, fmt.Sprintf("[❌ Fatal❌ ]: %v", err), "")
 			// 錯誤時重新執行背景
 			Schedule()
 		}
