@@ -19,8 +19,8 @@ services:
       context: .
     container_name: ${PROJECT_NAME}
     restart: always
-    ports:
-      - 9999:8080
+    # ports:
+    #   - 9999:8080
     environment:
       - ENV=${ENV} # 各站環境變數
       - SERVICE=all

@@ -1,7 +1,9 @@
 package router
 
 import (
+	"goformat/app/handler/pprof"
 	"goformat/app/handler/test"
+	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -11,8 +13,17 @@ import (
 
 // LoadBackendRouter 路由控制
 func LoadBackendRouter(r *gin.Engine) {
+
+	pprof.Register(r, "/api/debug/pprof/") // 性能
+
 	api := r.Group("/api")
 	{
+
+		// K8S Health Check
+		api.GET("/healthz", func(c *gin.Context) {
+			c.AbortWithStatus(http.StatusOK)
+		})
+
 		// 載入測試用API
 		if os.Getenv("ENV") == "develop" || os.Getenv("ENV") == "local" {
 			v1 := api.Group("/test")

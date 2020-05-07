@@ -1,9 +1,9 @@
 package helper
 
 import (
+	"fmt"
 	"goformat/app/global"
 	"goformat/library/errorcode"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -39,16 +39,16 @@ func CheckFileIsExist(filePath, fileName string, perm os.FileMode) error {
 	// 檢查檔案路徑是否存在
 	if _, err := os.Stat(filePath + fileName); os.IsNotExist(err) {
 		// 建制資料夾
-		if err := os.MkdirAll(filePath, perm); err != nil {
+		if err = os.MkdirAll(filePath, perm); err != nil {
 			log.Printf("❌ WriteLog: 建立資料夾錯誤 [%v] ❌ \n", err.Error())
-			return nil
+			return err
 		}
 
 		//  建制檔案
-		_, err := os.Create(filePath + fileName)
+		_, err = os.Create(filePath + fileName)
 		if err != nil {
 			log.Printf("❌ WriteLog: 建立檔案錯誤 [%v] ❌ \n", err.Error())
-			return nil
+			return err
 		}
 	}
 
@@ -91,4 +91,21 @@ func CatchError(c *gin.Context) {
 		apiErr := ErrorHandle(global.FatalLog, fmt.Sprintf("%v", err), "")
 		c.JSON(http.StatusBadRequest, Fail(apiErr))
 	}
+}
+
+// IndexOf 搜尋值在陣列的索引位置
+func IndexOf(element string, data []string) int {
+	for k, v := range data {
+		if element == v {
+			return k
+		}
+	}
+	return -1 // not found.
+}
+
+// RemoveIndex 刪除陣列元素
+func RemoveIndex(array []string, element string) []string {
+	index := IndexOf(element, array)
+
+	return append(array[:index], array[index+1:]...)
 }

@@ -65,7 +65,7 @@ func GateWayServiceRegister(project string) (output string, apiErr errorcode.Err
 	errArr := helper.InArray(project, out)
 	// 檢查服務是否在 不存在註冊
 	if errArr {
-		output = fmt.Sprintf(">>---------------service already register---------------<<")
+		output = ">>---------------service already register---------------<<"
 
 	} else {
 		// register pitaya service
