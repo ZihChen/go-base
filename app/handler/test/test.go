@@ -14,7 +14,7 @@ import (
 // @Tags Test
 // @Produce  json
 // @Success 200 {object} structs.APIResult "成功"
-// @Failure 400 {object} structs.APIResult "異常錯誤"
+// @Failure 400 {object} swagger.errorResp "異常錯誤"
 // @Router /api/test/set_redis [POST]
 func SetRedisValue(c *gin.Context) {
 	// 接不可預期的錯誤
@@ -35,7 +35,7 @@ func SetRedisValue(c *gin.Context) {
 // @Tags Test
 // @Produce  json
 // @Success 200 {object} structs.APIResult "成功"
-// @Failure 400 {object} structs.APIResult "異常錯誤"
+// @Failure 400 {object} swagger.errorResp "異常錯誤"
 // @Router /api/test/get_redis [GET]
 func GetRedisValue(c *gin.Context) {
 	// 接不可預期的錯誤
@@ -58,7 +58,7 @@ func GetRedisValue(c *gin.Context) {
 // @Tags Test
 // @Produce  json
 // @Success 200 {object} structs.APIResult "成功"
-// @Failure 400 {object} structs.APIResult "異常錯誤"
+// @Failure 400 {object} swagger.errorResp "異常錯誤"
 // @Router /api/test/ping_db_once [GET]
 func PingDBOnce(c *gin.Context) {
 	// 接不可預期的錯誤
@@ -79,7 +79,7 @@ func PingDBOnce(c *gin.Context) {
 // @Tags Test
 // @Produce  json
 // @Success 200 {object} structs.APIResult "成功"
-// @Failure 400 {object} structs.APIResult "異常錯誤"
+// @Failure 400 {object} swagger.errorResp "異常錯誤"
 // @Router /api/test/ping_db_second [GET]
 func PingDBSecond(c *gin.Context) {
 	// 接不可預期的錯誤
@@ -100,7 +100,7 @@ func PingDBSecond(c *gin.Context) {
 // @Tags Test
 // @Produce  json
 // @Success 200 {object} structs.APIResult "成功"
-// @Failure 400 {object} structs.APIResult "異常錯誤"
+// @Failure 400 {object} swagger.errorResp "異常錯誤"
 // @Router /api/test/error_task [GET]
 func ErrorTest(c *gin.Context) {
 	// 接不可預期的錯誤
