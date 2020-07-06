@@ -3,8 +3,8 @@ package helper
 import (
 	"encoding/json"
 	"goformat/app/global"
-	"goformat/library/errorcode"
 	"goformat/app/global/structs"
+	"goformat/library/errorcode"
 	"math/rand"
 	"time"
 
@@ -35,7 +35,7 @@ func Fail(err errorcode.Error) *structs.APIResult {
 	res.ErrorCode = err.GetErrorCode()
 	res.ErrorMsg = err.GetErrorText()
 	res.LogIDentity = err.GetLogID()
-	res.Result = []string{}
+	res.Result = map[string]string{}
 
 	return res
 }
