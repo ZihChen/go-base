@@ -24,7 +24,7 @@ type AccessLogFormat struct {
 	Path        string      `json:"path"`         // 當前路徑
 	Status      int         `json:"status"`       // 狀態碼
 	Method      string      `json:"method"`       // GET,POST,PUT,DELETE
-	Params      interface{} `json:"params"`       // 用戶帶入的參數
+	Params      interface{} `json:"parameter"`    // 用戶帶入的參數
 	HTTPReferer string      `json:"http_referer"` // 來源網址
 }
 
@@ -35,7 +35,7 @@ type ErrorLogFormat struct {
 	LogTime     string      `json:"logTime"`     // Log 當前時間
 	Path        string      `json:"path"`        // 當前路徑
 	FuncName    string      `json:"funcname"`    // 發生錯誤的func名稱
-	Params      interface{} `json:"params"`      // 錯誤發生時參數
+	Params      interface{} `json:"parameter"`   // 錯誤發生時參數
 	Result      interface{} `json:"reslut"`      // 錯誤訊息
 }
 
