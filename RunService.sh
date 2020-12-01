@@ -18,26 +18,24 @@ LOG="/var/log/app/$PROJECT_NAME"
 IMG="$VOLUME_PATH/images"
 # 環境變數
 ENV="local"
-
-
-# govendor path
-GOVENDOR_PATH="$GOPATH/src/github.com/kardianos/govendor/"
 # swagger path
 SWAGGER_PATH="$GOPATH/src/github.com/swaggo/"
+# Gitlab Access Token(golang 使用私有庫套件，時需用到)
+ACCESS_TOKEN="rmCquFPqfYsd9QrWTk_z"
+# go module 存放路徑
+GO_MOD_PATH="$GOPATH/pkg/mod"
 
 
-# 第一次clone專案須同步對外套件
-if [ ! -d "$GOVENDOR_PATH" ]; then
-    go get github.com/kardianos/govendor
-fi
+
 
 # 本機開發須安裝swagger + 初始化文件
 if [ ! -d "$GOVENDOR_PATH" ]; then
+    echo "===== Swagger not exist, prepare to install ===="
     go get -u github.com/swaggo/swag/cmd/swag
+
 fi
 
 cd $WORK_PATH
-govendor sync
 swag init
 
 
@@ -52,6 +50,9 @@ echo "ENV=$ENV">.env
 echo "LOG=$LOG">>.env
 echo "IMG=$IMG">>.env
 echo "PROJECT_NAME=$PROJECT_NAME">>.env
+echo "ACCESS_TOKEN"=$ACCESS_TOKEN>>.env
+echo "GO_MOD_PATH"=$GO_MOD_PATH>>.env
+
 
 # 啟動容器服務
 docker-compose up -d

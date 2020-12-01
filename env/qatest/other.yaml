@@ -1,13 +1,12 @@
-img_path:
-  img_path_rotate: /app/images/goformat/rotate
-
-img_server:
-  img_server_rotate: ./images/rotate/
-
 log:
   log_dir: /app/log/
-  access_log: goformat_access.log
-  error_log: goformat_error.log
+  access_log: access.log
+  error_log: error.log
+
+grpc_setting:
+  code: goformat
+  name: Go基底
+  path: qa-goformat-service.rd3-qa-goformat
 
 db:
   debug: false

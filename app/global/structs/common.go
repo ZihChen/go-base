@@ -2,27 +2,25 @@ package structs
 
 // EnvConfig dev.yaml格式
 type EnvConfig struct {
-	DBMaster    DbMaster    `yaml:"master"`
-	DbSlave     DbSlave     `yaml:"slave"`
+	DBMaster    DBMaster    `yaml:"master"`
+	DBSlave     DBSlave     `yaml:"slave"`
 	API         API         `yaml:"api"`
-	ImagePath   ImagePath   `yaml:"img_path"`
-	ImageServer ImageServer `yaml:"img_server"`
 	Log         Log         `yaml:"log"`
 	DB          DB          `yaml:"db"`
 	Redis       Redis       `yaml:"redis"`
 	GrpcSetting GrpcSetting `yaml:"grpc_setting"`
 }
 
-// DbMaster 載入db的master環境設定
-type DbMaster struct {
+// DBMaster 載入db的master環境設定
+type DBMaster struct {
 	Host     string `yaml:"host"`
 	Username string `yaml:"username"`
 	Password string `yaml:"password"`
 	Database string `yaml:"database"`
 }
 
-// DbSlave 載入db的slave環境設定
-type DbSlave struct {
+// DBSlave 載入db的slave環境設定
+type DBSlave struct {
 	Host     string `yaml:"host"`
 	Username string `yaml:"username"`
 	Password string `yaml:"password"`
@@ -31,21 +29,8 @@ type DbSlave struct {
 
 // API 載入各單位api環境設定
 type API struct {
-	CypressURL       string `yaml:"cypress_url"`
-	CypressToken     string `yaml:"cypress_token"`
-	RD1URL           string `yaml:"rd1_url"`
 	PitayaGrpcServer string `yaml:"pitaya_grpc_server"`
 	LemonGrpcServer  string `yaml:"lemon_grpc_server"`
-}
-
-// ImagePath 載入各單位other環境設定
-type ImagePath struct {
-	ImgPathRotate string `yaml:"img_path_rotate"`
-}
-
-// ImageServer 載入各單位other環境設定
-type ImageServer struct {
-	ImgServerRotate string `yaml:"img_server_rotate"`
 }
 
 // Log 載入Log設定檔規則
@@ -77,6 +62,7 @@ type APIResult struct {
 
 // GrpcSetting grpc 自動註冊服務設定
 type GrpcSetting struct {
+	Code string `yaml:"code"`
 	Name string `yaml:"name"`
 	Path string `yaml:"path"`
 }

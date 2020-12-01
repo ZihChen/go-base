@@ -6,8 +6,7 @@ log:
 grpc_setting:
   code: goformat
   name: Go基底
-  path: goformat:8080
-
+  path: int-goformat-service.rd3-int-goformat
 
 db:
-  debug: true
+  debug: false

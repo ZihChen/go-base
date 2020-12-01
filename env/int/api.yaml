@@ -1,0 +1,3 @@
+api:
+  pitaya_grpc_server: int-pitaya-grpc-service.rd3-int-pitaya:50051
+  lemon_grpc_server: int-lemon-grpc-service.rd3-int-lemon:50051

@@ -28,7 +28,6 @@ services:
     working_dir: /go/src/${PROJECT_NAME}
     volumes:
       - .:/go/src/${PROJECT_NAME}
-      - ${LOG}:/app/log/
       - ${IMG}:/app/images
     labels:
       - "traefik.http.routers.golang-goformat.rule=Host(`goformat.local.com`)"

@@ -69,10 +69,11 @@ func GateWayServiceRegister(project string) (output string, apiErr errorcode.Err
 
 	} else {
 		// register pitaya service
-		str := global.Config.GrpcSetting.Name + ":service"
+		str := global.Config.GrpcSetting.Code + ":service"
 		md5Token := helper.Md5Encryption(str)
 		req := rpclemon.RegisterRequest{
-			Name:  project,
+			Code:  global.Config.GrpcSetting.Code,
+			Name:  global.Config.GrpcSetting.Name,
 			Token: md5Token,
 			Path:  global.Config.GrpcSetting.Path,
 		}

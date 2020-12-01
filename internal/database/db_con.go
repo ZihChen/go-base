@@ -103,7 +103,7 @@ func DBPing() {
 	// 檢查 slave db
 	slavePool, apiErr := SlaveConnect()
 	if apiErr != nil {
-		log.Fatalf("🔔🔔🔔 SLAVE DB CONNECT ERROR: %v 🔔🔔🔔", global.Config.DbSlave.Host)
+		log.Fatalf("🔔🔔🔔 SLAVE DB CONNECT ERROR: %v 🔔🔔🔔", global.Config.DBSlave.Host)
 	}
 
 	err = slavePool.DB().Ping()
@@ -143,10 +143,10 @@ func composeString(mode string) string {
 		db.Password = global.Config.DBMaster.Password
 		db.Database = global.Config.DBMaster.Database
 	case global.GoFormatSl:
-		db.Host = global.Config.DbSlave.Host
-		db.Username = global.Config.DbSlave.Username
-		db.Password = global.Config.DbSlave.Password
-		db.Database = global.Config.DbSlave.Database
+		db.Host = global.Config.DBSlave.Host
+		db.Username = global.Config.DBSlave.Username
+		db.Password = global.Config.DBSlave.Password
+		db.Database = global.Config.DBSlave.Database
 	}
 
 	return fmt.Sprintf("%s:%s@tcp(%s:3306)/%s?timeout=5s&charset=utf8mb4&parseTime=True&loc=Local", db.Username, db.Password, db.Host, db.Database)

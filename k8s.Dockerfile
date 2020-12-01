@@ -21,7 +21,7 @@ RUN apk update \
     && cp /usr/share/zoneinfo/America/Puerto_Rico /etc/localtime
     
 RUN mkdir -p /app/log/
-RUN ln -sf /dev/stdout /app/log/goformat_access.log \
-    && ln -sf /dev/stdout /app/log/goformat_error.log
+RUN ln -sf /dev/stdout /app/log/access.log \
+    && ln -sf /dev/stdout /app/log/error.log
 
 ENTRYPOINT [ "./goformat" ]
