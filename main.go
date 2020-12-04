@@ -2,7 +2,7 @@ package main
 
 import (
 	"goformat/app/global"
-	"goformat/app/repository"
+	"goformat/internal/cache"
 	"goformat/internal/database"
 	"goformat/internal/entry"
 	"os"
@@ -26,7 +26,8 @@ func init() {
 	}
 
 	// 檢查 Redis 機器服務
-	repository.RedisPing()
+	redis := cache.RedisIns()
+	redis.RedisPing()
 
 	// 設定程式碼 timezone
 	os.Setenv("TZ", "America/Puerto_Rico")

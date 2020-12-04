@@ -8,6 +8,12 @@ RUN apk add git \
     && go get github.com/pilu/fresh \
     && go get google.golang.org/grpc
 
+ARG ACCESS_TOKEN
+ENV ACCESS_TOKEN=$ACCESS_TOKEN
+
+RUN go env -w GOPRIVATE=git.cchntek.com \
+    && git config --global url."https://rd3-pkg:${ACCESS_TOKEN}@git.cchntek.com".insteadOf "https://git.cchntek.com"
+
 # docker terminal 顯示 LOG
 RUN mkdir -p /app/log/ \
     && ln -sf /dev/stdout /app/log/access.log \

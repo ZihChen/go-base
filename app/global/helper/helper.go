@@ -6,8 +6,11 @@ import (
 	"goformat/app/global/structs"
 	"goformat/library/errorcode"
 	"math/rand"
+	"os"
 	"time"
 
+	"git.cchntek.com/rd3-pkg/teamgo"
+	jsoniter "github.com/json-iterator/go"
 	"google.golang.org/grpc"
 )
 
@@ -105,4 +108,27 @@ func GrpcServerConnect(address string) (conn *grpc.ClientConn, apiErr errorcode.
 	}
 	return
 
+}
+
+// TeamPlus 發送訊息至 teamplus
+func TeamPlus(org string, content interface{}) {
+
+	// 初始化
+	teamInfo := teamgo.New()
+
+	// 塞入資料
+	teamInfo.TeamPlusURL = global.TeamPlusURL
+	teamInfo.Account = global.TeamPlusAccount
+	teamInfo.APIKey = global.TeamPlusAPIKey
+	teamInfo.ChatSn = global.TeamPlusChatSn
+	teamInfo.ENV = os.Getenv("ENV") + os.Getenv("PROJECT_NAME")
+	teamInfo.Org = org
+
+	byteData, _ := jsoniter.Marshal(content)
+	teamInfo.Content = string(byteData)
+
+	// 發送訊息
+	if err := teamInfo.SendToGroup(); err != nil {
+		_ = ErrorHandle(global.WarnLog, "SEND_MESSAGE_TO_TEAM_PLUS_ERROR", err)
+	}
 }

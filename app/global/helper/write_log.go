@@ -118,7 +118,7 @@ func AccessLog(c *gin.Context) {
 	}
 
 	// 檢查路徑是否存在
-	_ = CheckFileIsExist(filePath, fileName, 0755)
+	_ = CheckFileIsExist(filePath, fileName, global.DirPermission)
 
 	// 型態轉換
 	byteData, _ := json.Marshal(content)
@@ -147,7 +147,7 @@ func fatalLog(err interface{}, param interface{}) string {
 	filePath = global.Config.Log.LogDir
 
 	// 檢查路徑是否存在
-	_ = CheckFileIsExist(filePath, fileName, 0755)
+	_ = CheckFileIsExist(filePath, fileName, global.DirPermission)
 
 	// 紀錄檔案名稱 + 行數 + func名稱
 	getFilePath(6, content)
@@ -181,7 +181,7 @@ func warnLog(err interface{}, param interface{}) string {
 	filePath = global.Config.Log.LogDir
 
 	// 檢查路徑是否存在
-	_ = CheckFileIsExist(filePath, fileName, 0755)
+	_ = CheckFileIsExist(filePath, fileName, global.DirPermission)
 
 	// 紀錄檔案名稱 + 行數 + func名稱
 	getFilePath(3, content)
@@ -212,7 +212,7 @@ func getFilePath(n int, content *ErrorLogFormat) {
 func writeLog(logTxt []byte) {
 
 	// 開啟檔案
-	logFile, err := os.OpenFile(filePath+fileName, os.O_CREATE|os.O_RDWR|os.O_APPEND, 0664)
+	logFile, err := os.OpenFile(filePath+fileName, os.O_CREATE|os.O_RDWR|os.O_APPEND, global.FilePermission)
 	if err != nil {
 		log.Printf("❌ WriteLog: 建立檔案錯誤 [%v] ❌ \n", err)
 	}

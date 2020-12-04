@@ -2,7 +2,7 @@ package business
 
 import (
 	"goformat/app/global"
-	"goformat/app/repository"
+	"goformat/internal/cache"
 	"goformat/library/errorcode"
 	"sync"
 	"time"
@@ -25,7 +25,7 @@ func RedisIns() *RedisBus {
 
 // SetRedisKey 存值進入redis
 func (a *RedisBus) SetRedisKey() (err errorcode.Error) {
-	redis := repository.RedisIns()
+	redis := cache.RedisIns()
 	key := "goformat:TestRedis"
 	err = redis.Set(key, time.Now(), global.RedisDBExpire)
 	if err != nil {
@@ -38,7 +38,7 @@ func (a *RedisBus) SetRedisKey() (err errorcode.Error) {
 // GetRedisValue 取 redis 值
 func (a *RedisBus) GetRedisValue() (value string, err errorcode.Error) {
 
-	redis := repository.RedisIns()
+	redis := cache.RedisIns()
 	key := "goformat:TestRedis"
 	value, err = redis.Get(key)
 	if err != nil {
