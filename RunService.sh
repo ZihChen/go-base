@@ -6,7 +6,7 @@
 # 備註：
 #   
 
-# 執行GoFormat的目錄,
+# 執行專案的目錄,
 WORK_PATH=$(dirname $(readlink -f $0))
 # 執行各容器，須掛載的資料夾位置
 VOLUME_PATH=$(dirname $(readlink -f $0))/../

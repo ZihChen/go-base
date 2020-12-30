@@ -34,7 +34,7 @@ func MasterConnect() (*gorm.DB, errorcode.Error) {
 		return masterPool, nil
 	}
 
-	connString := composeString(global.GoFormatMa)
+	connString := composeString(global.DBMaster)
 	masterPool, err = gorm.Open("mysql", connString)
 	if err != nil {
 		apiErr := helper.ErrorHandle(global.FatalLog, "DB_CONNECT_ERROR", err.Error())
@@ -65,7 +65,7 @@ func SlaveConnect() (*gorm.DB, errorcode.Error) {
 		return slavePool, nil
 	}
 
-	connString := composeString(global.GoFormatSl)
+	connString := composeString(global.DBSlaver)
 	slavePool, err = gorm.Open("mysql", connString)
 	if err != nil {
 		apiErr := helper.ErrorHandle(global.FatalLog, "DB_CONNECT_ERROR", err.Error())
@@ -137,12 +137,12 @@ func composeString(mode string) string {
 	db := dbCon{}
 
 	switch mode {
-	case global.GoFormatMa:
+	case global.DBMaster:
 		db.Host = global.Config.DBMaster.Host
 		db.Username = global.Config.DBMaster.Username
 		db.Password = global.Config.DBMaster.Password
 		db.Database = global.Config.DBMaster.Database
-	case global.GoFormatSl:
+	case global.DBSlaver:
 		db.Host = global.Config.DBSlave.Host
 		db.Username = global.Config.DBSlave.Username
 		db.Password = global.Config.DBSlave.Password

@@ -145,8 +145,8 @@ func (r *Redis) Get(key string) (value string, apiErr errorcode.Error) {
 	defer conn.Close()
 
 	value, err := redis.String(conn.Do("GET", key))
-	if err != nil {
-		helper.ErrorHandle(global.WarnLog, "REDIS_GET_VALUE_ERROR", err.Error(), key)
+	if err != nil && err.Error() != global.RedisNotFound {
+		apiErr = helper.ErrorHandle(global.WarnLog, "REDIS_GET_VALUE_ERROR", err.Error(), key)
 	}
 
 	return
@@ -210,8 +210,8 @@ func (r *Redis) HashGet(hkey string, field interface{}) (value string, apiErr er
 
 	// 取值
 	value, err := redis.String(conn.Do("HGET", hkey, field))
-	if err != nil {
-		helper.ErrorHandle(global.WarnLog, "REDIS_GET_VALUE_ERROR", err.Error(), hkey, field)
+	if err != nil && err.Error() != global.RedisNotFound {
+		apiErr = helper.ErrorHandle(global.WarnLog, "REDIS_GET_VALUE_ERROR", err.Error(), hkey, field)
 	}
 
 	return

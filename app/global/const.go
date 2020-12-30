@@ -1,10 +1,10 @@
 package global
 
-// GoFormatMa db master
-const GoFormatMa = "goformat_master"
+// DBMaster db master
+const DBMaster = "db_master"
 
-// GoFormatSl db slave
-const GoFormatSl = "goformat_slave"
+// DBSlaver db slave
+const DBSlaver = "db_slave"
 
 /** 正則規則 **/
 const (
@@ -69,4 +69,10 @@ const (
 	RD3     = "RD3"
 	RD1     = "RD1"
 	Cypress = "Cypress"
+)
+
+/** 錯誤訊息 **/
+const (
+	RecordNotFound = "record not found"
+	RedisNotFound  = "redigo: nil returned"
 )

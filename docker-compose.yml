@@ -3,18 +3,18 @@ version: '3'
 services:
   goformat-db:
     image: mariadb
-    container_name: goformatDB
+    container_name: ${PROJECT_NAME}DB
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root # DB 密碼
-      MYSQL_DATABASE: goformat  # 資料庫名稱
+      MYSQL_DATABASE: ${PROJECT_NAME}  # 資料庫名稱
     volumes:
-      - /home/goformat/database:/var/lib/mysql
+      - /home/${PROJECT_NAME}/database:/var/lib/mysql
     networks:
       - web_service
       
   golang-goformat:
-    # image: nexus.cqgame.games/rd3/golang-goformat:latest
+    # image: nexus.cqgame.games/rd3/golang-${PROJECT_NAME}:latest
     build:
       context: .
       args:
@@ -32,21 +32,21 @@ services:
       - .:/go/src/${PROJECT_NAME}
       - ${IMG}:/app/images
     labels:
-      - "traefik.http.routers.golang-goformat.rule=Host(`goformat.local.com`)"
-      - "traefik.http.services.golang-goformat.loadbalancer.server.port=8080"
+      - "traefik.http.routers.golang-${PROJECT_NAME}.rule=Host(`${PROJECT_NAME}.local.com`)"
+      - "traefik.http.services.golang-${PROJECT_NAME}.loadbalancer.server.port=8080"
     networks:
       - web_service
     command: "fresh runner.conf"
 
   redis-goformat:
     image: nexus.cqgame.games/rd3/library-redis:alpine
-    container_name: redis_goFormat
+    container_name: redis_${PROJECT_NAME}
     # 設定最大的TCP連線
     sysctls:
       net.core.somaxconn: 4096
     restart: always
     volumes:
-      - ./Redis/goformat:/data
+      - ./Redis/${PROJECT_NAME}:/data
       - ./docker/redis.conf:/usr/local/etc/redis/redis.conf
     command: redis-server /usr/local/etc/redis/redis.conf
     # 指定使用那一條網路
