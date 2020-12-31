@@ -27,6 +27,8 @@ services:
       - ENV=${ENV} # 各站環境變數
       - SERVICE=all
       - PROJECT_NAME=${PROJECT_NAME} # 專案名稱
+      - GOPRIVATE=${GITLAB} # GO Private 網址
+      # - GONOPROXY=${GOPROXY} # GO Proxy 網址
     working_dir: /go/src/${PROJECT_NAME}
     volumes:
       - .:/go/src/${PROJECT_NAME}

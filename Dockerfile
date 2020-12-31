@@ -11,8 +11,7 @@ RUN apk add git \
 ARG ACCESS_TOKEN
 ENV ACCESS_TOKEN=$ACCESS_TOKEN
 
-RUN go env -w GOPRIVATE=git.cchntek.com \
-    && git config --global url."https://rd3-pkg:${ACCESS_TOKEN}@git.cchntek.com".insteadOf "https://git.cchntek.com"
+RUN git config --global url."https://rd3-pkg:${ACCESS_TOKEN}@git.cchntek.com".insteadOf "https://git.cchntek.com"
 
 # docker terminal 顯示 LOG
 RUN mkdir -p /app/log/ \

@@ -24,6 +24,8 @@ SWAGGER_PATH="$GOPATH/src/github.com/swaggo/"
 ACCESS_TOKEN="rmCquFPqfYsd9QrWTk_z"
 # go module 存放路徑
 GO_MOD_PATH="$GOPATH/pkg/mod"
+# GitLab 網址
+GITLAB="git.cchntek.com"
 
 
 
@@ -50,8 +52,9 @@ echo "ENV=$ENV">.env
 echo "LOG=$LOG">>.env
 echo "IMG=$IMG">>.env
 echo "PROJECT_NAME=$PROJECT_NAME">>.env
-echo "ACCESS_TOKEN"=$ACCESS_TOKEN>>.env
-echo "GO_MOD_PATH"=$GO_MOD_PATH>>.env
+echo "ACCESS_TOKEN=$ACCESS_TOKEN">>.env
+echo "GO_MOD_PATH=$GO_MOD_PATH">>.env
+echo "GITLAB=$GITLAB">>.env
 
 
 # 啟動容器服務
