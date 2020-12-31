@@ -12,6 +12,6 @@ slave:
   password: root
   database: goformat
 redis:
-  redis_host: redis_goFormat
+  redis_host: redis_goformat
   redis_port: 6379
   redis_password: rd3Redis

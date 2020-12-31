@@ -18,11 +18,12 @@ func init() {
 	global.Start()
 
 	// 檢查 DB 機器服務
-	database.DBPing()
+	db := database.NewDbConnection()
+	db.DBPing()
 
 	// 自動建置 DB + Table
 	if os.Getenv("ENV") == "local" {
-		database.CheckTableIsExist()
+		db.CheckTableIsExist()
 	}
 
 	// 檢查 Redis 機器服務

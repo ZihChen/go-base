@@ -9,7 +9,10 @@ import (
 	"log"
 	"time"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm/logger"
+
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 // dbCon DB連線資料
@@ -26,114 +29,144 @@ var masterPool *gorm.DB
 // slavePool 存放 db Slave 連線池的全域變數
 var slavePool *gorm.DB
 
+type IDber interface {
+	MasterConnect() (*gorm.DB, errorcode.Error)
+	SlaveConnect() (*gorm.DB, errorcode.Error)
+	DBPing()
+	CheckTableIsExist()
+}
+
+func NewDbConnection() IDber {
+	return &dbCon{}
+}
+
 // MasterConnect 建立 Master Pool 連線
-func MasterConnect() (*gorm.DB, errorcode.Error) {
+func (d *dbCon) MasterConnect() (*gorm.DB, errorcode.Error) {
 	var err error
 
 	if masterPool != nil {
+		if global.Config.DB.Debug {
+			return masterPool.Debug(), nil
+		}
 		return masterPool, nil
 	}
 
-	connString := composeString(global.DBMaster)
-	masterPool, err = gorm.Open("mysql", connString)
+	connString := d.composeString(global.DBMaster)
+	masterPool, err = gorm.Open(mysql.Open(connString), &gorm.Config{Logger: logger.Default.LogMode(logger.Silent)})
 	if err != nil {
 		apiErr := helper.ErrorHandle(global.FatalLog, "DB_CONNECT_ERROR", err.Error())
 
 		return nil, apiErr
 	}
 
+	sqlPool, err := masterPool.DB()
+
 	// 限制最大開啟的連線數
-	masterPool.DB().SetMaxIdleConns(100)
+	sqlPool.SetMaxIdleConns(100)
 	// 限制最大閒置連線數
-	masterPool.DB().SetMaxOpenConns(2000)
+	sqlPool.SetMaxOpenConns(2000)
 	// 空閒連線 timeout 時間
-	masterPool.DB().SetConnMaxLifetime(15 * time.Second)
+	sqlPool.SetConnMaxLifetime(15 * time.Second)
 
 	// 全局禁用表名复数
 	// masterPool.SingularTable(true)
-	// 開啟SQL Debug模式
-	masterPool.LogMode(global.Config.DB.Debug)
 
+	if global.Config.DB.Debug {
+		return masterPool.Debug(), nil
+	}
 	return masterPool, nil
 }
 
 // SlaveConnect 建立 Slave Pool 連線
-func SlaveConnect() (*gorm.DB, errorcode.Error) {
+func (d *dbCon) SlaveConnect() (*gorm.DB, errorcode.Error) {
 	var err error
 
 	if slavePool != nil {
+		if global.Config.DB.Debug {
+			return slavePool.Debug(), nil
+		}
 		return slavePool, nil
 	}
 
-	connString := composeString(global.DBSlaver)
-	slavePool, err = gorm.Open("mysql", connString)
+	connString := d.composeString(global.DBSlaver)
+	slavePool, err = gorm.Open(mysql.Open(connString), &gorm.Config{})
 	if err != nil {
 		apiErr := helper.ErrorHandle(global.FatalLog, "DB_CONNECT_ERROR", err.Error())
 		return nil, apiErr
 	}
 
+	sqlPool, err := slavePool.DB()
+
 	// 限制最大開啟的連線數
-	slavePool.DB().SetMaxIdleConns(100)
+	sqlPool.SetMaxIdleConns(100)
 	// 限制最大閒置連線數
-	slavePool.DB().SetMaxOpenConns(2000)
+	sqlPool.SetMaxOpenConns(2000)
 	// 空閒連線 timeout 時間
-	slavePool.DB().SetConnMaxLifetime(15 * time.Second)
+	sqlPool.SetConnMaxLifetime(15 * time.Second)
 
 	// 全局禁用表名复数
 	// slavePool.SingularTable(true)
-	// 開啟SQL Debug模式
-	slavePool.LogMode(global.Config.DB.Debug)
 
+	if global.Config.DB.Debug {
+		return slavePool.Debug(), nil
+	}
 	return slavePool, nil
 }
 
 // DBPing 檢查DB是否啟動
-func DBPing() {
+func (d *dbCon) DBPing() {
 	// 檢查 master db
-	masterPool, apiErr := MasterConnect()
+	masterPool, apiErr := d.MasterConnect()
 	if apiErr != nil {
 		log.Fatalf("🔔🔔🔔 MASTER DB CONNECT ERROR: %v 🔔🔔🔔", global.Config.DBMaster.Host)
 	}
 
-	err := masterPool.DB().Ping()
+	masterDB, err := masterPool.DB()
+	if err != nil {
+		log.Fatalf("🔔🔔🔔 CONNECT MASTER DB ERROR: %v 🔔🔔🔔", err.Error())
+	}
+	err = masterDB.Ping()
 	if err != nil {
 		log.Fatalf("🔔🔔🔔 PING MASTER DB ERROR: %v 🔔🔔🔔", err.Error())
 	}
 
 	// 檢查 slave db
-	slavePool, apiErr := SlaveConnect()
+	slavePool, apiErr := d.SlaveConnect()
 	if apiErr != nil {
 		log.Fatalf("🔔🔔🔔 SLAVE DB CONNECT ERROR: %v 🔔🔔🔔", global.Config.DBSlave.Host)
 	}
-
-	err = slavePool.DB().Ping()
+	slaveDB, err := slavePool.DB()
+	if err != nil {
+		log.Fatalf("🔔🔔🔔 CONNECT SLAVE DB ERROR: %v 🔔🔔🔔", err.Error())
+	}
+	err = slaveDB.Ping()
 	if err != nil {
 		log.Fatalf("🔔🔔🔔 PING SLAVE DB ERROR: %v 🔔🔔🔔", err.Error())
 	}
 }
 
 // CheckTableIsExist 啟動main.go服務時，直接檢查所有 DB 的 Table 是否已經存在
-func CheckTableIsExist() {
-	db, apiErr := MasterConnect()
+func (d *dbCon) CheckTableIsExist() {
+	db, apiErr := d.MasterConnect()
 	if apiErr != nil {
 		log.Fatalf("🔔🔔🔔 MASTER DB CONNECT ERROR: %v 🔔🔔🔔", global.Config.DBMaster.Host)
 	}
 
 	// 會自動建置 DB Table
-	db.AutoMigrate(&model.Admin{})
-	err := db.AutoMigrate(
-		&model.Admin{},
-	).Error
+	err := db.Set("gorm:table_options", "comment '細單規則'").AutoMigrate(&model.Admin{})
+	if err != nil {
+		panic(err.Error())
+	}
 
 	if err != nil {
 		_ = helper.ErrorHandle(global.FatalLog, "DB_TABLE_NOT_EXIST", fmt.Sprintf("❌ 設置DB錯誤： %v ❌", err.Error()))
-		log.Fatalf("🔔🔔🔔 PING MASTER DB ERROR: %v 🔔🔔🔔", err.Error())
+		log.Fatalf("🔔🔔🔔 MIGRATE MASTER TABLE ERROR: %v 🔔🔔🔔", err.Error())
 	}
 
 }
 
 // composeString 組合DB連線前的字串資料
-func composeString(mode string) string {
+func (d *dbCon) composeString(mode string) string {
 	db := dbCon{}
 
 	switch mode {
