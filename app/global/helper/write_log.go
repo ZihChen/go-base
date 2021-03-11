@@ -14,29 +14,30 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	jsoniter "github.com/json-iterator/go"
 )
 
 // AccessLogFormat 紀錄Log格式
 type AccessLogFormat struct {
-	Level       string      `json:"level"`        // Log 層級
-	LogTime     string      `json:"logTime"`      // Log 當前時間
-	ClientIP    string      `json:"clientIP"`     // 用戶IP
-	Path        string      `json:"path"`         // 當前路徑
-	Status      int         `json:"status"`       // 狀態碼
-	Method      string      `json:"method"`       // GET,POST,PUT,DELETE
-	Params      interface{} `json:"parameter"`    // 用戶帶入的參數
-	HTTPReferer string      `json:"http_referer"` // 來源網址
+	Level       string `json:"level"`        // Log 層級
+	LogTime     string `json:"logTime"`      // Log 當前時間
+	ClientIP    string `json:"clientIP"`     // 用戶IP
+	Path        string `json:"path"`         // 當前路徑
+	Status      int    `json:"status"`       // 狀態碼
+	Method      string `json:"method"`       // GET,POST,PUT,DELETE
+	Params      string `json:"params"`       // 用戶帶入的參數
+	HTTPReferer string `json:"http_referer"` // 來源網址
 }
 
 // ErrorLogFormat 紀錄Log格式
 type ErrorLogFormat struct {
-	Level       string      `json:"level"`       // Log 層級
-	LogIDentity string      `json:"logIDentity"` // Log 識別證
-	LogTime     string      `json:"logTime"`     // Log 當前時間
-	Path        string      `json:"path"`        // 當前路徑
-	FuncName    string      `json:"funcname"`    // 發生錯誤的func名稱
-	Params      interface{} `json:"parameter"`   // 錯誤發生時參數
-	Result      interface{} `json:"reslut"`      // 錯誤訊息
+	Level       string `json:"level"`       // Log 層級
+	LogIDentity string `json:"logIDentity"` // Log 識別證
+	LogTime     string `json:"logTime"`     // Log 當前時間
+	Path        string `json:"path"`        // 當前路徑
+	FuncName    string `json:"funcname"`    // 發生錯誤的func名稱
+	Params      string `json:"params"`      // 錯誤發生時參數
+	Result      string `json:"reslut"`      // 錯誤訊息
 }
 
 // 宣告預設寫log路徑 + 格式至各環境 other.yaml 查詢
@@ -76,7 +77,7 @@ func AccessLog(c *gin.Context) {
 		Path:        c.Request.URL.Path,
 		Status:      c.Writer.Status(),
 		Method:      c.Request.Method,
-		Params:      []string{},
+		Params:      "",
 		HTTPReferer: c.GetHeader("Referer"),
 	}
 
@@ -97,7 +98,8 @@ func AccessLog(c *gin.Context) {
 	} else {
 		_ = c.Request.ParseMultipartForm(1000)
 
-		content.Params = c.Request.PostForm
+		byteData, _ := jsoniter.Marshal(c.Request.PostForm)
+		content.Params = string(byteData)
 
 		// 以 application/json 傳遞參數需用 GetRawData 接才有
 		if len(c.Request.PostForm) < 1 {
@@ -113,7 +115,8 @@ func AccessLog(c *gin.Context) {
 		// 若參數有帶入密碼，將密碼換成「*」號
 		if c.Request.PostForm.Get("pwd") != "" || c.Request.PostForm.Get("password") != "" {
 			c.Request.PostForm.Set("pwd", "******")
-			content.Params = c.Request.PostForm
+			byteData, _ := jsoniter.Marshal(c.Request.PostForm)
+			content.Params = string(byteData)
 		}
 	}
 
@@ -128,19 +131,16 @@ func AccessLog(c *gin.Context) {
 }
 
 // fatalLog 組合error log內容，不可預期的錯誤才可使用
-func fatalLog(err interface{}, param interface{}) string {
+func fatalLog(err string, param interface{}) string {
 	content := &ErrorLogFormat{
 		Level:       "[❌ Fatal❌ ]",
 		LogIDentity: Md5EncryptionWithTime("identity"),
 		LogTime:     time.Now().Format("2006-01-02 15:04:05 -07:00"),
 		FuncName:    "",
 		Path:        "",
-		Params:      "",
+		Params:      fmt.Sprintf("%v", param),
 		Result:      fmt.Sprintf("%v", err),
 	}
-
-	// 檢查是否需要紀錄帶入的參數
-	content.Params = fmt.Sprintf("%v", param)
 
 	// 取檔案位置
 	fileName = global.Config.Log.ErrorLog
@@ -150,7 +150,7 @@ func fatalLog(err interface{}, param interface{}) string {
 	_ = CheckFileIsExist(filePath, fileName, global.DirPermission)
 
 	// 紀錄檔案名稱 + 行數 + func名稱
-	getFilePath(6, content)
+	getFilePath(5, content)
 
 	// 型態轉換
 	byteData, _ := json.Marshal(content)
@@ -162,19 +162,16 @@ func fatalLog(err interface{}, param interface{}) string {
 }
 
 // warnLog 組合warn log內容，可預期的錯誤才可使用
-func warnLog(err interface{}, param interface{}) string {
+func warnLog(err string, param interface{}) string {
 	content := &ErrorLogFormat{
 		Level:       "[⚠️ Warn ⚠️ ]",
 		LogIDentity: Md5EncryptionWithTime(RanderStr(6)),
 		LogTime:     time.Now().Format("2006-01-02 15:04:05 -07:00"),
 		FuncName:    "",
 		Path:        "",
-		Params:      "",
+		Params:      fmt.Sprintf("%v", param),
 		Result:      fmt.Sprintf("%v", err),
 	}
-
-	// 檢查是否需要紀錄帶入的參數
-	content.Params = fmt.Sprintf("%v", param)
 
 	// 取檔案位置
 	fileName = global.Config.Log.ErrorLog

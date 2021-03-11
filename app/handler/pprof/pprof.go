@@ -1,7 +1,6 @@
 package pprof
 
 import (
-	"goformat/app/middleware"
 	"net/http"
 	"net/http/pprof"
 
@@ -27,7 +26,7 @@ func getPrefix(prefixOptions ...string) string {
 func Register(r *gin.Engine, prefixOptions ...string) {
 	prefix := getPrefix(prefixOptions...)
 
-	prefixRouter := r.Group(prefix, middleware.PProfAuth)
+	prefixRouter := r.Group(prefix)
 	{
 		prefixRouter.GET("/", pprofHandler(pprof.Index))
 		prefixRouter.GET("/cmdline", pprofHandler(pprof.Cmdline))

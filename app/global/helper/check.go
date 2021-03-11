@@ -16,7 +16,7 @@ import (
 
 // CheckDirIsExist 檢查檔案路徑是否存在
 func CheckDirIsExist(filePath string, perm os.FileMode) (apiErr errorcode.Error) {
-	// 重新設置umask
+	// 重新設置 umask
 	// syscall.Umask(0)
 
 	// 檢查檔案路徑是否存在
@@ -66,12 +66,9 @@ func ValidateStruct(req interface{}) error {
 }
 
 // ValidateRegex 驗證字串正則規則
-func ValidateRegex(req string, regex string) bool {
-	if ok, _ := regexp.MatchString(regex, req); !ok {
-		return false
-	}
-
-	return true
+func ValidateRegex(req, regex string) bool {
+	ok, _ := regexp.MatchString(regex, req)
+	return ok
 }
 
 // InArray 檢測值是否在陣列內

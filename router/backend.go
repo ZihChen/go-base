@@ -4,6 +4,7 @@ import (
 	"goformat/app/handler/pprof"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -13,13 +14,18 @@ import (
 // LoadBackendRouter 路由控制
 func LoadBackendRouter(r *gin.Engine) {
 
-	pprof.Register(r, "/api/debug/pprof/") // 性能
+	pprof.Register(r, "/internal/debug/pprof/") // 性能
 
 	api := r.Group("/api")
 
 	// K8S Health Check
 	api.GET("/healthz", func(c *gin.Context) {
-		c.AbortWithStatus(http.StatusOK)
+		data := map[string]string{
+			"env":  os.Getenv("ENV"),
+			"time": time.Now().Format("2006-01-02 15:04:05 -07:00"),
+		}
+
+		c.JSON(http.StatusOK, data)
 	})
 
 	// 載入測試用API

@@ -26,12 +26,18 @@ func RunHTTP() {
 	// 本機開發需要顯示 Gin Log
 	var r *gin.Engine
 	if os.Getenv("ENV") == "local" {
-		r = gin.Default()
+		r = gin.New()
+		r.Use(gin.Logger())
 	} else {
 		gin.SetMode(gin.ReleaseMode)
 		r = gin.New()
-		r.Use(gin.Recovery())
 	}
+
+	// 自定義 Recovery
+	r.Use(func(c *gin.Context) {
+		defer helper.CatchError(c)
+		c.Next()
+	})
 
 	// api gateway服務註冊
 	out, _ := service.GateWayServiceRegister(global.Config.GrpcSetting.Name)
