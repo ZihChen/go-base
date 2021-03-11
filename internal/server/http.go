@@ -5,7 +5,6 @@ import (
 	"goformat/app/global"
 	"goformat/app/global/helper"
 	"goformat/app/service"
-	"goformat/app/task"
 	"goformat/internal/bootstrap"
 	"goformat/router"
 	"os"
@@ -33,9 +32,6 @@ func RunHTTP() {
 		r = gin.New()
 		r.Use(gin.Recovery())
 	}
-
-	// 背景
-	go task.Schedule()
 
 	// api gateway服務註冊
 	out, _ := service.GateWayServiceRegister(global.Config.GrpcSetting.Name)

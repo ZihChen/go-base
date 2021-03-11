@@ -31,7 +31,7 @@ GITLAB="git.cchntek.com"
 
 
 # 本機開發須安裝swagger + 初始化文件
-if [ ! -d "$GOVENDOR_PATH" ]; then
+if [ ! -d "$SWAGGER_PATH" ]; then
     echo "===== Swagger not exist, prepare to install ===="
     go get -u github.com/swaggo/swag/cmd/swag
 
@@ -52,8 +52,6 @@ echo "ENV=$ENV">.env
 echo "LOG=$LOG">>.env
 echo "IMG=$IMG">>.env
 echo "PROJECT_NAME=$PROJECT_NAME">>.env
-echo "ACCESS_TOKEN=$ACCESS_TOKEN">>.env
-echo "GO_MOD_PATH=$GO_MOD_PATH">>.env
 echo "GITLAB=$GITLAB">>.env
 
 

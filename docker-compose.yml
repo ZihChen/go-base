@@ -17,8 +17,6 @@ services:
     # image: nexus.cqgame.games/rd3/golang-${PROJECT_NAME}:latest
     build:
       context: .
-      args:
-        - ACCESS_TOKEN=${ACCESS_TOKEN}
     container_name: ${PROJECT_NAME}
     restart: always
     # ports:

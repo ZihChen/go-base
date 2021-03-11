@@ -21,7 +21,7 @@
 /docs/*
 /Redis/*
 /.vscode
-/go.sum
+# /go.sum
 
 ### Govendor ###
 github.com
