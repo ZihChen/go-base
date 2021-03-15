@@ -6,10 +6,34 @@
 # 備註：
 #   
 
-# 執行專案的目錄,
-WORK_PATH=$(dirname $(readlink -f $0))
+# 取 OS 系統
+SYSTEM=$(uname)
+
+# 執行專案的目錄
+WORK_PATH=""
 # 執行各容器，須掛載的資料夾位置
-VOLUME_PATH=$(dirname $(readlink -f $0))/../
+VOLUME_PATH=""
+# 當前用戶名稱
+WHOAMI=""
+# 用戶專用名稱
+USER_PATH=""
+
+# 執行 RunService.sh 的目錄(透過readlink 獲取執行腳本的絕對路徑，再透過dirname取出目錄)
+if [ "$SYSTEM" = "Linux" ]
+then
+    WORK_PATH=$(dirname $(readlink -f $0))
+    VOLUME_PATH=$(dirname $(readlink -f $0))/../
+fi
+
+# For Mac
+if [ "$SYSTEM" = "Darwin" ]
+then
+    WORK_PATH=$(dirname $(greadlink -f $0))
+    VOLUME_PATH=$(dirname $(greadlink -f $0))/../
+    WHOAMI=$(whoami)
+    USER_PATH="/Users/$WHOAMI"
+fi
+
 # 專案名稱(取當前資料夾路徑最後一個資料夾名稱)
 PROJECT_NAME=${WORK_PATH##*/}
 # Log存放的目錄(預設local路徑)
@@ -56,4 +80,4 @@ echo "GITLAB=$GITLAB">>.env
 
 
 # 啟動容器服務
-docker-compose up -d
+USER_PATH=$USER_PATH docker-compose up -d

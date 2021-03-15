@@ -1,6 +1,6 @@
 module goformat
 
-go 1.14
+go 1.16
 
 require (
 	git.cchntek.com/rd3-pkg/teamgo v0.0.1
@@ -16,8 +16,8 @@ require (
 	github.com/swaggo/gin-swagger v1.2.0
 	github.com/swaggo/swag v1.7.0
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
-	golang.org/x/net v0.0.0-20210226172049-e18ecbb05110 // indirect
-	golang.org/x/sys v0.0.0-20210309074719-68d13333faf2 // indirect
+	golang.org/x/net v0.0.0-20210316092652-d523dce5a7f4 // indirect
+	golang.org/x/sys v0.0.0-20210320140829-1e4c9ba3b0c4 // indirect
 	golang.org/x/tools v0.1.0 // indirect
 	google.golang.org/grpc v1.28.0
 	gopkg.in/go-playground/validator.v9 v9.31.0

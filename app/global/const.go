@@ -36,8 +36,9 @@ const (
 
 /** 錯誤 Log 類型 **/
 const (
-	WarnLog  = "Warn"  // 警告型 Log
-	FatalLog = "Fatal" // 嚴重型 Log
+	WarnLog    = "Warn"    // 警告型 Log
+	FatalLog   = "Fatal"   // 嚴重型 Log
+	SuccessLog = "Success" // 成功型 Log
 )
 
 /** HTTP CURL 設定 **/
