@@ -9,7 +9,7 @@ services:
       MYSQL_ROOT_PASSWORD: root # DB 密碼
       MYSQL_DATABASE: ${PROJECT_NAME}  # 資料庫名稱
     volumes:
-      - /home/${PROJECT_NAME}/database:/var/lib/mysql
+      - /${USER_PATH}/DB/${PROJECT_NAME}:/var/lib/mysql
     networks:
       - web_service
       
@@ -19,6 +19,9 @@ services:
       context: .
     container_name: ${PROJECT_NAME}
     restart: always
+    ## 當 container 解析不到 gitlab 網址時，可以開啟該設定
+    # extra_hosts:
+    #   - "git.cchntek.com:10.17.100.201"
     # ports:
     #   - 9999:8080
     environment:

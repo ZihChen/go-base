@@ -1,8 +1,8 @@
 package global
 
 import (
+	"embed"
 	"goformat/app/global/structs"
-	"io/ioutil"
 	"log"
 	"os"
 
@@ -23,7 +23,7 @@ func getEnv() string {
 }
 
 // Start 執行main.go的第一步驟，載入各環境設定檔
-func Start() {
+func Start(f embed.FS) {
 	env := getEnv()
 
 	envPathList := []string{
@@ -32,8 +32,8 @@ func Start() {
 		"env/" + env + "/other.yaml",
 	}
 
-	for _, path := range envPathList {
-		configFile, err := ioutil.ReadFile(path)
+	for k := range envPathList {
+		configFile, err := f.ReadFile(envPathList[k])
 		if err != nil {
 			log.Fatalf("🔔🔔🔔  Can not find Yaml file %v 🔔🔔🔔", err)
 		}

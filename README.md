@@ -59,3 +59,20 @@ $ cd submodule/ && git pull origin master
 ```
 $ sh RunService.sh
 ```
+
+---
+## 背景註冊
+/internal/schedule/job.go
+
+```
+// 載入所有排程
+jobs = []*CronJob{
+    // 範例
+    // {
+    // 	Name:     "印出 hello world", // 排程名稱
+    // 	Spec:     "@every 10s",     // 排程時間
+    // 	FuncName: task.HelloWorld,  // 對應的 func 名稱
+    // 	isRetry:  true,             // 是否可重複執行
+    // },
+}
+```

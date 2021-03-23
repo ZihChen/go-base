@@ -55,8 +55,12 @@ func ErrorHandle(errorType, errorCode string, errMsg interface{}, param ...inter
 	apiErr.SetErrorCode(errorCode)
 
 	switch errorType {
+	case global.SuccessLog:
+		logID = successlog(fmt.Sprintf(errorCode+": %v", errMsg), param)
 	case global.WarnLog:
 		logID = warnLog(fmt.Sprintf(errorCode+": %v", errMsg), param)
+	case global.FatalLog:
+		logID = fatalLog(fmt.Sprintf(errorCode+": %v", errMsg), param)
 	default:
 		logID = fatalLog(fmt.Sprintf(errorCode+": %v", errMsg), param)
 	}
@@ -128,6 +132,38 @@ func AccessLog(c *gin.Context) {
 
 	// 寫Log
 	writeLog(byteData)
+}
+
+func successlog(text string, param interface{}) string {
+	// 初始化
+	content := &ErrorLogFormat{
+		Level:       "[✔️ SUCCESS ✔️ ]",
+		LogIDentity: Md5EncryptionWithTime("identity"),
+		LogTime:     time.Now().Format("2006-01-02 15:04:05 -07:00"),
+		FuncName:    "",
+		Path:        "",
+		Params:      fmt.Sprintf("%v", param),
+		Result:      text,
+	}
+
+	// 取檔案位置
+	fileName = global.Config.Log.ErrorLog
+	filePath = global.Config.Log.LogDir
+
+	// 檢查路徑是否存在
+	_ = CheckFileIsExist(filePath, fileName, global.DirPermission)
+
+	// 紀錄檔案名稱 + 行數 + func名稱
+	getFilePath(3, content)
+
+	// 型態轉換
+	byteData, _ := json.Marshal(content)
+
+	// 寫Log
+	writeLog(byteData)
+
+	return content.LogIDentity
+
 }
 
 // fatalLog 組合error log內容，不可預期的錯誤才可使用
