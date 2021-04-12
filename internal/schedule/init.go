@@ -21,7 +21,7 @@ func Run() {
 	// 塞入排程
 	for _, job := range jobs {
 		job.Init()
-		pid, err := bg.AddJob(job.Spec, cron.NewChain(cron.Recover(cron.DefaultLogger)).Then(job))
+		pid, err := bg.AddJob(job.Spec, cron.NewChain(cron.SkipIfStillRunning(cron.DefaultLogger), cron.Recover(cron.DefaultLogger)).Then(job))
 		if err != nil {
 			_ = helper.ErrorHandle(global.WarnLog, "CRON_JOB_ERROR", err)
 		}
