@@ -20,12 +20,7 @@ func Success(result interface{}) *structs.APIResult {
 		ErrorCode:   1,
 		ErrorMsg:    "SUCCESS",
 		LogIDentity: "",
-		Result:      []string{},
-	}
-
-	if result != "" && result != nil {
-		res.Result = result
-		return res
+		Result:      result,
 	}
 
 	return res
