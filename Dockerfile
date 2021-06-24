@@ -1,6 +1,6 @@
 # 第一層基底
 # FROM golang:1.16.0-alpine
-FROM nexus.cqgame.games/rd3/golang-tool:1.16.0-alpine-with-goproxy
+FROM evergreen.guardians.one/rd3/golang-tool:1.16.0-alpine-with-goproxy
 
 # 安裝 git
 # go get fresh, grpc

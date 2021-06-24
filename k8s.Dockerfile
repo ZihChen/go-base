@@ -1,5 +1,5 @@
 # 最終運行golang 的基底
-FROM nexus.cqgame.games/rd3/library-alpine:3.9.5
+FROM evergreen.guardians.one/rd3/library-alpine:3.9.5
 
 # 設定容器時區(美東)
 RUN apk update \
