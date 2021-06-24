@@ -146,7 +146,7 @@ steps:
       container: dev-${DRONE_REPO_NAME}
       use_tags_file: true
       kubernetes_token:
-        from_secret: kubernetes_token
+        from_secret: kubernetes_token_dev
     when:
       ref: [ refs/heads/develop ]
     depends_on:
@@ -162,7 +162,7 @@ steps:
       container: qa-${DRONE_REPO_NAME}
       use_tags_file: true
       kubernetes_token:
-        from_secret: kubernetes_token
+        from_secret: kubernetes_token_qa
     when:
       ref: [ refs/heads/qatest ]
     depends_on:
@@ -178,7 +178,7 @@ steps:
       container: int-${DRONE_REPO_NAME}
       use_tags_file: true
       kubernetes_token:
-        from_secret: kubernetes_token
+        from_secret: kubernetes_token_int
     when:
       ref: [ refs/heads/int ]
     depends_on:
@@ -190,7 +190,7 @@ steps:
       kubernetes_server: https://k8s.t2.corp/k8s/clusters/c-9cb7h
       namespace: rd3-pro-${DRONE_REPO_NAME}
       deployment: pro-${DRONE_REPO_NAME}-deployment
-      repo: xn--85809-rt8hx48m.guardians.one/rd3-sync/${DRONE_BRANCH}/golang-${DRONE_REPO_NAME}
+      repo: xn--85809-rt8hx48m.guardians.one/rd3-sync/a/golang-${DRONE_REPO_NAME}
       container: pro-${DRONE_REPO_NAME}
       tag: ${DRONE_TAG}
       kubernetes_token:
