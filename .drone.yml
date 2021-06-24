@@ -13,7 +13,7 @@ clone:
 steps:
   ## clone 專案
   - name: clone
-    image: nexus.cqgame.games/rd3/drone-git:latest
+    image: evergreen.guardians.one/rd3/drone-git:latest
     environment:
       RSYNC_KEY:
         from_secret: rsync_key
@@ -38,7 +38,7 @@ steps:
       ref: [ refs/heads/develop, refs/heads/qatest, refs/heads/int, refs/tags/v*, refs/tags/t* ]
   ## 設定 dev tag
   - name: set-tag
-    image: nexus.cqgame.games/rd3/drone-git:latest
+    image: evergreen.guardians.one/rd3/drone-git:latest
     commands:
       - echo "$(git rev-parse --short=7 ${DRONE_COMMIT_SHA})-${DRONE_BRANCH}" > ./tmp.txt
       - cat ./tmp.txt > .tags
@@ -49,7 +49,7 @@ steps:
       - clone
   ## 設定 prod tag
   - name: backup-pro-tag
-    image: nexus.cqgame.games/rd3/drone-git:latest
+    image: evergreen.guardians.one/rd3/drone-git:latest
     commands:
       - echo ${DRONE_TAG}  > ./tmp.txt
       - cat ./tmp.txt > .tags
@@ -60,7 +60,7 @@ steps:
       - clone
   ## 編譯 golang code
   - name: golang-build
-    image: nexus.cqgame.games/rd3/golang-tool:1.16.0-alpine-with-goproxy
+    image: evergreen.guardians.one/rd3/golang-tool:1.16.0-alpine-with-goproxy
     commands:
       # 產生 swag api 文件
       - swag init
@@ -76,16 +76,16 @@ steps:
         path: /root/.cache/go-build
   ## 建置容器並傳至 harbor (INT Project)
   - name: build-image
-    image: nexus.cqgame.games/rd3/drone-docker:18.09.6
+    image: evergreen.guardians.one/rd3/drone-docker:18.09.6
     environment:
       PROJECT_NAME: ${DRONE_REPO_NAME}
       ACCESS_TOKEN:
         from_secret: access_token
     settings:
-      registry: nexus.cqgame.games
-      repo: nexus.cqgame.games/rd3/${DRONE_BRANCH}/golang-${DRONE_REPO_NAME}
+      registry: evergreen.guardians.one
+      repo: evergreen.guardians.one/rd3/${DRONE_BRANCH}/golang-${DRONE_REPO_NAME}
       dockerfile: ./k8s.Dockerfile
-      cache_from: nexus.cqgame.games/rd3/${DRONE_BRANCH}/golang-${DRONE_REPO_NAME}:latest
+      cache_from: evergreen.guardians.one/rd3/${DRONE_BRANCH}/golang-${DRONE_REPO_NAME}:latest
       username:
         from_secret: docker_username
       password:
@@ -101,16 +101,16 @@ steps:
       - golang-build
   ## 建置容器並傳至 harbor (T2 Project)
   - name: build-sync-images
-    image: nexus.cqgame.games/rd3/drone-docker:18.09.6
+    image: evergreen.guardians.one/rd3/drone-docker:18.09.6
     environment:
       PROJECT_NAME: ${DRONE_REPO_NAME}
       ACCESS_TOKEN:
         from_secret: access_token
     settings:
-      registry: nexus.cqgame.games
-      repo: nexus.cqgame.games/rd3/${DRONE_BRANCH}/golang-${DRONE_REPO_NAME}
+      registry: evergreen.guardians.one
+      repo: evergreen.guardians.one/rd3/${DRONE_BRANCH}/golang-${DRONE_REPO_NAME}
       dockerfile: ./k8s.Dockerfile
-      cache_from: nexus.cqgame.games/rd3/${DRONE_BRANCH}/golang-${DRONE_REPO_NAME}:latest
+      cache_from: evergreen.guardians.one/rd3/${DRONE_BRANCH}/golang-${DRONE_REPO_NAME}:latest
       username:
         from_secret: docker_username
       password:
@@ -126,7 +126,7 @@ steps:
       - golang-build
   ## 重新覆蓋 .tag 檔案內容
   - name: rebuild-tag-file
-    image: nexus.cqgame.games/rd3/drone-git:latest
+    image: evergreen.guardians.one/rd3/drone-git:latest
     commands:
       - cat ./tmp.txt > .tags
       - cat .tags
@@ -137,12 +137,12 @@ steps:
       - build-sync-images
   ## 佈署至 dev k8s 環境
   - name: deploy-dev-k8s
-    image: nexus.cqgame.games/rd3/drone-kubernetes:latest
+    image: evergreen.guardians.one/rd3/drone-kubernetes:latest
     settings:
       kubernetes_server: https://f4.guardians.one/k8s/clusters/c-hswpk
       namespace: rd3-dev-${DRONE_REPO_NAME}
       deployment: dev-${DRONE_REPO_NAME}-deployment
-      repo: nexus.cqgame.games/rd3/${DRONE_BRANCH}/golang-${DRONE_REPO_NAME}
+      repo: evergreen.guardians.one/rd3/${DRONE_BRANCH}/golang-${DRONE_REPO_NAME}
       container: dev-${DRONE_REPO_NAME}
       use_tags_file: true
       kubernetes_token:
@@ -153,12 +153,12 @@ steps:
       - rebuild-tag-file
   ## 佈署至 qa k8s 環境
   - name: deploy-qa-k8s
-    image: nexus.cqgame.games/rd3/drone-kubernetes:latest
+    image: evergreen.guardians.one/rd3/drone-kubernetes:latest
     settings:
       kubernetes_server: https://f4.guardians.one/k8s/clusters/c-pzbf4
       namespace: rd3-qa-${DRONE_REPO_NAME}
       deployment: qa-${DRONE_REPO_NAME}-deployment
-      repo: nexus.cqgame.games/rd3/${DRONE_BRANCH}/golang-${DRONE_REPO_NAME}
+      repo: evergreen.guardians.one/rd3/${DRONE_BRANCH}/golang-${DRONE_REPO_NAME}
       container: qa-${DRONE_REPO_NAME}
       use_tags_file: true
       kubernetes_token:
@@ -169,12 +169,12 @@ steps:
       - rebuild-tag-file
   ## 佈署至 int k8s 環境
   - name: deploy-int-k8s
-    image: nexus.cqgame.games/rd3/drone-kubernetes:latest
+    image: evergreen.guardians.one/rd3/drone-kubernetes:latest
     settings:
       kubernetes_server: https://f4.guardians.one/k8s/clusters/c-cvs7s
       namespace: rd3-int-${DRONE_REPO_NAME}
       deployment: int-${DRONE_REPO_NAME}-deployment
-      repo: nexus.cqgame.games/rd3/${DRONE_BRANCH}/golang-${DRONE_REPO_NAME}
+      repo: evergreen.guardians.one/rd3/${DRONE_BRANCH}/golang-${DRONE_REPO_NAME}
       container: int-${DRONE_REPO_NAME}
       use_tags_file: true
       kubernetes_token:
@@ -185,7 +185,7 @@ steps:
       - rebuild-tag-file
   ## 佈署至 pro t2 k8s 環境
   - name: deploy-pro-t2-k8s
-    image: nexus.cqgame.games/rd3/drone-kubernetes:latest
+    image: evergreen.guardians.one/rd3/drone-kubernetes:latest
     settings:
       kubernetes_server: https://k8s.t2.corp/k8s/clusters/c-9cb7h
       namespace: rd3-pro-${DRONE_REPO_NAME}
@@ -201,7 +201,7 @@ steps:
       - rebuild-tag-file
   ## Telegram 推播通知
   - name: telegram
-    image: nexus.cqgame.games/rd3/drone-telegram:1.3.5
+    image: evergreen.guardians.one/rd3/drone-telegram:1.3.5
     settings:
       token:
         from_secret: telegram_token
