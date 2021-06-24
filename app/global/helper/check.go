@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"strings"
 	"syscall"
 
 	"github.com/gin-gonic/gin"
@@ -105,4 +106,36 @@ func RemoveIndex(array []string, element string) []string {
 	index := IndexOf(element, array)
 
 	return append(array[:index], array[index+1:]...)
+}
+
+// IsDeveloperEnv 檢查是否為開發環境(local, develop)
+func IsDeveloperEnv(env string) bool {
+
+	if isDev := strings.Contains(env, "develop"); isDev {
+		return true
+	}
+
+	if isLocal := strings.Contains(env, "local"); isLocal {
+		return true
+	}
+
+	return false
+}
+
+// IsLocal 檢查是否為本地
+func IsLocalEnv(env string) bool {
+	if isLocal := strings.Contains(env, "local"); isLocal {
+		return true
+	}
+
+	return false
+}
+
+// IsNotProd 非正式站環境
+func IsNotProd(env string) bool {
+	if isProd := strings.Contains(env, "t2"); isProd {
+		return false
+	}
+
+	return true
 }

@@ -1,6 +1,7 @@
 package router
 
 import (
+	"goformat/app/global/helper"
 	"goformat/app/handler/pprof"
 	"net/http"
 	"os"
@@ -29,7 +30,7 @@ func LoadBackendRouter(r *gin.Engine) {
 	})
 
 	// 載入測試用API
-	if os.Getenv("ENV") == "develop" || os.Getenv("ENV") == "local" || os.Getenv("ENV") == "develop-ae" {
+	if helper.IsDeveloperEnv(os.Getenv("ENV")) {
 		// Swagger
 		api.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}

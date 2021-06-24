@@ -117,7 +117,7 @@ func TeamPlus(org string, content interface{}) {
 	teamInfo.Account = global.TeamPlusAccount
 	teamInfo.APIKey = global.TeamPlusAPIKey
 	teamInfo.ChatSn = global.TeamPlusChatSn
-	teamInfo.ENV = os.Getenv("ENV") + os.Getenv("PROJECT_NAME")
+	teamInfo.ENV = os.Getenv("ENV") + "(" + os.Getenv("PROJECT_NAME") + ")"
 	teamInfo.Org = org
 
 	byteData, _ := jsoniter.Marshal(content)

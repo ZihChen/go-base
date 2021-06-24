@@ -3,6 +3,7 @@ package main
 import (
 	"embed"
 	"goformat/app/global"
+	"goformat/app/global/helper"
 	"goformat/internal/cache"
 	"goformat/internal/database"
 	"goformat/internal/entry"
@@ -26,7 +27,7 @@ func init() {
 	db.DBPing()
 
 	// 自動建置 DB + Table
-	if os.Getenv("ENV") == "local" {
+	if helper.IsLocalEnv(os.Getenv("ENV")) {
 		db.CheckTableIsExist()
 	}
 
