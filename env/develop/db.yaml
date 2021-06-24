@@ -11,7 +11,8 @@ slave:
   username: Cmuseum_seed
   password: FR2gwMrUyDc_cc
   database: guava
+
 redis:
-  redis_host: 172.17.0.1
-  redis_port: 6380
+  redis_host: dev-goformat-redis-service
+  redis_port: 6379
   redis_password: rd3Redis
