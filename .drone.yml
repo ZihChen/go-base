@@ -42,7 +42,7 @@ steps:
     commands:
       - echo "$(git rev-parse --short=7 ${DRONE_COMMIT_SHA})-${DRONE_BRANCH}" > ./tmp.txt
       - cat ./tmp.txt > .tags
-      - echo ",latest-${DRONE_BRANCH}" >> .tags
+      - echo ",latest" >> .tags
     when:
       ref: [ refs/heads/develop, refs/heads/qatest, refs/heads/int ]
     depends_on:
@@ -53,7 +53,7 @@ steps:
     commands:
       - echo ${DRONE_TAG}  > ./tmp.txt
       - cat ./tmp.txt > .tags
-      - echo ",latest-prod" >> .tags
+      - echo ",latest" >> .tags
     when:
       ref: [ refs/tags/v*, refs/tags/t* ]
     depends_on:
