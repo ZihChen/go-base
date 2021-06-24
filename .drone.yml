@@ -139,7 +139,7 @@ steps:
   - name: deploy-dev-k8s
     image: nexus.cqgame.games/rd3/drone-kubernetes:latest
     settings:
-      kubernetes_server: https://k8s.ny.corp/k8s/clusters/local
+      kubernetes_server: https://f4.guardians.one/k8s/clusters/c-hswpk
       namespace: rd3-dev-${DRONE_REPO_NAME}
       deployment: dev-${DRONE_REPO_NAME}-deployment
       repo: nexus.cqgame.games/rd3/${DRONE_BRANCH}/golang-${DRONE_REPO_NAME}
@@ -155,7 +155,7 @@ steps:
   - name: deploy-qa-k8s
     image: nexus.cqgame.games/rd3/drone-kubernetes:latest
     settings:
-      kubernetes_server: https://k8s.ny.corp/k8s/clusters/local
+      kubernetes_server: https://f4.guardians.one/k8s/clusters/c-pzbf4
       namespace: rd3-qa-${DRONE_REPO_NAME}
       deployment: qa-${DRONE_REPO_NAME}-deployment
       repo: nexus.cqgame.games/rd3/${DRONE_BRANCH}/golang-${DRONE_REPO_NAME}
@@ -171,7 +171,7 @@ steps:
   - name: deploy-int-k8s
     image: nexus.cqgame.games/rd3/drone-kubernetes:latest
     settings:
-      kubernetes_server: https://k8s.ny.corp/k8s/clusters/local
+      kubernetes_server: https://f4.guardians.one/k8s/clusters/c-cvs7s
       namespace: rd3-int-${DRONE_REPO_NAME}
       deployment: int-${DRONE_REPO_NAME}-deployment
       repo: nexus.cqgame.games/rd3/${DRONE_BRANCH}/golang-${DRONE_REPO_NAME}
