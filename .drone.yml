@@ -140,7 +140,7 @@ steps:
       kubernetes_server: https://f4.guardians.one/k8s/clusters/c-hswpk
       namespace: rd3-dev-${DRONE_REPO_NAME}
       deployment: dev-${DRONE_REPO_NAME}-deployment
-      repo: evergreen.guardians.one/rd3/golang-${DRONE_REPO_NAME}-${DRONE_BRANCH}
+      repo: evergreen.guardians.one/rd3/golang-${DRONE_REPO_NAME}
       container: dev-${DRONE_REPO_NAME}
       use_tags_file: true
       kubernetes_token:
@@ -156,7 +156,7 @@ steps:
       kubernetes_server: https://f4.guardians.one/k8s/clusters/c-pzbf4
       namespace: rd3-qa-${DRONE_REPO_NAME}
       deployment: qa-${DRONE_REPO_NAME}-deployment
-      repo: evergreen.guardians.one/rd3/golang-${DRONE_REPO_NAME}-${DRONE_BRANCH}
+      repo: evergreen.guardians.one/rd3/golang-${DRONE_REPO_NAME}
       container: qa-${DRONE_REPO_NAME}
       use_tags_file: true
       kubernetes_token:
@@ -172,7 +172,7 @@ steps:
       kubernetes_server: https://f4.guardians.one/k8s/clusters/c-cvs7s
       namespace: rd3-int-${DRONE_REPO_NAME}
       deployment: int-${DRONE_REPO_NAME}-deployment
-      repo: evergreen.guardians.one/rd3/golang-${DRONE_REPO_NAME}-${DRONE_BRANCH}
+      repo: evergreen.guardians.one/rd3/golang-${DRONE_REPO_NAME}
       container: int-${DRONE_REPO_NAME}
       use_tags_file: true
       kubernetes_token:
