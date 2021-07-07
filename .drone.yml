@@ -58,22 +58,6 @@ steps:
       ref: [ refs/tags/v*, refs/tags/t* ]
     depends_on:
       - clone
-  ## 編譯 golang code
-  - name: golang-build
-    image: evergreen.guardians.one/rd3/golang-tool:1.16.0-alpine-with-goproxy
-    commands:
-      # 產生 swag api 文件
-      - swag init
-      # 開始編譯
-      - go build -o runner
-    when:
-      ref: [ refs/heads/develop, refs/heads/qatest, refs/heads/int, refs/tags/v*, refs/tags/t* ]
-    depends_on:
-      - set-tag
-      - backup-pro-tag
-    volumes:
-      - name: cache
-        path: /root/.cache/go-build
   ## 建置容器並傳至 harbor (INT Project)
   - name: build-image
     image: evergreen.guardians.one/rd3/drone-docker:18.09.6
@@ -97,7 +81,8 @@ steps:
     when:
       ref: [ refs/heads/develop, refs/heads/qatest, refs/heads/int ]
     depends_on:
-      - golang-build
+      - set-tag
+      - backup-pro-tag
   ## 建置容器並傳至 harbor (T2 Project)
   - name: build-sync-images
     image: evergreen.guardians.one/rd3/drone-docker:18.09.6
@@ -121,7 +106,8 @@ steps:
     when:
       ref: [ refs/tags/v*, refs/tags/t* ]
     depends_on:
-      - golang-build
+      - set-tag
+      - backup-pro-tag
   ## 重新覆蓋 .tag 檔案內容
   - name: rebuild-tag-file
     image: evergreen.guardians.one/rd3/drone-git:latest
@@ -244,9 +230,6 @@ steps:
 
 ## VM 掛載路徑
 volumes:
-  - name: cache
-    host:
-      path: /usr/local/app/cache/RD3_KG/
   - name: docker
     host:
       path: /var/run/docker.sock
