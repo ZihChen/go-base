@@ -27,6 +27,10 @@ WORKDIR /app
 RUN apk update \
     && apk add tzdata \
     && cp /usr/share/zoneinfo/America/Puerto_Rico /etc/localtime
+
+COPY ./runner /app/runner
+
+WORKDIR /app
     
 RUN mkdir -p /app/log/ \
     && ln -sf /dev/stdout /app/log/access.log \
