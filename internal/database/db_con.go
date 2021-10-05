@@ -36,7 +36,7 @@ type IDber interface {
 	CheckTableIsExist()
 }
 
-func NewDbConnection() IDber {
+func NewDBConnection() IDber {
 	return &dbCon{}
 }
 
@@ -59,7 +59,7 @@ func (d *dbCon) MasterConnect() (*gorm.DB, errorcode.Error) {
 		return nil, apiErr
 	}
 
-	sqlPool, err := masterPool.DB()
+	sqlPool, _ := masterPool.DB()
 
 	// 限制最大開啟的連線數
 	sqlPool.SetMaxIdleConns(100)
@@ -67,9 +67,6 @@ func (d *dbCon) MasterConnect() (*gorm.DB, errorcode.Error) {
 	sqlPool.SetMaxOpenConns(2000)
 	// 空閒連線 timeout 時間
 	sqlPool.SetConnMaxLifetime(15 * time.Second)
-
-	// 全局禁用表名复数
-	// masterPool.SingularTable(true)
 
 	if global.Config.DB.Debug {
 		return masterPool.Debug(), nil
@@ -95,7 +92,7 @@ func (d *dbCon) SlaveConnect() (*gorm.DB, errorcode.Error) {
 		return nil, apiErr
 	}
 
-	sqlPool, err := slavePool.DB()
+	sqlPool, _ := slavePool.DB()
 
 	// 限制最大開啟的連線數
 	sqlPool.SetMaxIdleConns(100)
@@ -103,9 +100,6 @@ func (d *dbCon) SlaveConnect() (*gorm.DB, errorcode.Error) {
 	sqlPool.SetMaxOpenConns(2000)
 	// 空閒連線 timeout 時間
 	sqlPool.SetConnMaxLifetime(15 * time.Second)
-
-	// 全局禁用表名复数
-	// slavePool.SingularTable(true)
 
 	if global.Config.DB.Debug {
 		return slavePool.Debug(), nil

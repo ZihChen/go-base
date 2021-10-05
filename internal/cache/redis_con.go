@@ -101,10 +101,10 @@ func (r *Redis) redisPoolConnect() *redis.Pool {
 func (r *Redis) RedisPing() {
 	RedisPool := r.redisPoolConnect()
 	conn := RedisPool.Get()
-	defer conn.Close()
 
 	_, err := conn.Do("PING")
 	if err != nil {
+		conn.Close()
 		log.Fatalf("🔔🔔🔔 REDIS CONNECT ERROR: %v 🔔🔔🔔", err.Error())
 	}
 }
@@ -182,7 +182,7 @@ func (r *Redis) Append(key string, value interface{}) (n interface{}, apiErr err
 }
 
 // HashSet Hash方式存入redis值
-func (r *Redis) HashSet(hkey string, key interface{}, value interface{}, time int) (apiErr errorcode.Error) {
+func (r *Redis) HashSet(hkey string, key, value interface{}, expire int) (apiErr errorcode.Error) {
 	RedisPool := r.redisPoolConnect()
 	conn := RedisPool.Get()
 	defer conn.Close()
@@ -194,7 +194,7 @@ func (r *Redis) HashSet(hkey string, key interface{}, value interface{}, time in
 	}
 
 	// 設置過期時間
-	if _, err := conn.Do("EXPIRE", hkey, time); err != nil {
+	if _, err := conn.Do("EXPIRE", hkey, expire); err != nil {
 		apiErr = helper.ErrorHandle(global.WarnLog, "REDIS_SET_EXPIRE_ERROR", err.Error())
 		return
 	}
