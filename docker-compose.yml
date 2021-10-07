@@ -14,7 +14,7 @@ services:
       - web_service
       
   golang-goformat:
-    # image: nexus.cqgame.games/rd3/golang-${PROJECT_NAME}:latest
+    # image: evergreen.guardians.one/rd3/golang-${PROJECT_NAME}:latest
     build:
       context: .
     container_name: ${PROJECT_NAME}
@@ -42,7 +42,7 @@ services:
     command: "fresh runner.conf"
 
   redis-goformat:
-    image: nexus.cqgame.games/rd3/library-redis:alpine
+    image: evergreen.guardians.one/rd3/library-redis:alpine
     container_name: redis_${PROJECT_NAME}
     # 設定最大的TCP連線
     sysctls:
