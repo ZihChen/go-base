@@ -7,6 +7,7 @@ import (
 	"goformat/app/model"
 	"goformat/library/errorcode"
 	"log"
+	"os"
 	"time"
 
 	"gorm.io/gorm/logger"
@@ -33,7 +34,7 @@ type IDber interface {
 	MasterConnect() (*gorm.DB, errorcode.Error)
 	SlaveConnect() (*gorm.DB, errorcode.Error)
 	DBPing()
-	CheckTableIsExist()
+	CheckTable()
 }
 
 func NewDBConnection() IDber {
@@ -139,8 +140,8 @@ func (d *dbCon) DBPing() {
 	}
 }
 
-// CheckTableIsExist 啟動main.go服務時，直接檢查所有 DB 的 Table 是否已經存在
-func (d *dbCon) CheckTableIsExist() {
+// CheckTable 啟動main.go服務時，直接檢查所有 DB 的 Table 是否已經存在
+func (d *dbCon) CheckTable() {
 	db, apiErr := d.MasterConnect()
 	if apiErr != nil {
 		log.Fatalf("🔔🔔🔔 MASTER DB CONNECT ERROR: %v 🔔🔔🔔", global.Config.DBMaster.Host)
@@ -165,16 +166,76 @@ func (d *dbCon) composeString(mode string) string {
 
 	switch mode {
 	case global.DBMaster:
-		db.Host = global.Config.DBMaster.Host
-		db.Username = global.Config.DBMaster.Username
-		db.Password = global.Config.DBMaster.Password
-		db.Database = global.Config.DBMaster.Database
+		db.Host = d.getHost(true)
+		db.Username = d.getUser(true)
+		db.Password = d.getPass(true)
+		db.Database = d.getDBName()
 	case global.DBSlaver:
-		db.Host = global.Config.DBSlave.Host
-		db.Username = global.Config.DBSlave.Username
-		db.Password = global.Config.DBSlave.Password
-		db.Database = global.Config.DBSlave.Database
+		db.Host = d.getHost(false)
+		db.Username = d.getUser(false)
+		db.Password = d.getPass(false)
+		db.Database = d.getDBName()
 	}
 
 	return fmt.Sprintf("%s:%s@tcp(%s:3306)/%s?timeout=5s&charset=utf8mb4&parseTime=True&loc=Local", db.Username, db.Password, db.Host, db.Database)
+}
+
+// getHost 取 DB Host
+func (d *dbCon) getHost(master bool) string {
+
+	switch master {
+	case true:
+		if value, ok := os.LookupEnv("MHOST"); ok {
+			return value
+		}
+		return global.Config.DBMaster.Host
+	default:
+		if value, ok := os.LookupEnv("SHOST"); ok {
+			return value
+		}
+		return global.Config.DBMaster.Host
+	}
+}
+
+// getUser 取 DB User
+func (d *dbCon) getUser(master bool) string {
+
+	switch master {
+	case true:
+		if value, ok := os.LookupEnv("MUSER"); ok {
+			return value
+		}
+		return global.Config.DBMaster.Username
+	default:
+		if value, ok := os.LookupEnv("SUSER"); ok {
+			return value
+		}
+		return global.Config.DBMaster.Username
+	}
+}
+
+// getPass 取 DB Pass
+func (d *dbCon) getPass(master bool) string {
+
+	switch master {
+	case true:
+		if value, ok := os.LookupEnv("MPASS"); ok {
+			return value
+		}
+		return global.Config.DBMaster.Password
+	default:
+		if value, ok := os.LookupEnv("SPASS"); ok {
+			return value
+		}
+		return global.Config.DBMaster.Password
+	}
+}
+
+// getDBName 取 DB Name
+func (d *dbCon) getDBName() string {
+
+	if value, ok := os.LookupEnv("DB_NAME"); ok {
+		return value
+	}
+	return global.Config.DBMaster.Database
 }
