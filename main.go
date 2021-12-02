@@ -29,7 +29,7 @@ func init() {
 
 	// 自動建置 DB + Table
 	if helper.IsLocalEnv(os.Getenv("ENV")) {
-		db.CheckTableIsExist()
+		db.CheckTable()
 	}
 
 	// 檢查 Redis 機器服務

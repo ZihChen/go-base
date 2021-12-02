@@ -1,16 +1,16 @@
 master:
   # master db 設定
-  host: 172.17.0.1
-  username: root
-  password: root
-  database: goformat
+  host: 
+  username: 
+  password: 
+  database: 
 
 slave:
   # slave db 設定
-  host: 172.17.0.1
-  username: root
-  password: root
-  database: goformat
+  host: 
+  username: 
+  password: 
+  database: 
 
 redis:
   redis_host: 172.17.0.1

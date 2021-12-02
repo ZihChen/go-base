@@ -1,16 +1,16 @@
 master:
   # master db 設定
-  host: 10.30.4.96
-  username: Cdoctor_seed
-  password: SrJTuNWexa3_cc
-  database: guava
+  host: 
+  username: 
+  password: 
+  database: 
 
 slave:
   # slave db 設定
-  host: 10.30.4.97
-  username: Cmuseum_seed
-  password: FR2gwMrUyDc_cc
-  database: guava
+  host: 
+  username: 
+  password: 
+  database: 
 
 redis:
   redis_host: dev-goformat-redis-service
