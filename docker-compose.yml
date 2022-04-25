@@ -7,12 +7,12 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root # DB 密碼
-      MYSQL_DATABASE: ${PROJECT_NAME}  # 資料庫名稱
+      MYSQL_DATABASE: ${PROJECT_NAME} # 資料庫名稱
     volumes:
       - /${USER_PATH}/DB/${PROJECT_NAME}:/var/lib/mysql
     networks:
       - web_service
-      
+
   golang-goformat:
     # image: evergreen.guardians.one/rd3/golang-${PROJECT_NAME}:latest
     build:
@@ -21,7 +21,7 @@ services:
     restart: always
     ## 當 container 解析不到 gitlab 網址時，可以開啟該設定
     # extra_hosts:
-    #   - "git.cchntek.com:10.17.100.201"
+    #   - "git.1688898.xyz:10.17.100.201"
     # ports:
     #   - 9999:8080
     environment:
@@ -33,7 +33,6 @@ services:
     working_dir: /go/src/${PROJECT_NAME}
     volumes:
       - .:/go/src/${PROJECT_NAME}
-      - ${IMG}:/app/images
     labels:
       - "traefik.http.routers.golang-${PROJECT_NAME}.rule=Host(`${PROJECT_NAME}.local.com`)"
       - "traefik.http.services.golang-${PROJECT_NAME}.loadbalancer.server.port=8080"
@@ -55,8 +54,6 @@ services:
     # 指定使用那一條網路
     networks:
       - web_service
-
-
 
 networks:
   web_service:

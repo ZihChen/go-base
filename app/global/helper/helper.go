@@ -9,7 +9,7 @@ import (
 	"os"
 	"time"
 
-	"git.cchntek.com/rd3-pkg/teamgo"
+	"git.1688898.xyz/rd3-pkg/teamgo"
 	jsoniter "github.com/json-iterator/go"
 	"google.golang.org/grpc"
 )
