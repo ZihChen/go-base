@@ -22,8 +22,8 @@ func LoadBackendRouter(r *gin.Engine) {
 	// K8S Health Check
 	api.GET("/healthz", func(c *gin.Context) {
 		data := map[string]string{
-			"env":  os.Getenv("ENV"),
-			"time": time.Now().Format("2006-01-02 15:04:05 -07:00"),
+			"service": os.Getenv("PROJECT_NAME"),
+			"time":    time.Now().Format("2006-01-02 15:04:05 -07:00"),
 		}
 
 		c.JSON(http.StatusOK, data)

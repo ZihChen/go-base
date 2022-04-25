@@ -4,7 +4,6 @@ go 1.16
 
 require (
 	git.1688898.xyz/rd3-pkg/teamgo v0.0.1
-	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 // indirect
 	github.com/gin-gonic/gin v1.6.3
 	github.com/golang/protobuf v1.3.5
 	github.com/gomodule/redigo v2.0.0+incompatible
